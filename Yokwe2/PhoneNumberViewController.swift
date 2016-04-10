@@ -19,8 +19,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         phone.delegate = self
         phone.keyboardType = .NumberPad
-        
-        continueButton.tintColor = colorHelper.pink
+
         continueButton.alpha = 0.5
         continueButton.enabled = false
     }
@@ -98,7 +97,6 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
         
         SharingCenter.sharedInstance.phone = phone.text
         YokweHelper.storeUser()
-        YokweHelper.storePhone(phone.text!)
         
         FacebookHelper.riderGraphRequest(selfRider, completion: {(result)-> Void in
             SharingCenter.sharedInstance.rider = result

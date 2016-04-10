@@ -16,8 +16,8 @@ class SharingCenter{
     var start:String = ""
     var destination:String = ""
     var mode:String = "rider"
-    var userID:String = ""
-    var apnsToken:String = ""
+    var userID:String?
+    var apnsToken:String?
     var myPath:String?
     var startLocation:CLLocationCoordinate2D?
     var endLocation:CLLocationCoordinate2D?
@@ -27,6 +27,9 @@ class SharingCenter{
     var phone:String?
     var tripTime:String?
     var tripDistance:String?
+    var email:String?
+    var customerToken:String?
+    var accountToken:String?
     
     static let sharedInstance = SharingCenter()
     

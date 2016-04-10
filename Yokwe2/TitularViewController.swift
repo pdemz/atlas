@@ -31,11 +31,11 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             SharingCenter.sharedInstance.userID = FBSDKAccessToken.currentAccessToken().userID
             
-            //check if the user has logged in before
-            YokweHelper.doesUserExist({(result) -> Void in
-                if result == true{
+            //check if the user has logged in before by fetching info
+            YokweHelper.getUser({(result) -> Void in
+                if let user = result{
                     dispatch_async(dispatch_get_main_queue(), {
-                        self.proceedToHomeScreen()
+                        self.proceedToHomeScreen(user)
                     })
                 }else{
                     print("User does not exist")
@@ -61,7 +61,7 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate {
         
     }
     
-    func proceedToHomeScreen(){
+    func proceedToHomeScreen(user:User){
         YokweHelper.storeUser()
         
         let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
@@ -71,13 +71,12 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate {
             SharingCenter.sharedInstance.rider = result
         })
         
-        YokweHelper.getProfile({(result) -> Void in
-            let profileInfo = result?.componentsSeparatedByString(";")
-            if let aboutMe = profileInfo?[0]{
-                SharingCenter.sharedInstance.aboutMe = aboutMe
-            }
-            SharingCenter.sharedInstance.phone = profileInfo![1]
-        })
+
+        SharingCenter.sharedInstance.aboutMe = user.aboutMe
+        SharingCenter.sharedInstance.phone = user.phone
+        SharingCenter.sharedInstance.accountToken = user.accountToken
+        SharingCenter.sharedInstance.customerToken = user.customerToken
+
         
         let protectedPage = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate

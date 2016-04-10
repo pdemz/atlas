@@ -35,9 +35,9 @@ class TripViewController: UIViewController {
         photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
         
-        tripTimesView.layer.borderWidth = 0.3
-        tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
-        totalTripTimeLabel.text = "Trip duration: \(Int(totalTripTime!/60)) hr \(Int(totalTripTime!)%60) min"
+        //tripTimesView.layer.borderWidth = 0.3
+        //tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        print("total trip time: \(totalTripTime!)")
         
         endTrip.layer.backgroundColor = colorHelper.pink.CGColor
         navigate.layer.backgroundColor = colorHelper.orange.CGColor
@@ -119,6 +119,7 @@ class TripViewController: UIViewController {
             mh.makeDirectionsRequest({(result) -> Void in
                 dispatch_async(dispatch_get_main_queue(), {
                     SharingCenter.sharedInstance.myPath = result
+                    self.totalTripTimeLabel.text = mh.duration!
                     let newPath = GMSPath(fromEncodedPath: result)
                     let polyLine = GMSPolyline(path: newPath)
                     polyLine.strokeWidth = 5

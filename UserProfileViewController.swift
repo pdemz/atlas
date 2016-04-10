@@ -45,6 +45,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
+        
     }
     
     func editProfile(){
@@ -54,7 +55,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         
         if aboutMeText == nil || aboutMeText == ""{
             aboutMe.textColor = UIColor.lightGrayColor()
-            aboutMe.text = "Express yo'self..."
+            aboutMe.text = "Express yo self..."
         }
         
         aboutMe.editable = true
@@ -66,7 +67,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
     func closeView(){
         //Only make request if text changed
         if aboutMe.text != aboutMeText{
-            YokweHelper.storeAboutMe(aboutMe.text)
+            YokweHelper.storeUser()
         }
         
         dismissViewControllerAnimated(true, completion: nil)

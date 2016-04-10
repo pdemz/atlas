@@ -56,6 +56,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         
         destinationTextField.leftView = UIView(frame: CGRectMake(0, 0, self.startLabel.frame.width+8, originTextField.frame.height))
         destinationTextField.leftViewMode = UITextFieldViewMode.Always
+        
+        originTextField.layer.cornerRadius = 4
+        originTextField.clipsToBounds = true
+        
+
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -84,10 +89,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             self.title = "Ride"
         }
         
-        self.navigationController?.navigationBar.tintColor = colorHelper.redOrange
-        self.navigationController?.navigationBar.barTintColor = colorHelper.beige
+        self.navigationController?.navigationBar.tintColor = colorHelper.orange
+        //self.navigationController?.navigationBar.barTintColor = colorHelper.beige
         self.navigationController?.navigationBar.translucent = false
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: colorHelper.indigo]
+        //self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 20)!, NSForegroundColorAttributeName: colorHelper.indigo]
+        //self.navigationController
         
     }
     
@@ -160,14 +166,71 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             SharingCenter.sharedInstance.locationManager!.stopUpdatingLocation()
             
             if SharingCenter.sharedInstance.mode == "driver"{
-                performSegueWithIdentifier("driverSegue", sender: sender)
+                //Check if their account info is on file
+                if SharingCenter.sharedInstance.accountToken == nil{
+                    presentDriverForm()
+                    
+                }else{
+                    performSegueWithIdentifier("driverSegue", sender: sender)
+                }
+                
             }else if SharingCenter.sharedInstance.mode ==  "rider"{
-                performSegueWithIdentifier("riderSegue", sender: sender)
+                //Check if payment info is on file
+                if SharingCenter.sharedInstance.customerToken == nil{
+                    presentCustomerForm()
+                    
+                }else{
+                    performSegueWithIdentifier("riderSegue", sender: sender)
+                    
+                }
+                
             }
         }
         
     }
     
+    func presentCustomerForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        vc = customizeVC(vc) as! PaymentFormViewController
+        vc.title = "Payment Info"
+        
+        var navController = UINavigationController(rootViewController: vc)
+        navController = customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: nil)
+    }
+    
+    func presentDriverForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        vc = customizeVC(vc) as! DriverAccountCreationViewController
+        vc.title = "Create Driver Account"
+        
+        var navController = UINavigationController(rootViewController: vc)
+        navController = customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: {
+            self.pressedGo(self)
+        })
+    }
+ 
+    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+        navController.navigationBar.tintColor = UIColor.blackColor()
+        navController.navigationBar.barTintColor = UIColor.whiteColor()
+        navController.navigationBar.translucent = false
+        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 22)!, NSForegroundColorAttributeName: colorHelper.indigo]
+        
+        return navController
+    }
+    
+    func customizeVC(vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        
+        //Dismiss button
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        vc.navigationItem.leftBarButtonItem = dismissButton
+        
+        return vc
+    }
 
 }
 

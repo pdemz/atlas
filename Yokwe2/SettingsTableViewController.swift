@@ -111,7 +111,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         if canClose{
             if phone.text! != phoneText{
                 SharingCenter.sharedInstance.phone = phone.text!
-                YokweHelper.storePhone(phone.text!)
+                YokweHelper.storeUser()
             }
             dismissViewControllerAnimated(true, completion: nil)
         }

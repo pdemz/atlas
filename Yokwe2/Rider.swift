@@ -23,6 +23,7 @@ class Rider{
     var accessToken:String?
     var phone:String?
     var aboutMe:String?
+    var price:String?
     
     init(name: String?, origin: String?, destination: String?, photo: UIImage?, mutualFriends: String?, fareEstimate: String?, addedTime:String?, userID:String?, accessToken:String?){
         
@@ -36,6 +37,5 @@ class Rider{
         self.userID = userID
         self.accessToken = accessToken
     }
-
 
 }

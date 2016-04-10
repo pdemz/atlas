@@ -16,16 +16,21 @@ class RiderOptionTableViewCell: UITableViewCell {
     @IBOutlet weak var addedTime: UILabel!
     @IBOutlet weak var friendIcon: UIImageView!
     @IBOutlet weak var mutualFriends: UILabel!
+    @IBOutlet weak var price: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.layer.borderColor = UIColor.lightGrayColor().CGColor
-        self.layer.borderWidth = 0.3
+        
+        photo.layer.masksToBounds = false
+        photo.layer.cornerRadius = photo.frame.height/2
+        photo.clipsToBounds = true
+        
         self.name.textColor = colorHelper.orange
         mutualFriends.textColor = colorHelper.lavender
         friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         friendIcon.tintColor = colorHelper.lavender
+        
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

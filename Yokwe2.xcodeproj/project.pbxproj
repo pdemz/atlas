@@ -32,7 +32,13 @@
 		DB2727D41C723DEF00A528CE /* DriverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */; };
 		DB4B88B11BFC01F50006F974 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */; };
 		DB5543F61C7B6058001503EB /* DashboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */; };
+		DB68DA491CA0BEA8005B4158 /* PaymentConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */; };
+		DB68DA4B1CAB20C5005B4158 /* DriverAccountCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */; };
+		DB68DA4D1CADC0AE005B4158 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4C1CADC0AE005B4158 /* User.swift */; };
 		DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7C66BA1C592AF10087474F /* colorHelper.swift */; };
+		DB8C94711CBAE9B100FFF48C /* BankAccountCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */; };
+		DB914AAC1C9A37D1002BA5A3 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */; };
+		DB914AAE1C9A386C002BA5A3 /* PaymentFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB914AAD1C9A386C002BA5A3 /* PaymentFormViewController.swift */; };
 		DB979C061C4D50A9000B91B4 /* FacebookHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB979C051C4D50A9000B91B4 /* FacebookHelper.swift */; };
 		DB979C081C4D5123000B91B4 /* YokweHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB979C071C4D5123000B91B4 /* YokweHelper.swift */; };
 		DB98A07E1C6943DD00FBCAA7 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB98A07D1C6943DD00FBCAA7 /* SettingsTableViewController.swift */; };
@@ -90,7 +96,13 @@
 		DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverTableViewCell.swift; sourceTree = "<group>"; };
 		DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardTableViewController.swift; sourceTree = "<group>"; };
+		DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentConfirmationViewController.swift; sourceTree = "<group>"; };
+		DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverAccountCreationViewController.swift; sourceTree = "<group>"; };
+		DB68DA4C1CADC0AE005B4158 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB7C66BA1C592AF10087474F /* colorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = colorHelper.swift; sourceTree = "<group>"; };
+		DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankAccountCreation.swift; sourceTree = "<group>"; };
+		DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Stripe.framework; sourceTree = "<group>"; };
+		DB914AAD1C9A386C002BA5A3 /* PaymentFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentFormViewController.swift; sourceTree = "<group>"; };
 		DB979C051C4D50A9000B91B4 /* FacebookHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookHelper.swift; sourceTree = "<group>"; };
 		DB979C071C4D5123000B91B4 /* YokweHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YokweHelper.swift; sourceTree = "<group>"; };
 		DB98A07D1C6943DD00FBCAA7 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +127,7 @@
 				82F1DCC7619A5D91007AA7F0 /* libPods.a in Frameworks */,
 				DB4B88B11BFC01F50006F974 /* FBSDKCoreKit.framework in Frameworks */,
 				DBD79D571BFD31B300BF383C /* FBSDKLoginKit.framework in Frameworks */,
+				DB914AAC1C9A37D1002BA5A3 /* Stripe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +218,9 @@
 				DBA80AEE1C605C91003B8B73 /* SWRevealViewController */,
 				DBA80AED1C605B44003B8B73 /* Helpers */,
 				DBD79D541BFD13F400BF383C /* TitularViewController.swift */,
+				DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */,
+				DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */,
+				DB914AAD1C9A386C002BA5A3 /* PaymentFormViewController.swift */,
 				DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */,
 				BEBEC17D1BE95B8400986839 /* UserProfileViewController.swift */,
 				BE0128CA1BE2BE2200D78FD7 /* DriverOrRideViewController.swift */,
@@ -223,6 +239,7 @@
 				DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */,
 				DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */,
 				DB98A07D1C6943DD00FBCAA7 /* SettingsTableViewController.swift */,
+				DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */,
 			);
 			name = "Swift Files";
 			sourceTree = "<group>";
@@ -242,6 +259,7 @@
 			children = (
 				BE92C95E1BC19960008D22E5 /* Driver.swift */,
 				BE0128CE1BE2CA8800D78FD7 /* Rider.swift */,
+				DB68DA4C1CADC0AE005B4158 /* User.swift */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -270,6 +288,7 @@
 		EB0DB239C785A79D01E0AD14 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */,
 				DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */,
 				DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */,
 				B3B8A66AD6F66B58E45DD574 /* libPods.a */,
@@ -336,7 +355,7 @@
 						DevelopmentTeam = 69W48383FK;
 						SystemCapabilities = {
 							com.apple.OMC = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.Push = {
 								enabled = 1;
@@ -456,6 +475,7 @@
 				BE0D70161BA5024400F201FE /* AppDelegate.swift in Sources */,
 				BE92C95F1BC19960008D22E5 /* Driver.swift in Sources */,
 				BE0128CB1BE2BE2200D78FD7 /* DriverOrRideViewController.swift in Sources */,
+				DB68DA491CA0BEA8005B4158 /* PaymentConfirmationViewController.swift in Sources */,
 				BE92C9651BC1ABEB008D22E5 /* DriverOptionsTableViewController.swift in Sources */,
 				BE0128CF1BE2CA8800D78FD7 /* Rider.swift in Sources */,
 				DBA80AEC1C5FBF85003B8B73 /* PhoneNumberViewController.swift in Sources */,
@@ -464,16 +484,20 @@
 				DB9D94A11C7BAC4F0072992B /* OfferResponseViewController.swift in Sources */,
 				DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */,
 				BEBEC17E1BE95B8400986839 /* UserProfileViewController.swift in Sources */,
+				DB8C94711CBAE9B100FFF48C /* BankAccountCreation.swift in Sources */,
 				BE8BD91D1BE81E9900B77BDD /* ConfirmRiderViewController.swift in Sources */,
 				DBED151B1C7B451800351D10 /* DashboardTableViewCell.swift in Sources */,
 				DB0A3E7C1C6180D500187B9C /* SlideOutMenuViewController.swift in Sources */,
+				DB68DA4B1CAB20C5005B4158 /* DriverAccountCreationViewController.swift in Sources */,
 				DB9D94A31C7BAC5D0072992B /* RideRequestResponseViewController.swift in Sources */,
 				DB979C061C4D50A9000B91B4 /* FacebookHelper.swift in Sources */,
+				DB914AAE1C9A386C002BA5A3 /* PaymentFormViewController.swift in Sources */,
 				DB2727D41C723DEF00A528CE /* DriverTableViewCell.swift in Sources */,
 				DB98A07E1C6943DD00FBCAA7 /* SettingsTableViewController.swift in Sources */,
 				DBA80AF21C605CC2003B8B73 /* SWRevealViewController.m in Sources */,
 				BE8239F01BD043B100BD5103 /* SharingCenter.swift in Sources */,
 				BE0128CD1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift in Sources */,
+				DB68DA4D1CADC0AE005B4158 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,7 +642,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Yokwe2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.demarreau.Yokwe;
 				PRODUCT_NAME = Yokwe;
@@ -642,7 +666,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Yokwe2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.demarreau.Yokwe;
 				PRODUCT_NAME = Yokwe;

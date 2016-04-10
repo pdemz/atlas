@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import FBSDKCoreKit
 import FBSDKLoginKit
+import Stripe
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyCqZ50c_NV-tYwVOMwxaS4XY-vomaxsOEc")
+        
+        Stripe.setDefaultPublishableKey("pk_test_Bq9k5f3IMhNSzOjRiow84wna")
         
         FBSDKLoginButton.classForCoder()
         
@@ -41,11 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 SharingCenter.sharedInstance.rider = result
             })
             
-            YokweHelper.getProfile({(result) -> Void in
-                if let profileInfo = result?.componentsSeparatedByString(";"){
-                    SharingCenter.sharedInstance.aboutMe = profileInfo[0]
-                    SharingCenter.sharedInstance.phone = profileInfo[1]
-                    print(profileInfo[1])
+            YokweHelper.getUser({(result) -> Void in
+                if let user = result{
+                    SharingCenter.sharedInstance.aboutMe = user.aboutMe
+                    SharingCenter.sharedInstance.phone = user.phone
+                    SharingCenter.sharedInstance.accountToken = user.accountToken
+                    SharingCenter.sharedInstance.customerToken = user.customerToken
                 }
             })
             

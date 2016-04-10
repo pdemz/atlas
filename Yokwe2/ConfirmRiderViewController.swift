@@ -101,7 +101,7 @@ class ConfirmRiderViewController: UIViewController {
     
     
     @IBAction func pressedOffer(sender: AnyObject) {
-        YokweHelper.riderSelection(rider.userID!, addedTime: rider.addedTime!)
+        YokweHelper.riderSelection(rider.userID!, addedTime: rider.addedTime!, price: rider.price!)
         
         let alertString = "You will be alerted when \(rider.name!) responds to your offer"
         let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)

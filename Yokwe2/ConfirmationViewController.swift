@@ -81,7 +81,7 @@ class ConfirmationViewController: UIViewController {
     
     @IBAction func pressedRequest(sender: AnyObject) {
         print("This is being stored: \(String(driver.addedTime!))")
-        YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!))
+        YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!)
         
         let alertString = "You will be alerted when \(driver.name!) responds to your request"
         let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)

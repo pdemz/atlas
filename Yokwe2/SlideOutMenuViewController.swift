@@ -92,7 +92,7 @@ class SlideOutMenuViewController: UITableViewController {
         navController.navigationBar.tintColor = colorHelper.redOrange
         navController.navigationBar.barTintColor = colorHelper.beige
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: colorHelper.indigo]
+        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 22)!, NSForegroundColorAttributeName: colorHelper.indigo]
         
         return navController
     }

@@ -13,10 +13,15 @@ class DriverTableViewCell: UITableViewCell {
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var mutualFriends: UILabel!
     @IBOutlet weak var friendIcon: UIImageView!
+    @IBOutlet weak var price: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        photo.layer.masksToBounds = false
+        photo.layer.cornerRadius = photo.frame.height/2
+        photo.clipsToBounds = true
+        
         self.layer.borderColor = UIColor.lightGrayColor().CGColor
         self.layer.borderWidth = 0.3
         mutualFriends.textColor = colorHelper.orange
