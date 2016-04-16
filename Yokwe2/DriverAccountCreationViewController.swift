@@ -47,7 +47,7 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
                     
                     alertString = "Account created successfully"
                     okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                        self.presentBankForm()
                     })
                     
                 }
@@ -55,7 +55,7 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
                     //Create alert for error, and ask user to retry
                     alertString = "There were errors processing your payment information. Please try again."
                     okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                        self.navigationController?.popViewControllerAnimated(true)
+                        self.presentBankForm()
                     })
                 }
                 
@@ -144,6 +144,41 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
         }
         
         return true
+    }
+    
+    func presentBankForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("BankAccountCreation") as! BankAccountCreation
+        vc = customizeVC(vc) as! BankAccountCreation
+        vc.title = "Payment Info"
+        
+        var navController = UINavigationController(rootViewController: vc)
+        navController = customizeNavController(navController)
+        
+        navController.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
+        presentViewController(navController, animated: true, completion: nil)
+    }
+    
+    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+        navController.navigationBar.tintColor = UIColor.blackColor()
+        navController.navigationBar.barTintColor = UIColor.whiteColor()
+        navController.navigationBar.translucent = false
+        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 22)!, NSForegroundColorAttributeName: colorHelper.indigo]
+        
+        return navController
+    }
+    
+    func customizeVC(vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        
+        //Dismiss button
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        vc.navigationItem.leftBarButtonItem = dismissButton
+        
+        return vc
+    }
+    
+    func closeView(){
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
 }

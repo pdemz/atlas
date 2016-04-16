@@ -32,12 +32,9 @@ class OfferResponseViewController: UIViewController {
         photo.layer.masksToBounds = false
         photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
-        tripTimesView.layer.borderWidth = 0.3
-        tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        
         totalTripTimeLabel.text = "Trip duration: \(Int(totalTripTime!/3600)) hr \(Int(totalTripTime!/60)%60) min"
-        
-        rejectButton.backgroundColor = colorHelper.redOrange
-        
+                
         print(type)
         
         if(type! == "ride"){

@@ -25,8 +25,6 @@ class ConfirmationViewController: UIViewController {
             photo.layer.cornerRadius = photo.frame.height/2
             photo.clipsToBounds = true
             name.text = driver.name
-            tripTimesView.layer.borderWidth = 0.3
-            tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
             totalTripTime.text = "Trip duration: \(SharingCenter.sharedInstance.tripTime!)"
             
             loadMapView()

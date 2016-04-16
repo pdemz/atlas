@@ -214,10 +214,8 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     }
  
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
-        navController.navigationBar.tintColor = UIColor.blackColor()
-        navController.navigationBar.barTintColor = UIColor.whiteColor()
+        navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 22)!, NSForegroundColorAttributeName: colorHelper.indigo]
         
         return navController
     }

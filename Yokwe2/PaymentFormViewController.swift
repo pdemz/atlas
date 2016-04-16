@@ -65,7 +65,7 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
                 //Create alert for error, and ask user to retry
                 alertString = "There were errors processing your payment information. Please try again."
                 okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                    self.navigationController?.popViewControllerAnimated(true)
+                    self.dismissViewControllerAnimated(true, completion: nil)
                 })
                 
             }else if let token = token {

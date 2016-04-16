@@ -26,8 +26,6 @@ class ConfirmRiderViewController: UIViewController {
         
         name.text = rider.name
         
-        tripTimesView.layer.borderWidth = 0.3
-        tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
         addedTime.text = "Time added: \(rider.addedTime!) mins"
         totalTripTime.text = "Total trip: \(getTotalTripTime())"
         

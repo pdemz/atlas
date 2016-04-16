@@ -39,10 +39,6 @@ class TripViewController: UIViewController {
         //tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
         print("total trip time: \(totalTripTime!)")
         
-        endTrip.layer.backgroundColor = colorHelper.pink.CGColor
-        navigate.layer.backgroundColor = colorHelper.orange.CGColor
-        
-        
         if type == "riding"{
             self.title = "Riding"
             name.text = driver!.name
@@ -221,10 +217,7 @@ class TripViewController: UIViewController {
     }
     
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
-        navController.navigationBar.tintColor = colorHelper.redOrange
-        navController.navigationBar.barTintColor = colorHelper.beige
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: colorHelper.indigo]
-        
+        navController.navigationBar.tintColor = colorHelper.orange
         return navController
     }
     

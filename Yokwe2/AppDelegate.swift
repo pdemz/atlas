@@ -237,10 +237,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
-        navController.navigationBar.tintColor = colorHelper.redOrange
-        navController.navigationBar.barTintColor = colorHelper.beige
+        navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: UIColor.blackColor()]
         
         FacebookHelper.driverGraphRequest(driver, completion: { (result)->Void in
             dispatch_async(dispatch_get_main_queue(), {
@@ -277,10 +275,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
-        navController.navigationBar.tintColor = colorHelper.redOrange
-        navController.navigationBar.barTintColor = colorHelper.beige
+        navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: UIColor.blackColor()]
         
         FacebookHelper.riderGraphRequest(rider, completion: { (result)->Void in
             dispatch_async(dispatch_get_main_queue(), {

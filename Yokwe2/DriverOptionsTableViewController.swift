@@ -108,6 +108,7 @@ class DriverOptionsTableViewController: UITableViewController {
         cell.name.text = driver.name
         cell.photo.image = driver.photo
         cell.mutualFriends.text = driver.mutualFriends
+        cell.price.text = ("$\(Double(driver.price!)!/100)")
         
         return cell
         

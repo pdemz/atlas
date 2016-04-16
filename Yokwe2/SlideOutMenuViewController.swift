@@ -89,10 +89,8 @@ class SlideOutMenuViewController: UITableViewController {
     }
     
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
-        navController.navigationBar.tintColor = colorHelper.redOrange
-        navController.navigationBar.barTintColor = colorHelper.beige
+        navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 22)!, NSForegroundColorAttributeName: colorHelper.indigo]
         
         return navController
     }

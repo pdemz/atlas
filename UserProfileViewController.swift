@@ -32,14 +32,13 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         aboutMe.text = aboutMeText
         
         phone.text = phoneText
-        phone.textColor = colorHelper.lavender
         phone.adjustsFontSizeToFitWidth = true
         
-        location.textColor = colorHelper.lavender
+        location.textColor = colorHelper.orange
         location.text = locationText
         
         friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        friendIcon.tintColor = colorHelper.lavender
+        friendIcon.tintColor = colorHelper.orange
         
         friendIcon.hidden = friendIconHidden
         
@@ -60,8 +59,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         
         aboutMe.editable = true
         aboutMe.bounces = true
-        aboutMe.layer.borderColor = colorHelper.beige.CGColor
-        aboutMe.layer.borderWidth = 2
+        //aboutMe.firstRespo
     }
     
     func closeView(){

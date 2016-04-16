@@ -269,6 +269,45 @@ class YokweHelper{
         task.resume()
     }
     
+    class func addBankAccount(name:String, email:String?, accountNum:String, routingNum:String, completion:(result:String?)->Void){
+        let addr = NSURL(string: "https://www.yokweapp.com/profile")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "addBankAccount"
+        let userID = FBSDKAccessToken.currentAccessToken().userID
+        
+        var postString = "userID=\(userID)&type=\(type)&name=\(name)&accountNum=\(accountNum)&routingNum=\(routingNum)"
+        
+        //Email is optional - check if it is null
+        if let emailString = email{
+            postString += "&email=\(emailString)"
+        }
+        
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                return
+            }
+            
+            if let response = String(data: data!, encoding: NSUTF8StringEncoding){
+                if response != "null"{
+                    completion(result: response)
+                }
+            }
+            
+            completion(result: nil)
+            
+        }
+        task.resume()
+    }
+    
     //Store/update user
     //Verbose, but simple - and probably the least amount of code for the job
     class func storeUser(){

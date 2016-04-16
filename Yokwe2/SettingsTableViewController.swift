@@ -20,7 +20,6 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         tableView.tableFooterView = UIView()
-        logout.textColor = colorHelper.redOrange
         
         phone.delegate = self
         phone.text = phoneText

@@ -27,9 +27,9 @@ class RiderOptionTableViewCell: UITableViewCell {
         photo.clipsToBounds = true
         
         self.name.textColor = colorHelper.orange
-        mutualFriends.textColor = colorHelper.lavender
+        mutualFriends.textColor = colorHelper.orange
         friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        friendIcon.tintColor = colorHelper.lavender
+        friendIcon.tintColor = colorHelper.orange
         
     }
     

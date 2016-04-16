@@ -21,12 +21,10 @@ class DriverTableViewCell: UITableViewCell {
         photo.layer.masksToBounds = false
         photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
-        
-        self.layer.borderColor = UIColor.lightGrayColor().CGColor
-        self.layer.borderWidth = 0.3
+
         mutualFriends.textColor = colorHelper.orange
         friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        friendIcon.tintColor = colorHelper.redOrange
+        friendIcon.tintColor = colorHelper.orange
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
