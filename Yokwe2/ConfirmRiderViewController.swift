@@ -94,6 +94,9 @@ class ConfirmRiderViewController: UIViewController {
             destination.title = rider.name!
             destination.photoImage = rider.photo!
             destination.locationText = rider.mutualFriends!
+            destination.aboutMeText = rider.aboutMe!
+            destination.educationText = rider.education
+
         }
     }
     

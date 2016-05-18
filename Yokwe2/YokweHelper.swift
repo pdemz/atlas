@@ -12,6 +12,51 @@ import UIKit
 
 class YokweHelper{
     
+    //Authenticates a user with email and password combo
+    class func authenticateEmail(completion:(result:Bool)->Void){
+        //Main part of address
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "authenticateEmail"
+        let email = SharingCenter.sharedInstance.email
+        let password = SharingCenter.sharedInstance.password
+        
+        let postString = "type=\(type)&email=\(email!)&password=\(password!)"
+        
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                completion(result: false)
+            }
+            
+            //userID;accessToken_
+            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
+                print("response string: \(responseString)")
+                
+                //User logged in successfully!
+                if(responseString == "success"){
+                    completion(result: true)
+
+                }else{
+                    completion(result: false)
+
+                }
+                
+            }
+            
+        }
+        
+        task.resume()
+    }
+    
     //Returns a list of drivers given a rider
     class func getDriverList(completion:(result:[Driver])->Void){
         
@@ -23,11 +68,12 @@ class YokweHelper{
         let type = "rideRequest"
         let start = SharingCenter.sharedInstance.start.stringByReplacingOccurrencesOfString(" ", withString: "+")
         let dest = SharingCenter.sharedInstance.destination.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        let userID = FBSDKAccessToken.currentAccessToken().userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
+        var postString = "origin=\(start)&destination=\(dest)&type=\(type)"
+        
+        postString = addCredentials(postString)
         
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&origin=\(start)&destination=\(dest)&type=\(type)&accessToken=\(accessToken)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -50,6 +96,7 @@ class YokweHelper{
                         var newb = driver.componentsSeparatedByString(";")
                         let newDriver = Driver(name: nil, photo: nil, mutualFriends: newb[3], fareEstimate: nil, eta: nil, userID: newb[0], accessToken: newb[1], addedTime: Double(newb[2]))
                         newDriver.price = newb[4]
+                        newDriver.aboutMe = newb[5]
                         print(newb[4])
                         driverList.append(newDriver)
                     }
@@ -74,12 +121,12 @@ class YokweHelper{
         let type = "driveRequest"
         let start = SharingCenter.sharedInstance.start.stringByReplacingOccurrencesOfString(" ", withString: "+")
         let dest = SharingCenter.sharedInstance.destination.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
         
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&origin=\(start)&destination=\(dest)&type=\(type)&accessToken=\(accessToken)&limit=30"
-        print(postString)
+        var postString = "origin=\(start)&destination=\(dest)&type=\(type)&limit=30"
+        
+        postString = addCredentials(postString)
+        
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -101,6 +148,7 @@ class YokweHelper{
                         var newb = rider.componentsSeparatedByString(";")
                         let newRider = Rider(name: nil, origin: newb[2], destination: newb[3], photo: nil, mutualFriends: newb[5], fareEstimate: nil, addedTime: newb[4], userID: newb[0], accessToken: newb[1])
                         newRider.price = newb[6]
+                        newRider.aboutMe = newb[7]
                         riderList.append(newRider)
                         
                     }
@@ -122,11 +170,12 @@ class YokweHelper{
         
         //Add parameters
         let type = "update"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
         
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)"
+        var postString = "type=\(type)"
+        
+        postString = addCredentials(postString)
+        
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -160,15 +209,12 @@ class YokweHelper{
         
         //Add parameters
         let type = "getUser"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
         
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
         
-        print("uid")
-        print(userID!)
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
@@ -215,10 +261,16 @@ class YokweHelper{
         
         //Add parameters
         let type = "updatePaymentInfo"
-        let userID = SharingCenter.sharedInstance.userID
         
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&token=\(token)&email=\(email)"
+        
+        var postString = "type=\(type)&token=\(token)"
+        if FBSDKAccessToken.currentAccessToken() != nil{
+            postString += "&email=\(email)"
+        }
+        
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -242,10 +294,10 @@ class YokweHelper{
         
         //Add parameters
         let type = "createStripeAccount"
-        let userID = FBSDKAccessToken.currentAccessToken().userID
         
-        let postString = "userID=\(userID)&type=\(type)&firstName=\(firstName)&lastName=\(lastName)" +
+        var postString = "type=\(type)&firstName=\(firstName)&lastName=\(lastName)" +
         "&day=\(day)&month=\(month)&year=\(year)&line1=\(line1)&city=\(city)&state=\(state)&zip=\(zip)&last4=\(last4)"
+        postString = addCredentials(postString)
         
         request.HTTPMethod = "POST"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
@@ -275,10 +327,10 @@ class YokweHelper{
         
         //Add parameters
         let type = "addBankAccount"
-        let userID = FBSDKAccessToken.currentAccessToken().userID
         
-        var postString = "userID=\(userID)&type=\(type)&name=\(name)&accountNum=\(accountNum)&routingNum=\(routingNum)"
-        
+        var postString = "type=\(type)&name=\(name)&accountNum=\(accountNum)&routingNum=\(routingNum)"
+        postString = addCredentials(postString)
+
         //Email is optional - check if it is null
         if let emailString = email{
             postString += "&email=\(emailString)"
@@ -316,11 +368,21 @@ class YokweHelper{
         
         //Add parameters
         var postString = "type=storeUser"
-        if let userID = SharingCenter.sharedInstance.userID{
-            postString += "&userID=\(userID)"
-        }
-        if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
-            postString += "&accessToken=\(accessToken)"
+        
+        if FBSDKAccessToken.currentAccessToken() != nil{
+            if let userID = SharingCenter.sharedInstance.userID{
+                postString += "&userID=\(userID)"
+            }
+            if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+                postString += "&accessToken=\(accessToken)"
+            }
+        }else{
+            if let name = SharingCenter.sharedInstance.name{
+                postString += "&name=\(name)"
+            }
+            if let password = SharingCenter.sharedInstance.password{
+                postString += "&password=\(password)"
+            }
         }
         if let apnsToken = SharingCenter.sharedInstance.apnsToken{
             postString += "&apnsToken=\(apnsToken)"
@@ -407,11 +469,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "updateProfile"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
         
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&aboutMe=\(aboutMe)"
+        var postString = "type=\(type)&aboutMe=\(aboutMe)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -436,10 +498,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "getProfile"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -472,10 +535,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "doesUserExist"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -508,11 +572,12 @@ class YokweHelper{
         
         //Add parameters
         let type = "updatePhone"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
         
+                
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&phone=\(phone)"
+        var postString = "type=\(type)&phone=\(phone)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -535,10 +600,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "getPhone"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -570,10 +636,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "riderSelection"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&riderID=\(riderID)&addedTime=\(addedTime)&price=\(price)"
+        var postString = "type=\(type)&riderID=\(riderID)&addedTime=\(addedTime)&price=\(price)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -594,10 +661,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "driverSelection"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&driverID=\(driverID)&addedTime=\(addedTime)&price=\(price)"
+        var postString = "type=\(type)&driverID=\(driverID)&addedTime=\(addedTime)&price=\(price)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -618,10 +686,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "accept"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&requesterID=\(requesterID)&requestType=\(requestType)"
+        var postString = "type=\(type)&requesterID=\(requesterID)&requestType=\(requestType)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -642,10 +711,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "rideReject"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&requesterID=\(requesterID)"
+        var postString = "type=\(type)&requesterID=\(requesterID)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -666,10 +736,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "driveReject"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&requesterID=\(requesterID)"
+        var postString = "type=\(type)&requesterID=\(requesterID)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -683,17 +754,43 @@ class YokweHelper{
         task.resume()
     }
     
-    //Called when user ends an active trip
+    //Called when user cancels an active trip - no charge is made
+    class func cancelTrip(riderID:String, driverID:String){
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "cancel"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)&riderID=\(riderID)&driverID=\(driverID)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            if error != nil {
+                print("error\(error)")
+                return
+            }
+        }
+        task.resume()
+    }
+    
+    //Called when user ends an active trip $$
     class func endTrip(riderID:String, driverID:String){
         let addr = NSURL(string: "https://www.yokweapp.com/atlas")
         let request = NSMutableURLRequest(URL: addr!)
         
         //Add parameters
         let type = "end"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)&riderID=\(riderID)&driverID=\(driverID)"
+        var postString = "type=\(type)&riderID=\(riderID)&driverID=\(driverID)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -714,11 +811,11 @@ class YokweHelper{
         
         //Add parameters
         let type = "update"
-        let userID = SharingCenter.sharedInstance.userID
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
-
+        
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID!)&type=\(type)&accessToken=\(accessToken)"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -755,7 +852,10 @@ class YokweHelper{
         //Add parameters
         let type = "getPhone"
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID)&type=\(type)&accessToken=\(accessToken)"
+        
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -790,7 +890,9 @@ class YokweHelper{
         //Add parameters
         let type = "getProfile"
         request.HTTPMethod = "POST"
-        let postString = "userID=\(userID)&type=\(type)&accessToken=\(accessToken)"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -815,6 +917,30 @@ class YokweHelper{
             
         }
         task.resume()
+    }
+    
+    class func addCredentials(postString:String) -> String{
+        var newString = postString
+        
+        //Attach proper credentials
+        if FBSDKAccessToken.currentAccessToken() == nil{
+            if let email = SharingCenter.sharedInstance.email{
+                newString += "&email=\(email)"
+            }
+            if let password = SharingCenter.sharedInstance.password{
+                newString += "&password=\(password)"
+            }
+            
+        }else{
+            if let userID = FBSDKAccessToken.currentAccessToken().userID{
+                newString += "&userID=\(userID)"
+            }
+            if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+                newString += "&accessToken=\(accessToken)"
+            }
+        }
+        
+        return newString
     }
 
 

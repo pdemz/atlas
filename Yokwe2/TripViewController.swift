@@ -7,62 +7,97 @@
 //
 
 import UIKit
+import Foundation
 import GoogleMaps
 
-class TripViewController: UIViewController {
+class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManagerDelegate {
     
+    //Create a trip class and put it here dang it!
+    
+    var locationTimer = NSTimer.init()
     var driver:Driver?
     var rider:Rider?
     var totalTripTime:Double?
     var type:String? //ride or drive
     var currentDestination:String?
-    
+    var containerVC:TripDetails?
+
+    @IBOutlet weak var detailsContainer: UIView!
+    @IBOutlet weak var endTripButton: UIButton!
     @IBOutlet weak var pickUp: UIButton!
-    @IBOutlet weak var endTrip: UIButton!
-    @IBOutlet weak var navigate: UIButton!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var photo: UIImageView!
-    @IBOutlet weak var tripTimesView: UIView!
-    @IBOutlet weak var totalTripTimeLabel: UILabel!
-    @IBOutlet weak var addedTimeLabel: UILabel!
     @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet weak var containerButton: UIButton!
+    
+    @IBOutlet weak var containerBottomm: NSLayoutConstraint!
+    @IBOutlet weak var pickUpButtonWidth: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        SharingCenter.sharedInstance.locationManager?.delegate = self
+        SharingCenter.sharedInstance.locationManager?.allowsBackgroundLocationUpdates = true
         
-        // Do any additional setup after loading the view.
-        photo.layer.masksToBounds = false
-        photo.layer.cornerRadius = photo.frame.height/2
-        photo.clipsToBounds = true
+        locationTimer = NSTimer.scheduledTimerWithTimeInterval(180.0, target: self, selector: #selector(TripViewController.enableButtonsBasedOnLocation), userInfo: nil, repeats: true)
         
-        //tripTimesView.layer.borderWidth = 0.3
-        //tripTimesView.layer.borderColor = UIColor.lightGrayColor().CGColor
-        print("total trip time: \(totalTripTime!)")
+        pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
+        pickUp.titleLabel?.adjustsFontSizeToFitWidth = true
+        self.pickUp.enabled = false
+        self.pickUp.hidden = true
+        pickUpButtonWidth.constant -= self.view.bounds.width
+        pickUp.alpha = 0
         
         if type == "riding"{
             self.title = "Riding"
-            name.text = driver!.name
-            photo.image = driver!.photo
             
-            self.pickUp.enabled = false
-            self.pickUp.hidden = true
+            containerVC?.name.text = driver!.name
+            containerVC?.photo.image = driver!.photo
             
             currentDestination = rider?.destination
-            addedTimeLabel.hidden = true
+            containerVC?.addedTime.hidden = true
         }else{
             self.title = "Driving"
-            name.text = rider!.name
-            photo.image = rider!.photo
+            
+            containerVC?.name.text = rider!.name
+            containerVC?.photo.image = rider!.photo
             
             pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
             pickUp.titleLabel?.adjustsFontSizeToFitWidth = true
+            
             currentDestination = rider?.origin
             let hours = Int((driver?.addedTime!)!/60)
             let mins = Int((driver?.addedTime!)!)%60
-            addedTimeLabel.text = "Added time: \(hours) hr \(mins) min"
+            
+            containerVC?.addedTime.text = "+\(mins) min"
         }
         
         loadMapView()
+        
+        //Initialize position of details view controller
+        containerBottomm.constant -= ((containerVC?.photo.frame.height)! + 16)
+
+    
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        containerVC = segue.destinationViewController as? TripDetails
+        containerVC?.delegate = self
+        
+    }
+    
+    func slideDetailView(){
+        //Change constraint
+        if self.containerBottomm.constant < 0{
+            self.containerBottomm.constant += ((self.containerVC?.photo.frame.height)! + 16)
+            self.containerButton.enabled = false
+        }else{
+            self.containerBottomm.constant -= ((self.containerVC?.photo.frame.height)! + 16)
+        }
+        
+        //Now animate
+        UIView.animateWithDuration(0.2){
+            self.view.layoutIfNeeded()
+        }
+        
     }
     
     func loadMapView(){
@@ -82,7 +117,7 @@ class TripViewController: UIViewController {
         riderEndMarker.title = "End"
         
         let bounds = GMSCoordinateBounds(coordinate: riderOrigin, coordinate: riderDestination)
-        let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/5)
+        let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/6)
         self.mapView.moveCamera(update)
         
         if(type != "riding"){
@@ -115,7 +150,11 @@ class TripViewController: UIViewController {
             mh.makeDirectionsRequest({(result) -> Void in
                 dispatch_async(dispatch_get_main_queue(), {
                     SharingCenter.sharedInstance.myPath = result
-                    self.totalTripTimeLabel.text = mh.duration!
+                    
+                    
+                    self.containerVC?.totalTime.text = mh.duration!
+                    print("duration")
+                    print(mh.duration)
                     let newPath = GMSPath(fromEncodedPath: result)
                     let polyLine = GMSPolyline(path: newPath)
                     polyLine.strokeWidth = 5
@@ -137,6 +176,7 @@ class TripViewController: UIViewController {
                     polyLine.strokeWidth = 5
                     polyLine.strokeColor = colorHelper.blue
                     polyLine.map = self.mapView
+                    self.containerVC?.totalTime.text = "\(mh.duration!) total"
                 })
             })
         }
@@ -149,8 +189,11 @@ class TripViewController: UIViewController {
         
     }
 
-    @IBAction func pressedNavigate(sender: AnyObject) {
+    func pressedNavigate() {
         //Open google maps, and route to currentDestination
+        
+        print("navigate was pressed")
+        
         let dest = self.currentDestination!.stringByReplacingOccurrencesOfString(" ", withString: "+")
         
         //Check if Google Maps is installed
@@ -164,22 +207,63 @@ class TripViewController: UIViewController {
     
     @IBAction func pressedPickup(sender: AnyObject) {
         
+        //Notify server
+        
         self.currentDestination = rider?.destination!
         self.pickUp.enabled = false
+        pickUpButtonWidth.constant -= self.view.bounds.width
         
         UIView.animateWithDuration(0.1, animations: {
             self.pickUp.layer.opacity = 0
+            self.view.layoutIfNeeded()
         })
         
     }
     
-    @IBAction func endTrip(sender: AnyObject) {
-        YokweHelper.endTrip((rider?.userID)!, driverID: (driver?.userID)!)
-        self.dismissViewControllerAnimated(true, completion: nil)
+    //Cancels the trip - no charge is made. Exactly like end trip otherwise
+    func pressedCancel() {
+        
+        //Confirm that driver is ready to end the trip
+        let alertString = "This will end the trip early, so no charge will be made. Are you sure about this?"
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+            
+            //Send message to server to end trip and return to homescreen
+            YokweHelper.cancelTrip((self.rider?.userID)!, driverID: (self.driver?.userID)!)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+        
+        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.Default, handler: nil)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
         
     }
     
-    @IBAction func tappedPhoto(sender: AnyObject) {
+    //Completes the trip and charges the rider
+    @IBAction func endTrip(){
+        
+        //Confirm that driver is ready to end the trip
+        let alertString = "This will end the trip and you will be paid <insert price>"
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+            
+            //Send message to server to end trip and return to homescreen
+            YokweHelper.endTrip((self.rider?.userID)!, driverID: (self.driver?.userID)!)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+        
+        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.Default, handler: nil)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func tappedPhoto() {
         //Present profile with phone number
         presentProfile()
         
@@ -196,6 +280,7 @@ class TripViewController: UIViewController {
             selfProfile.phoneText = self.driver?.phone
             selfProfile.aboutMeText = self.driver?.aboutMe
             selfProfile.locationText = self.driver?.mutualFriends
+            selfProfile.educationText = self.driver?.education
             
             print("driverPhone = \(self.driver?.phone)")
             
@@ -206,6 +291,8 @@ class TripViewController: UIViewController {
             selfProfile.phoneText = self.rider?.phone
             selfProfile.aboutMeText = self.rider?.aboutMe
             selfProfile.locationText = self.rider?.mutualFriends
+            selfProfile.educationText = self.rider?.education
+
 
         }
         
@@ -231,5 +318,60 @@ class TripViewController: UIViewController {
         return vc
     }
 
+    @IBAction func containerButtonTap(sender: AnyObject) {
+        slideDetailView()
+    }
+    
+    func enableButtonsBasedOnLocation(){
+        SharingCenter.sharedInstance.locationManager?.requestLocation()
+        
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        //Get current location
+        let driverLocation = SharingCenter.sharedInstance.locationManager?.location!
+        
+        //Get the CLLocation from coordinates
+        let latLongPickUp = self.rider!.origin!.componentsSeparatedByString(",")
+        let latLongDropOff = self.rider!.destination!.componentsSeparatedByString(",")
+        
+        let pickup = CLLocation(latitude: CLLocationDegrees(latLongPickUp[0])!, longitude: CLLocationDegrees(latLongPickUp[1])!)
+        let dropOff = CLLocation(latitude: CLLocationDegrees(latLongDropOff[0])!, longitude: CLLocationDegrees(latLongDropOff[1])!)
+        
+        //Get distance
+        let distanceInMetersFromPickup = driverLocation!.distanceFromLocation(pickup)
+        let distanceInMetersFromDropoff = driverLocation!.distanceFromLocation(dropOff)
+        
+        //Check if they are within about 2 miles of pickup point
+        if distanceInMetersFromPickup < 3000{
+            
+            //show pickup button
+            self.pickUp.enabled = true
+            self.pickUp.hidden = false
+            pickUpButtonWidth.constant += self.view.bounds.width
+            //Now animate
+            UIView.animateWithDuration(0.5){
+                self.pickUp.alpha = 0.7
+                self.view.layoutIfNeeded()
+            }
+            
+        //Check if they are within about 2 miles of drop off point
+        }else if distanceInMetersFromDropoff < 3000 && self.pickUp.enabled == false{
+            
+            //show end trip button
+            self.endTripButton.enabled = true
+            self.endTripButton.hidden = false
+            pickUpButtonWidth.constant += self.view.bounds.width
+            
+            //Now animate
+            UIView.animateWithDuration(0.5){
+                self.endTripButton.alpha = 0.7
+                self.view.layoutIfNeeded()
+            }
+            
+        }
+
+    }
 
 }

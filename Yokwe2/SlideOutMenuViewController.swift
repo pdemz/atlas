@@ -70,6 +70,9 @@ class SlideOutMenuViewController: UITableViewController {
         
         if let name = SharingCenter.sharedInstance.rider?.name{
             selfProfile.title = name
+            selfProfile.educationText = SharingCenter.sharedInstance.rider?.education!
+            print("This should be in your profile:")
+            print(SharingCenter.sharedInstance.rider?.education!)
             selfProfile.photoImage = SharingCenter.sharedInstance.rider?.photo
 
         }

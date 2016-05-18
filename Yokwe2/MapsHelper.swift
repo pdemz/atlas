@@ -41,7 +41,7 @@ class MapsHelper{
                 return
             } else {
                 do {
-                    print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+                    //print(NSString(data: data!, encoding: NSUTF8StringEncoding))
 
                     let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! NSDictionary
                     let routes = jsonResults.objectForKey("routes") as! [NSDictionary]

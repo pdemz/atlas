@@ -19,6 +19,8 @@ class User{
     var phone:String?
     var customerToken:String?
     var accountToken:String?
+    var name:String?
+    var education:String?
     
     init(json:NSDictionary){
         
@@ -30,6 +32,7 @@ class User{
         self.phone = json.valueForKey("phone") as? String
         self.customerToken = json.valueForKey("customerToken") as? String
         self.accountToken = json.valueForKey("accountToken") as? String
+        self.name = json.valueForKey("name") as? String
     }
     
 }

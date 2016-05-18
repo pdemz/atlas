@@ -74,6 +74,8 @@ class ConfirmationViewController: UIViewController {
                 destination.title = driver.name!
                 destination.photoImage = driver.photo!
                 destination.locationText = driver.mutualFriends!
+                destination.aboutMeText = driver.aboutMe!
+                destination.educationText = driver.education!
             }
         }
     

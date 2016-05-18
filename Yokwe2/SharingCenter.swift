@@ -12,6 +12,7 @@ import CoreLocation
 
 class SharingCenter{
     
+    var accessToken:String?
     var shouldReset = false
     var start:String = ""
     var destination:String = ""
@@ -30,6 +31,8 @@ class SharingCenter{
     var email:String?
     var customerToken:String?
     var accountToken:String?
+    var password:String?
+    var name:String?
     
     static let sharedInstance = SharingCenter()
     

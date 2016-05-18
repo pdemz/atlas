@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         var initialViewController: UIViewController
         
+        
+        
         if (FBSDKAccessToken.currentAccessToken() != nil){
             
             let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
@@ -57,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             initialViewController = protectedPage
             
             SharingCenter.sharedInstance.locationManager = CLLocationManager()
-            SharingCenter.sharedInstance.locationManager!.requestWhenInUseAuthorization()
+            SharingCenter.sharedInstance.locationManager?.requestWhenInUseAuthorization()
             
         }else{
             let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("TitularViewController")
@@ -89,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
             
         }
@@ -98,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
 
         }
@@ -120,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         print("Notification received")
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
             
         }
@@ -183,11 +185,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
-        navController.navigationBar.tintColor = colorHelper.redOrange
-        navController.navigationBar.barTintColor = colorHelper.beige
+        navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-        
         
         if rider.userID == SharingCenter.sharedInstance.userID{
             driveOffer.totalTripTime = (rj?.valueForKey("duration") as! Double)
@@ -217,7 +216,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mf = jsonResults.valueForKey("mutualFriends") as? String
 
         let driverID = jsonResults.valueForKey("driverID") as! String
-        let accessToken = jsonResults.valueForKey("driverAccessToken") as! String
+        let accessToken = jsonResults.valueForKey("driverAccessToken") as? String
         let driver = Driver(name: nil, photo: nil, mutualFriends: mf, fareEstimate: nil, eta: nil, userID: driverID, accessToken: accessToken, addedTime: nil)
         
         let origin = jsonResults.valueForKey("origin") as! String
@@ -252,7 +251,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mf = jsonResults.valueForKey("mutualFriends") as? String
 
         let id = jsonResults.valueForKey("riderID") as! String
-        let accessToken = jsonResults.valueForKey("accessToken") as! String
+        let accessToken = jsonResults.valueForKey("accessToken") as? String
         let driver = Driver(name: nil, photo: nil, mutualFriends: nil, fareEstimate: nil, eta: nil, userID: nil, accessToken: nil, addedTime: nil)
         driver.destination = jsonResults.valueForKey("driverDestination") as? String
         driver.origin = jsonResults.valueForKey("driverOrigin") as? String

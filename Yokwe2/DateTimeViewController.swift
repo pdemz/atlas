@@ -15,6 +15,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("idk whats up with this")
+        
+        self.distance.adjustsFontSizeToFitWidth = true
+        self.duration.adjustsFontSizeToFitWidth = true
+        
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
             menuButton.action = "revealToggle:"
@@ -26,13 +31,10 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         self.bottomView.layer.shadowOpacity = 0.1
         self.bottomView.hidden = true
         
+        print("You got here. For some reason it just didn't work out.")
+        
         SharingCenter.sharedInstance.locationManager!.delegate = self
-        SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
-        if SharingCenter.sharedInstance.locationManager == nil{
-            print("location manager is nil")
-        }else{
-            print("location manager not nil")
-        }
+        SharingCenter.sharedInstance.locationManager!.requestLocation()
         
         originTextField.delegate = self
         destinationTextField.delegate = self
@@ -319,7 +321,6 @@ extension DateTimeViewController{
         
         if mapView != nil{
             mapView!.camera = GMSCameraPosition(target: (locations.last?.coordinate)!, zoom: 15, bearing: 0, viewingAngle: 0)
-            SharingCenter.sharedInstance.locationManager?.stopUpdatingLocation()
         }
     }
     

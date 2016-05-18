@@ -175,6 +175,7 @@ class OfferResponseViewController: UIViewController {
             selfProfile.phoneText = self.driver?.phone
             selfProfile.aboutMeText = self.driver?.aboutMe
             selfProfile.locationText = self.driver?.mutualFriends
+            selfProfile.educationText = self.driver?.education
             
             print("driverPhone = \(self.driver?.phone)")
             
@@ -185,9 +186,9 @@ class OfferResponseViewController: UIViewController {
             selfProfile.phoneText = self.rider?.phone
             selfProfile.aboutMeText = self.rider?.aboutMe
             selfProfile.locationText = self.rider?.mutualFriends
+            selfProfile.educationText = self.driver?.education
             
         }
-        
         
         var navController = UINavigationController(rootViewController: selfProfile)
         navController = customizeNavController(navController)
@@ -196,10 +197,8 @@ class OfferResponseViewController: UIViewController {
     }
     
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
-        navController.navigationBar.tintColor = colorHelper.redOrange
-        navController.navigationBar.barTintColor = colorHelper.beige
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Arial", size: 24)!, NSForegroundColorAttributeName: colorHelper.indigo]
-        
+        navController.navigationBar.tintColor = colorHelper.orange
+
         return navController
     }
     

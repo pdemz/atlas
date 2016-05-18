@@ -18,7 +18,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         phone.delegate = self
-        phone.keyboardType = .NumberPad
+        phone.keyboardType = .PhonePad
 
         continueButton.alpha = 0.5
         continueButton.enabled = false

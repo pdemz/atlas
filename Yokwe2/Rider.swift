@@ -24,6 +24,7 @@ class Rider{
     var phone:String?
     var aboutMe:String?
     var price:String?
+    var education:String?
     
     init(name: String?, origin: String?, destination: String?, photo: UIImage?, mutualFriends: String?, fareEstimate: String?, addedTime:String?, userID:String?, accessToken:String?){
         

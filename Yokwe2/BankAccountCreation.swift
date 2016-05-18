@@ -107,8 +107,6 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
                 
                 if textField == routingNum{
                     maxLength = 9
-                }else if textField == accountNum{
-                    maxLength = 12
                 }else{
                     maxLength = (textField.text?.characters.count)!
                 }

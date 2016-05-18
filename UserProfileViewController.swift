@@ -14,6 +14,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
     var photoImage:UIImage? = nil
     var aboutMeText:String?
     var phoneText:String?
+    var educationText:String?
     var locationText:String?
     var friendIconHidden:Bool = false
     
@@ -22,17 +23,24 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var friendIcon: UIImageView!
+    @IBOutlet weak var education: UILabel!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         photo.image = photoImage
+        photo.layer.masksToBounds = false
+        photo.layer.cornerRadius = photo.frame.height/2
+        photo.clipsToBounds = true
         
         aboutMe.delegate = self
         aboutMe.text = aboutMeText
         
         phone.text = phoneText
         phone.adjustsFontSizeToFitWidth = true
+        
+        education.text = educationText
+        education.adjustsFontSizeToFitWidth = true
         
         location.textColor = colorHelper.orange
         location.text = locationText
@@ -106,17 +114,18 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    
     func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            self.view.frame.origin.y -= keyboardSize.height
+            //self.view.frame.origin.y -= keyboardSize.height
         }
         
     }
     
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            self.view.frame.origin.y += keyboardSize.height
+            //self.view.frame.origin.y += keyboardSize.height
         }
     }
     
