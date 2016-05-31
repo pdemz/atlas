@@ -192,7 +192,8 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
         UIApplication.sharedApplication().registerForRemoteNotifications()
         
         SharingCenter.sharedInstance.locationManager = CLLocationManager()
-        SharingCenter.sharedInstance.locationManager!.requestWhenInUseAuthorization()
+        SharingCenter.sharedInstance.locationManager!.requestAlwaysAuthorization()
+        SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
 
     }
     

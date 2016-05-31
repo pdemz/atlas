@@ -12,6 +12,34 @@ import UIKit
 
 class YokweHelper{
     
+    class func submitReview(stars: Int, review: String, revieweeID:String, reviewType:String){
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "review"
+        
+        request.HTTPMethod = "POST"
+        
+        var postString = "type=\(type)&stars=\(stars)&review=\(review)&revieweeID=\(revieweeID)&reviewType=\(reviewType)"
+        
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                return
+            }
+            
+        }
+        task.resume()
+    }
+    
     //Authenticates a user with email and password combo
     class func authenticateEmail(completion:(result:Bool)->Void){
         //Main part of address
@@ -227,7 +255,6 @@ class YokweHelper{
             
             let responseString = String(data: data!, encoding: NSUTF8StringEncoding)
             
-            print(responseString!)
             
             if responseString != nil && responseString != ""{
 
@@ -815,7 +842,7 @@ class YokweHelper{
         request.HTTPMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
-
+    
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -828,6 +855,8 @@ class YokweHelper{
             
             let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
             print("update: \(responseString)")
+            
+            print("the response: \(response)")
             
             do {
                 if let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{

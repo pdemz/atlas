@@ -38,5 +38,10 @@ class Rider{
         self.userID = userID
         self.accessToken = accessToken
     }
+    
+    init(userID:String, accessToken:String){
+        self.userID = userID
+        self.accessToken = accessToken
+    }
 
 }

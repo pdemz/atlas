@@ -52,6 +52,7 @@
 		DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */; };
 		DBD79D551BFD13F400BF383C /* TitularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD79D541BFD13F400BF383C /* TitularViewController.swift */; };
 		DBD79D571BFD31B300BF383C /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */; };
+		DBE564C91CF5DC7A00B96659 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */; };
 		DBED151B1C7B451800351D10 /* DashboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBED151A1C7B451800351D10 /* DashboardTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +121,7 @@
 		DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsHelper.swift; sourceTree = "<group>"; };
 		DBD79D541BFD13F400BF383C /* TitularViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitularViewController.swift; sourceTree = "<group>"; };
 		DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		DBED151A1C7B451800351D10 /* DashboardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -222,6 +224,7 @@
 				DBA80AEE1C605C91003B8B73 /* SWRevealViewController */,
 				DBA80AED1C605B44003B8B73 /* Helpers */,
 				DBD79D541BFD13F400BF383C /* TitularViewController.swift */,
+				DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */,
 				DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */,
 				DB81671B1CE6335200712459 /* TripDetails.swift */,
 				DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */,
@@ -474,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */,
+				DBE564C91CF5DC7A00B96659 /* ReviewViewController.swift in Sources */,
 				BE0D70181BA5024400F201FE /* ViewController.swift in Sources */,
 				DBD32B201C8161440015CF06 /* TripViewController.swift in Sources */,
 				BE0D70361BA5028300F201FE /* DateTimeViewController.swift in Sources */,
@@ -653,7 +657,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Yokwe2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.demarreau.Yokwe;
 				PRODUCT_NAME = Atlas;
@@ -677,7 +681,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Yokwe2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.demarreau.Yokwe;
 				PRODUCT_NAME = Atlas;

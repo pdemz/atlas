@@ -35,6 +35,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         
         aboutMe.delegate = self
         aboutMe.text = aboutMeText
+        aboutMe.keyboardType  = .ASCIICapable
         
         phone.text = phoneText
         phone.adjustsFontSizeToFitWidth = true

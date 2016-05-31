@@ -26,8 +26,6 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     @IBOutlet weak var endTripButton: UIButton!
     @IBOutlet weak var pickUp: UIButton!
     @IBOutlet weak var mapView: GMSMapView!
-    @IBOutlet weak var containerButton: UIButton!
-    
     @IBOutlet weak var containerBottomm: NSLayoutConstraint!
     @IBOutlet weak var pickUpButtonWidth: NSLayoutConstraint!
     
@@ -37,16 +35,20 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         SharingCenter.sharedInstance.locationManager?.delegate = self
         SharingCenter.sharedInstance.locationManager?.allowsBackgroundLocationUpdates = true
         
+        enableButtonsBasedOnLocation()
+        
         locationTimer = NSTimer.scheduledTimerWithTimeInterval(180.0, target: self, selector: #selector(TripViewController.enableButtonsBasedOnLocation), userInfo: nil, repeats: true)
         
-        pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
         pickUp.titleLabel?.adjustsFontSizeToFitWidth = true
         self.pickUp.enabled = false
         self.pickUp.hidden = true
         pickUpButtonWidth.constant -= self.view.bounds.width
         pickUp.alpha = 0
+        endTripButton.alpha = 0
+        endTripButton.enabled = false
+        endTripButton.hidden = true
         
-        if type == "riding"{
+        if type! == "riding"{
             self.title = "Riding"
             
             containerVC?.name.text = driver!.name
@@ -56,25 +58,24 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             containerVC?.addedTime.hidden = true
         }else{
             self.title = "Driving"
+            pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
             
             containerVC?.name.text = rider!.name
             containerVC?.photo.image = rider!.photo
             
-            pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
-            pickUp.titleLabel?.adjustsFontSizeToFitWidth = true
-            
             currentDestination = rider?.origin
             let hours = Int((driver?.addedTime!)!/60)
-            let mins = Int((driver?.addedTime!)!)%60
+            let mins = Int((driver?.addedTime!)!)
             
-            containerVC?.addedTime.text = "+\(mins) min"
+            containerVC?.addedTime.text = "+\(mins) mins"
         }
+        
+        containerVC?.price.text = "$\(driver!.price!)"
         
         loadMapView()
         
         //Initialize position of details view controller
-        containerBottomm.constant -= ((containerVC?.photo.frame.height)! + 16)
-
+        //containerBottomm.constant -= ((containerVC?.photo.frame.height)! + 16)
     
     }
     
@@ -88,7 +89,6 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         //Change constraint
         if self.containerBottomm.constant < 0{
             self.containerBottomm.constant += ((self.containerVC?.photo.frame.height)! + 16)
-            self.containerButton.enabled = false
         }else{
             self.containerBottomm.constant -= ((self.containerVC?.photo.frame.height)! + 16)
         }
@@ -120,7 +120,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/6)
         self.mapView.moveCamera(update)
         
-        if(type != "riding"){
+        if(type! != "riding"){
             let driverOriginSplit = driver!.origin!.componentsSeparatedByString(",")
             let driverDestinationSplit = driver!.destination!.componentsSeparatedByString(",")
             let driverOrigin = CLLocationCoordinate2D(latitude: CLLocationDegrees((driverOriginSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((driverOriginSplit[1] as NSString).doubleValue))
@@ -152,9 +152,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
                     SharingCenter.sharedInstance.myPath = result
                     
                     
-                    self.containerVC?.totalTime.text = mh.duration!
-                    print("duration")
-                    print(mh.duration)
+                    self.containerVC?.totalTime.text = "\(mh.duration!) total"
                     let newPath = GMSPath(fromEncodedPath: result)
                     let polyLine = GMSPolyline(path: newPath)
                     polyLine.strokeWidth = 5
@@ -191,9 +189,6 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
 
     func pressedNavigate() {
         //Open google maps, and route to currentDestination
-        
-        print("navigate was pressed")
-        
         let dest = self.currentDestination!.stringByReplacingOccurrencesOfString(" ", withString: "+")
         
         //Check if Google Maps is installed
@@ -217,6 +212,8 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             self.pickUp.layer.opacity = 0
             self.view.layoutIfNeeded()
         })
+        
+        //Notify server that rider has been picked up
         
     }
     
@@ -246,7 +243,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     @IBAction func endTrip(){
         
         //Confirm that driver is ready to end the trip
-        let alertString = "This will end the trip and you will be paid <insert price>"
+        let alertString = "This will end the trip and you will be paid $\(driver!.price!)"
         let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
         
         let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
@@ -274,15 +271,13 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         selfProfile = customizeVC(selfProfile) as! UserProfileViewController
         
         //Get driver info
-        if self.type == "riding"{
+        if self.type! == "riding"{
             selfProfile.title = self.driver?.name
             selfProfile.photoImage = self.driver?.photo
             selfProfile.phoneText = self.driver?.phone
             selfProfile.aboutMeText = self.driver?.aboutMe
             selfProfile.locationText = self.driver?.mutualFriends
             selfProfile.educationText = self.driver?.education
-            
-            print("driverPhone = \(self.driver?.phone)")
             
             //else get rider info
         }else{
@@ -318,16 +313,23 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         return vc
     }
 
-    @IBAction func containerButtonTap(sender: AnyObject) {
+    func tappedBackground(){
         slideDetailView()
     }
     
     func enableButtonsBasedOnLocation(){
-        SharingCenter.sharedInstance.locationManager?.requestLocation()
-        
+        if type! != "riding"{
+            SharingCenter.sharedInstance.locationManager?.requestLocation()
+        }
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("failed to update location :(")
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        print("driver location updated!")
         
         //Get current location
         let driverLocation = SharingCenter.sharedInstance.locationManager?.location!
@@ -343,8 +345,11 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         let distanceInMetersFromPickup = driverLocation!.distanceFromLocation(pickup)
         let distanceInMetersFromDropoff = driverLocation!.distanceFromLocation(dropOff)
         
+        print("distance from pickup in meters: \(distanceInMetersFromPickup)")
+        print("distance from dropoff in meters: \(distanceInMetersFromDropoff)")
+        
         //Check if they are within about 2 miles of pickup point
-        if distanceInMetersFromPickup < 3000{
+        if distanceInMetersFromPickup < 100{
             
             //show pickup button
             self.pickUp.enabled = true
@@ -352,12 +357,12 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             pickUpButtonWidth.constant += self.view.bounds.width
             //Now animate
             UIView.animateWithDuration(0.5){
-                self.pickUp.alpha = 0.7
+                self.pickUp.alpha = 0.9
                 self.view.layoutIfNeeded()
             }
             
-        //Check if they are within about 2 miles of drop off point
-        }else if distanceInMetersFromDropoff < 3000 && self.pickUp.enabled == false{
+        //Check if they are within about 2 miles of drop off point and rider has been picked up.
+        }else if distanceInMetersFromDropoff < 100 && self.pickUp.enabled == false{
             
             //show end trip button
             self.endTripButton.enabled = true
@@ -366,7 +371,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             
             //Now animate
             UIView.animateWithDuration(0.5){
-                self.endTripButton.alpha = 0.7
+                self.endTripButton.alpha = 0.9
                 self.view.layoutIfNeeded()
             }
             

@@ -10,12 +10,10 @@ import UIKit
 import CoreFoundation
 import GoogleMaps
 
-class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDelegate, CLLocationManagerDelegate, SWRevealViewControllerDelegate{
+class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDelegate, CLLocationManagerDelegate, SWRevealViewControllerDelegate, UIPopoverPresentationControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("idk whats up with this")
         
         self.distance.adjustsFontSizeToFitWidth = true
         self.duration.adjustsFontSizeToFitWidth = true
@@ -31,10 +29,8 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         self.bottomView.layer.shadowOpacity = 0.1
         self.bottomView.hidden = true
         
-        print("You got here. For some reason it just didn't work out.")
-        
         SharingCenter.sharedInstance.locationManager!.delegate = self
-        SharingCenter.sharedInstance.locationManager!.requestLocation()
+        SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
         
         originTextField.delegate = self
         destinationTextField.delegate = self
@@ -70,10 +66,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         
         //Reset text boxes and locations and ensure bottom view is not visible
         
+        SharingCenter.sharedInstance.locationManager!.delegate = self
+        
         if SharingCenter.sharedInstance.shouldReset{
             SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
             self.mapView.clear()
-            
             self.originTextField.text = nil
             self.destinationTextField.text = nil
             startLocation = nil
@@ -303,6 +300,11 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
 
 extension DateTimeViewController{
     
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController!) -> UIModalPresentationStyle {
+        // Return no adaptive presentation style, use default presentation behaviour
+        return .None
+    }
+    
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .AuthorizedWhenInUse {
             SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
@@ -311,9 +313,14 @@ extension DateTimeViewController{
         }
     }
     
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("couldn't get user location :( there was an error")
+        
+    }
+    
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("did update")
+        print("did update location")
         
         SharingCenter.sharedInstance.startLocation = SharingCenter.sharedInstance.locationManager?.location!.coordinate
         
@@ -322,6 +329,8 @@ extension DateTimeViewController{
         if mapView != nil{
             mapView!.camera = GMSCameraPosition(target: (locations.last?.coordinate)!, zoom: 15, bearing: 0, viewingAngle: 0)
         }
+        
+        SharingCenter.sharedInstance.locationManager?.stopUpdatingLocation()
     }
     
     

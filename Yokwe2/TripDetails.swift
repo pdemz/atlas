@@ -13,6 +13,7 @@ protocol TripDetailsDelegate {
     func pressedNavigate()
     func pressedCancel()
     func tappedPhoto()
+    func tappedBackground()
 }
 
 class TripDetails: UIViewController {
@@ -23,6 +24,7 @@ class TripDetails: UIViewController {
     var totalTimeText:String?
     var delegate:TripDetailsDelegate?
     
+    @IBOutlet weak var price: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var navigate: UIButton!
     @IBOutlet weak var photoButton: UIButton!
@@ -38,8 +40,16 @@ class TripDetails: UIViewController {
         photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
         
+        price.adjustsFontSizeToFitWidth = true
+        totalTime.adjustsFontSizeToFitWidth = true
+        addedTime.adjustsFontSizeToFitWidth = true
+        
     }
 
+    @IBAction func tappedBackground(sender: AnyObject) {
+        print("background button tapped")
+        self.delegate?.tappedBackground()
+    }
     
     @IBAction func pressedNavigate(sender: AnyObject) {
         self.delegate?.pressedNavigate()

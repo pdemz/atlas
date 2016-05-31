@@ -59,7 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             initialViewController = protectedPage
             
             SharingCenter.sharedInstance.locationManager = CLLocationManager()
-            SharingCenter.sharedInstance.locationManager?.requestWhenInUseAuthorization()
+            SharingCenter.sharedInstance.locationManager?.requestAlwaysAuthorization()
+            SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             
         }else{
             let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("TitularViewController")
@@ -144,8 +145,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 dispatch_async(dispatch_get_main_queue(), {
                     self.presentTrip(result)
                 })
+            }else if(type == "review"){
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+
+                    self.presentReview(result)
+                })
+                
             }
         })
+    }
+    
+    func presentReview(json:NSDictionary){
+        let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
+        let review = mainStoryBoard.instantiateViewControllerWithIdentifier("review") as! ReviewViewController
+        let navController:UINavigationController = UINavigationController(rootViewController: review)
+    
+        navController.navigationBar.tintColor = colorHelper.orange
+        navController.navigationBar.translucent = false
+        
+        //Get user photo and name with access token
+        if json.valueForKey("accessToken") != nil{
+            let reviewee = Rider(userID: json.valueForKey("revieweeID") as! String, accessToken: json.valueForKey("accessToken") as! String)
+            
+            FacebookHelper.riderGraphRequest(reviewee, completion: { (result)->Void in
+                dispatch_async(dispatch_get_main_queue(), {
+                    review.photoImage = result.photo
+                    review.revieweeID = result.userID
+                    review.type = json.valueForKey("review_type") as? String
+                    review.title = "Review for \(result.name!)"
+                    self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+                })
+            })
+        }
+        
+        //In the future - get this directly from json for users without facebook
     }
     
     func presentTrip(json:NSDictionary){
@@ -159,9 +193,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         driver.origin = dj!.valueForKey("origin") as? String
         driver.destination = dj!.valueForKey("destination") as? String
         
+        //Get price and format it
+        let priceNumber = ((json.valueForKey("price") as! Double)/100)
+        let formatter = NSNumberFormatter()
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.minimumIntegerDigits = 0
+        driver.price = formatter.stringFromNumber(priceNumber)
+        
         driver.aboutMe = dj!.valueForKey("aboutMe") as? String;
         driver.phone = dj!.valueForKey("phone") as? String;
-        let addedTime = (json.valueForKey("duration") as! Double) - (dj!.valueForKey("duration") as! Double)/60
+        let addedTime = (json.valueForKey("duration") as! Double) - (dj!.valueForKey("duration") as! Double)
         driver.addedTime = addedTime
         
         let rj = json.objectForKey("rider")
@@ -215,9 +257,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func presentDriveOffer(jsonResults:NSDictionary){
         let mf = jsonResults.valueForKey("mutualFriends") as? String
 
+        //Get the driver info
         let driverID = jsonResults.valueForKey("driverID") as! String
         let accessToken = jsonResults.valueForKey("driverAccessToken") as? String
         let driver = Driver(name: nil, photo: nil, mutualFriends: mf, fareEstimate: nil, eta: nil, userID: driverID, accessToken: accessToken, addedTime: nil)
+        
+        //Get price and format it
+        let priceNumber = ((jsonResults.valueForKey("price") as! Double)/100)
+        let formatter = NSNumberFormatter()
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.minimumIntegerDigits = 0
+        driver.price = formatter.stringFromNumber(priceNumber)
         
         let origin = jsonResults.valueForKey("origin") as! String
         let destination = jsonResults.valueForKey("destination") as! String
@@ -256,6 +307,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         driver.destination = jsonResults.valueForKey("driverDestination") as? String
         driver.origin = jsonResults.valueForKey("driverOrigin") as? String
         driver.addedTime = jsonResults.valueForKey("addedTime") as? Double
+        
+        //Get price and format it
+        let priceNumber = ((jsonResults.valueForKey("price") as! Double)/100)
+        let formatter = NSNumberFormatter()
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.minimumIntegerDigits = 0
+        driver.price = formatter.stringFromNumber(priceNumber)
         
         let riderOrigin = jsonResults.valueForKey("riderOrigin") as! String
         let riderDestination = jsonResults.valueForKey("riderDestination") as! String

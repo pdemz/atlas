@@ -24,6 +24,7 @@ class OfferResponseViewController: UIViewController {
     @IBOutlet weak var totalTripTimeLabel: UILabel!
     @IBOutlet weak var addedTimeLabel: UILabel!
     @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet weak var price: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +34,13 @@ class OfferResponseViewController: UIViewController {
         photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
         
-        totalTripTimeLabel.text = "Trip duration: \(Int(totalTripTime!/3600)) hr \(Int(totalTripTime!/60)%60) min"
+        totalTripTimeLabel.text = "\(Int(totalTripTime!/3600)) hr \(Int(totalTripTime!/60)%60) min total"
                 
-        print(type)
+        price.text = "$\((driver?.price!)!)"
+        
+        price.adjustsFontSizeToFitWidth = true
+        totalTripTimeLabel.adjustsFontSizeToFitWidth = true
+        addedTimeLabel.adjustsFontSizeToFitWidth = true
         
         if(type! == "ride"){
             self.title = "Ride offer"
@@ -46,9 +51,9 @@ class OfferResponseViewController: UIViewController {
             self.title = "Ride request"
             name.text = rider!.name
             photo.image = rider!.photo
-            let hours = Int((driver?.addedTime!)!/60)
+            //let hours = Int((driver?.addedTime!)!/60)
             let mins = Int((driver?.addedTime!)!)%60
-            addedTimeLabel.text = "Added time: \(hours) hr \(mins) min"
+            addedTimeLabel.text = "+\(mins) min"
         }
         
         loadMapView()
@@ -119,13 +124,16 @@ class OfferResponseViewController: UIViewController {
             mh.start = self.rider?.origin
             mh.end = self.rider?.destination
             
+            //Show polyline
             mh.makeDirectionsRequest({(result) -> Void in
-                SharingCenter.sharedInstance.myPath = result
-                let newPath = GMSPath(fromEncodedPath: result)
-                let polyLine = GMSPolyline(path: newPath)
-                polyLine.strokeWidth = 5
-                polyLine.strokeColor = colorHelper.blue
-                polyLine.map = self.mapView
+                dispatch_async(dispatch_get_main_queue(), {
+                    SharingCenter.sharedInstance.myPath = result
+                    let newPath = GMSPath(fromEncodedPath: result)
+                    let polyLine = GMSPolyline(path: newPath)
+                    polyLine.strokeWidth = 5
+                    polyLine.strokeColor = colorHelper.blue
+                    polyLine.map = self.mapView
+                })
             })
         }
         
