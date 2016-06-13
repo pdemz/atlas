@@ -23,7 +23,9 @@ class TripDetails: UIViewController {
     var addedTimeText:String?
     var totalTimeText:String?
     var delegate:TripDetailsDelegate?
+    var phoneText:String?
     
+    @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var navigate: UIButton!
@@ -64,6 +66,17 @@ class TripDetails: UIViewController {
     @IBAction func tappedPhoto(sender: AnyObject) {
         self.delegate?.tappedPhoto()
         
+    }
+    
+    @IBAction func openMessenger(sender: AnyObject) {
+        if phoneText != nil && phoneText != ""{
+            let number = phoneText!.stringByReplacingOccurrencesOfString("(", withString: "").stringByReplacingOccurrencesOfString(") ", withString: "").stringByReplacingOccurrencesOfString("-", withString: "")
+            let url = "sms:\(number)"
+            UIApplication.sharedApplication().openURL(NSURL(string: url)!)
+            
+        }
+
+
     }
     
 }

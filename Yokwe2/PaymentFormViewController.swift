@@ -13,7 +13,8 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var cardTextField: STPPaymentCardTextField!
-    @IBOutlet weak var continueButton: UIButton!
+
+    var canContinue = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,26 +22,24 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
         cardTextField.delegate = self
         emailTextField.delegate = self
         
-        continueButton.tintColor = colorHelper.maroonOrange
-        continueButton.enabled = false
         cardTextField.borderWidth = 0.5
         cardTextField.borderColor = UIColor.lightGrayColor()
         
     }
     
     func paymentCardTextFieldDidChange(textField: STPPaymentCardTextField) {
-        if emailTextField.text != "" && textField.valid{
-            continueButton.enabled = true
+        if textField.valid{
+            canContinue = true
         }else{
-            continueButton.enabled = false
+            canContinue = false
         }
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        if emailTextField.text != "" && cardTextField.valid{
-            continueButton.enabled = true
+        if cardTextField.valid{
+            canContinue = true
         }else{
-            continueButton.enabled = false
+            canContinue = false
         }
     }
     
@@ -73,6 +72,7 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
                 SharingCenter.sharedInstance.customerToken = token.tokenId
                 
                 print(token.tokenId)
+                
                 alertString = "Payment information stored successfully"
                 okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
                     self.dismissViewControllerAnimated(true, completion: nil)
@@ -86,5 +86,45 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
             }
         })
     }
+    
+    func saveInfo() {
+        let newCard = cardTextField.cardParams
+        
+        if canContinue{
+        
+            //Either get the token and save the card to server
+            STPAPIClient.sharedClient().createTokenWithCard(newCard, completion: { (token, error) -> Void in
+                var alertString:String?
+                var okAction:UIAlertAction?
+                if let error = error {
+                    print(error)
+                    //Create alert for error, and ask user to retry
+                    alertString = "There were errors processing your payment information. Please try again."
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                    
+                }else if let token = token {
+                    YokweHelper.updatePaymentInfo(token.tokenId, email: self.emailTextField.text!)
+                    SharingCenter.sharedInstance.customerToken = token.tokenId
+                    
+                    print(token.tokenId)
+                    
+                    alertString = "Payment information stored successfully"
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                    
+                }
+                if alertString != nil{
+                    let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(okAction!)
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+            })
+            
+        }
+    }
+
     
 }

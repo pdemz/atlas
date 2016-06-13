@@ -3,37 +3,37 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Atlas 58.png",
+      "filename" : "58bow.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Atlas 87.png",
+      "filename" : "87bow.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "Atlas 80.png",
+      "filename" : "80bow.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "Atlas 180.png",
+      "filename" : "180bow.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "Atlas 120.png",
+      "filename" : "120bow.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "Atlas 180-1.png",
+      "filename" : "180bow-1.png",
       "scale" : "3x"
     }
   ],

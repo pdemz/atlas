@@ -25,14 +25,19 @@ class OfferResponseViewController: UIViewController {
     @IBOutlet weak var addedTimeLabel: UILabel!
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var price: UILabel!
+    @IBOutlet weak var acceptButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        //Set up photo
         photo.layer.masksToBounds = false
         photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
+        
+        //Set up buttons
+        acceptButton.layer.cornerRadius = 4
+        rejectButton.layer.cornerRadius = 4
         
         totalTripTimeLabel.text = "\(Int(totalTripTime!/3600)) hr \(Int(totalTripTime!/60)%60) min total"
                 
@@ -62,7 +67,8 @@ class OfferResponseViewController: UIViewController {
     func loadMapView(){
         //let newPath = GMSPath(fromEncodedPath: SharingCenter.sharedInstance.myPath!)
         
-        
+        let mapInsets = UIEdgeInsetsMake(0, 0, (self.acceptButton.frame.height + 16), 0)
+        self.mapView.padding = mapInsets
         //Split rider origin and destination
         
         let riderOriginSplit = rider!.origin!.componentsSeparatedByString(",")

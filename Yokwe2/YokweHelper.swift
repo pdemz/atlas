@@ -212,6 +212,7 @@ class YokweHelper{
             
             if error != nil {
                 print("error\(error)")
+                completion(result: nil)
                 return
             }
             
@@ -806,6 +807,57 @@ class YokweHelper{
         task.resume()
     }
     
+    //Called when driver arrives at rider origin
+    class func pickUp(riderID:String){
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "pickUp"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)&riderID=\(riderID)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            if error != nil {
+                print("error\(error)")
+                return
+            }
+        }
+        
+        task.resume()
+    }
+    
+    //Called when driver starts the trip
+    class func startTrip(riderID:String){
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "start"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)&riderID=\(riderID)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            if error != nil {
+                print("error\(error)")
+                return
+            }
+        }
+        task.resume()
+    }
+    
     //Called when user ends an active trip $$
     class func endTrip(riderID:String, driverID:String){
         let addr = NSURL(string: "https://www.yokweapp.com/atlas")
@@ -832,7 +884,7 @@ class YokweHelper{
     }
     
     //Fetches trips, pending responses, or any requests
-    class func getUpdate(completion:(result: NSDictionary)->Void){
+    class func getUpdate(completion:(result: NSDictionary?)->Void){
         let addr = NSURL(string: "https://www.yokweapp.com/atlas")
         let request = NSMutableURLRequest(URL: addr!)
         
@@ -850,6 +902,7 @@ class YokweHelper{
             data, response, error in
             if error != nil {
                 print("error\(error)")
+                completion(result: nil)
                 return
             }
             
@@ -862,11 +915,14 @@ class YokweHelper{
                 if let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
                     print("json: \(jsonResults)")
                     completion(result: jsonResults)
+                }else{
+                    completion(result: nil)
                 }
                 
             } catch {
                 // failure
                 print("Fetch failed: \((error as NSError).localizedDescription)")
+                completion(result: nil)
             }
             
         }

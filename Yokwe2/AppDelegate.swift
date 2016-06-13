@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyCqZ50c_NV-tYwVOMwxaS4XY-vomaxsOEc")
         
-        Stripe.setDefaultPublishableKey("pk_test_Bq9k5f3IMhNSzOjRiow84wna")
+        Stripe.setDefaultPublishableKey("pk_live_bd9UGPnXebRwYRUCsz7a3F5e")
         
         FBSDKLoginButton.classForCoder()
         
@@ -132,27 +132,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func getUpdate(){
         YokweHelper.getUpdate({(result) -> Void in
-            let type = result.valueForKey("type") as! String
-            if(type == "driveOffer"){
-                dispatch_async(dispatch_get_main_queue(), {
-                  self.presentDriveOffer(result)
-                })
-            }else if(type == "rideRequest"){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentRideRequest(result)
-                })
-            }else if(type == "trip"){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentTrip(result)
-                })
-            }else if(type == "review"){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
-
-                    self.presentReview(result)
-                })
-                
+            
+            print("shouldve updated")
+            
+            if result != nil{
+                let type = result!.valueForKey("type") as! String
+                if(type == "driveOffer"){
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentDriveOffer(result!)
+                    })
+                }else if(type == "rideRequest"){
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentRideRequest(result!)
+                    })
+                }else if(type == "trip"){
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentTrip(result!)
+                    })
+                }else if(type == "review"){
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+                        
+                        self.presentReview(result!)
+                    })
+                }
+            }else{
+                //Dismiss trip window if it was cancelled
+                if  UIApplication.sharedApplication().keyWindow!.rootViewController!.presentedViewController?.childViewControllers.first is TripViewController{
+                    print("shouldve dismissed")
+                    self.window!.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    
+                }
             }
+            
         })
     }
     
@@ -198,7 +210,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let formatter = NSNumberFormatter()
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 0
+        formatter.minimumIntegerDigits = 1
         driver.price = formatter.stringFromNumber(priceNumber)
         
         driver.aboutMe = dj!.valueForKey("aboutMe") as? String;
@@ -217,6 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         driveOffer.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
         driveOffer.driver = driver
         driveOffer.rider = rider
+        driveOffer.status = json.valueForKey("status") as! String
         
         if rider.userID == SharingCenter.sharedInstance.userID{
             driveOffer.type = "riding"
@@ -230,8 +243,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
         
+        print("xxx~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~xxx")
+        print(UIApplication.sharedApplication().keyWindow?.rootViewController!.presentedViewController?.childViewControllers.first?.title)
+        
         if rider.userID == SharingCenter.sharedInstance.userID{
             driveOffer.totalTripTime = (rj?.valueForKey("duration") as! Double)
+            
+            //Update view controller if this is already on display
+            if let tripVC = UIApplication.sharedApplication().keyWindow!.rootViewController!.presentedViewController?.childViewControllers.first as? TripViewController{
+                tripVC.status = json.valueForKey("status") as! String
+                print("status should have been updated!!")
+                tripVC.updateDriverStatus()
+                
+            }
             
             FacebookHelper.driverGraphRequest(driver, completion: { (result)->Void in
                 dispatch_async(dispatch_get_main_queue(), {
@@ -267,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let formatter = NSNumberFormatter()
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 0
+        formatter.minimumIntegerDigits = 1
         driver.price = formatter.stringFromNumber(priceNumber)
         
         let origin = jsonResults.valueForKey("origin") as! String
@@ -313,7 +337,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let formatter = NSNumberFormatter()
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 0
+        formatter.minimumIntegerDigits = 1
         driver.price = formatter.stringFromNumber(priceNumber)
         
         let riderOrigin = jsonResults.valueForKey("riderOrigin") as! String

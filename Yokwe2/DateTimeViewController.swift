@@ -64,6 +64,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        //Present ride or drive if they just logged in
+        if SharingCenter.sharedInstance.didJustLogIn{
+            presentRideOrDrive()
+        }
+        
         //Reset text boxes and locations and ensure bottom view is not visible
         
         SharingCenter.sharedInstance.locationManager!.delegate = self
@@ -155,6 +160,16 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         openAutocomplete()
     }
     
+    func presentRideOrDrive(){
+        let rideOrDrive = self.storyboard?.instantiateViewControllerWithIdentifier("rideOrDrive") as! RideOrDriveViewController
+        rideOrDrive.title = "I want to..."
+        
+        var navController = UINavigationController(rootViewController: rideOrDrive)
+        
+        self.presentViewController(navController, animated: true, completion: nil)
+        
+        SharingCenter.sharedInstance.didJustLogIn = false
+    }
 
     //Check that user entered an origin and a destination before progressing
     @IBAction func pressedGo(sender: AnyObject) {
@@ -225,6 +240,10 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         //Dismiss button
         let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
+        
+        //Save button
+        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "saveInfo")
+        vc.navigationItem.rightBarButtonItem = barSaveButton
         
         return vc
     }

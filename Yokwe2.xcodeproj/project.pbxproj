@@ -48,6 +48,7 @@
 		DB9D94A31C7BAC5D0072992B /* RideRequestResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9D94A21C7BAC5D0072992B /* RideRequestResponseViewController.swift */; };
 		DBA80AEC1C5FBF85003B8B73 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */; };
 		DBA80AF21C605CC2003B8B73 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA80AF11C605CC2003B8B73 /* SWRevealViewController.m */; };
+		DBCB03171D06114E001AC1A7 /* RideOrDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */; };
 		DBD32B201C8161440015CF06 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD32B1F1C8161440015CF06 /* TripViewController.swift */; };
 		DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */; };
 		DBD79D551BFD13F400BF383C /* TitularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD79D541BFD13F400BF383C /* TitularViewController.swift */; };
@@ -117,6 +118,7 @@
 		DBA80AEF1C605CC2003B8B73 /* Yokwe2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Yokwe2-Bridging-Header.h"; sourceTree = "<group>"; };
 		DBA80AF01C605CC2003B8B73 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		DBA80AF11C605CC2003B8B73 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideOrDriveViewController.swift; sourceTree = "<group>"; };
 		DBD32B1F1C8161440015CF06 /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsHelper.swift; sourceTree = "<group>"; };
 		DBD79D541BFD13F400BF383C /* TitularViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitularViewController.swift; sourceTree = "<group>"; };
@@ -223,9 +225,8 @@
 				DB0A3E7D1C6186F300187B9C /* Cells */,
 				DBA80AEE1C605C91003B8B73 /* SWRevealViewController */,
 				DBA80AED1C605B44003B8B73 /* Helpers */,
-				DBD79D541BFD13F400BF383C /* TitularViewController.swift */,
+				DBCB03151D0610E2001AC1A7 /* Login */,
 				DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */,
-				DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */,
 				DB81671B1CE6335200712459 /* TripDetails.swift */,
 				DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */,
 				DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */,
@@ -244,7 +245,6 @@
 				BE0D70151BA5024400F201FE /* AppDelegate.swift */,
 				BE0128CC1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift */,
 				BE8BD91C1BE81E9900B77BDD /* ConfirmRiderViewController.swift */,
-				DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */,
 				DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */,
 				DB98A07D1C6943DD00FBCAA7 /* SettingsTableViewController.swift */,
 				DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */,
@@ -292,6 +292,17 @@
 				DBA80AEF1C605CC2003B8B73 /* Yokwe2-Bridging-Header.h */,
 			);
 			name = SWRevealViewController;
+			sourceTree = "<group>";
+		};
+		DBCB03151D0610E2001AC1A7 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */,
+				DBD79D541BFD13F400BF383C /* TitularViewController.swift */,
+				DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */,
+				DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		EB0DB239C785A79D01E0AD14 /* Frameworks */ = {
@@ -506,6 +517,7 @@
 				DB9D94A31C7BAC5D0072992B /* RideRequestResponseViewController.swift in Sources */,
 				DB979C061C4D50A9000B91B4 /* FacebookHelper.swift in Sources */,
 				DB914AAE1C9A386C002BA5A3 /* PaymentFormViewController.swift in Sources */,
+				DBCB03171D06114E001AC1A7 /* RideOrDriveViewController.swift in Sources */,
 				DB2727D41C723DEF00A528CE /* DriverTableViewCell.swift in Sources */,
 				DB1DD0391CD64C5E00645C0E /* EmailSignupViewController.swift in Sources */,
 				DB98A07E1C6943DD00FBCAA7 /* SettingsTableViewController.swift in Sources */,

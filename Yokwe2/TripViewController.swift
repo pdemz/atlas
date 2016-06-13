@@ -13,15 +13,21 @@ import GoogleMaps
 class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManagerDelegate {
     
     //Create a trip class and put it here dang it!
-    
-    var locationTimer = NSTimer.init()
+    var status = "waiting"
     var driver:Driver?
     var rider:Rider?
     var totalTripTime:Double?
     var type:String? //ride or drive
     var currentDestination:String?
     var containerVC:TripDetails?
+    
+    //Booleans to make sure notification actions are only completed one time
+    var completedPickUp = false
+    var notifiedOfPickup = false
+    var notifiedOfDropoff = false
 
+    @IBOutlet weak var statusBar: UILabel!
+    @IBOutlet weak var startTripButton: UIButton!
     @IBOutlet weak var detailsContainer: UIView!
     @IBOutlet weak var endTripButton: UIButton!
     @IBOutlet weak var pickUp: UIButton!
@@ -31,14 +37,8 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        SharingCenter.sharedInstance.locationManager?.delegate = self
-        SharingCenter.sharedInstance.locationManager?.allowsBackgroundLocationUpdates = true
         
-        enableButtonsBasedOnLocation()
-        
-        locationTimer = NSTimer.scheduledTimerWithTimeInterval(180.0, target: self, selector: #selector(TripViewController.enableButtonsBasedOnLocation), userInfo: nil, repeats: true)
-        
+        //Button button who's got the button...
         pickUp.titleLabel?.adjustsFontSizeToFitWidth = true
         self.pickUp.enabled = false
         self.pickUp.hidden = true
@@ -48,26 +48,72 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         endTripButton.enabled = false
         endTripButton.hidden = true
         
+        //Google map view set up
+        self.mapView!.myLocationEnabled = true
+        self.mapView!.settings.myLocationButton = true
+        
         if type! == "riding"{
             self.title = "Riding"
+            
+            //Mapview padding
+            let mapInsets = UIEdgeInsetsMake((self.statusBar.frame.height + 8), 0, (self.detailsContainer.frame.height + 8), 0)
+            self.mapView.padding = mapInsets
+            
+            
+            statusBar.adjustsFontSizeToFitWidth = true
+            
+            updateDriverStatus()
             
             containerVC?.name.text = driver!.name
             containerVC?.photo.image = driver!.photo
             
             currentDestination = rider?.destination
             containerVC?.addedTime.hidden = true
+            containerVC?.phoneText = driver!.phone
         }else{
             self.title = "Driving"
+            
+            //Hide the status bar
+            statusBar.alpha = 0
+            
+            //Mapview padding
+            let mapInsets = UIEdgeInsetsMake(0, 0, (self.detailsContainer.frame.height + 8), 0)
+            self.mapView.padding = mapInsets
+            
             pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
+            
+            if status == "waiting"{
+                startTripButton.alpha = 1
+                startTripButton.enabled = true
+            }else{
+                startTripButton.alpha = 0
+                startTripButton.enabled = false
+            }
             
             containerVC?.name.text = rider!.name
             containerVC?.photo.image = rider!.photo
+            containerVC?.phoneText = rider!.phone
             
             currentDestination = rider?.origin
             let hours = Int((driver?.addedTime!)!/60)
             let mins = Int((driver?.addedTime!)!)
             
             containerVC?.addedTime.text = "+\(mins) mins"
+            
+            //Handle location updates
+            SharingCenter.sharedInstance.locationManager?.delegate = self
+            SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyKilometer
+            SharingCenter.sharedInstance.locationManager?.allowsBackgroundLocationUpdates = true
+            SharingCenter.sharedInstance.locationManager?.activityType = CLActivityType.AutomotiveNavigation
+            SharingCenter.sharedInstance.locationManager?.pausesLocationUpdatesAutomatically = true
+            
+            if status != "waiting"{
+                SharingCenter.sharedInstance.locationManager?.startUpdatingLocation()
+            }
+            
+            //Do this real quick when the view loads
+            enableButtonsBasedOnLocation()
+            
         }
         
         containerVC?.price.text = "$\(driver!.price!)"
@@ -202,18 +248,20 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     
     @IBAction func pressedPickup(sender: AnyObject) {
         
-        //Notify server
+        completedPickUp = true
+        status = "leg2"
         
         self.currentDestination = rider?.destination!
         self.pickUp.enabled = false
         pickUpButtonWidth.constant -= self.view.bounds.width
         
-        UIView.animateWithDuration(0.1, animations: {
+        UIView.animateWithDuration(0.5, animations: {
             self.pickUp.layer.opacity = 0
             self.view.layoutIfNeeded()
         })
         
         //Notify server that rider has been picked up
+        YokweHelper.pickUp((self.rider?.userID)!)
         
     }
     
@@ -239,6 +287,23 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         
     }
     
+    //Starts the trip, alerts the rider about what is going on and starts sending location data to server
+    @IBAction func startTrip(sender: AnyObject) {
+        
+        status = "leg1"
+        SharingCenter.sharedInstance.locationManager?.startUpdatingLocation()
+        YokweHelper.startTrip((self.rider?.userID)!)
+        
+        //Handle button animation
+        self.startTripButton.enabled = false
+        self.startTripButton.frame.offsetInPlace(dx: 0, dy: -(startTripButton.frame.height))
+        UIView.animateWithDuration(0.5, animations: {
+            self.startTripButton.frame.offsetInPlace(dx: 0, dy: -(self.startTripButton.frame.height))
+            self.startTripButton.layer.opacity = 0
+            self.view.layoutIfNeeded()
+        })
+    }
+    
     //Completes the trip and charges the rider
     @IBAction func endTrip(){
         
@@ -250,6 +315,11 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             
             //Send message to server to end trip and return to homescreen
             YokweHelper.endTrip((self.rider?.userID)!, driverID: (self.driver?.userID)!)
+            
+            //Stop updating location
+            SharingCenter.sharedInstance.locationManager?.stopUpdatingLocation()
+            
+            //Dismiss the view controller
             self.dismissViewControllerAnimated(true, completion: nil)
         })
         
@@ -258,6 +328,24 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         alert.addAction(okAction)
         alert.addAction(cancelAction)
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func updateDriverStatus(){
+        //Update status bar appropriately
+        if status == "leg2"{
+            containerVC?.cancel.alpha = 0
+            containerVC?.cancel.enabled = false
+            
+            statusBar.alpha = 0
+            
+        }else if status == "leg1"{
+            statusBar.textColor = colorHelper.orange
+            statusBar.text = "\((driver?.name)!) is en route"
+            
+        }else{
+            statusBar.textColor = UIColor.orangeColor()
+            statusBar.text = "Waiting for \((driver?.name)!) to start the trip."
+        }
     }
     
     func tappedPhoto() {
@@ -348,8 +436,18 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         print("distance from pickup in meters: \(distanceInMetersFromPickup)")
         print("distance from dropoff in meters: \(distanceInMetersFromDropoff)")
         
-        //Check if they are within about 2 miles of pickup point
-        if distanceInMetersFromPickup < 100{
+        //Check if they are within about 1 mile of pickup point
+        if distanceInMetersFromPickup < 1000 && status == "leg1"{
+            
+            //Local notification that they need to select that they picked up the passenger.
+            if notifiedOfPickup == false{
+                let notification = UILocalNotification()
+                notification.alertBody = "You must confirm in the app once you've picked \(rider!.name!) up"
+                notification.soundName = UILocalNotificationDefaultSoundName
+                UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+                
+                notifiedOfPickup = true
+            }
             
             //show pickup button
             self.pickUp.enabled = true
@@ -361,8 +459,19 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
                 self.view.layoutIfNeeded()
             }
             
-        //Check if they are within about 2 miles of drop off point and rider has been picked up.
-        }else if distanceInMetersFromDropoff < 100 && self.pickUp.enabled == false{
+        //Check if they are within about 1 mile of drop off point and rider has been picked up.
+        }else if distanceInMetersFromDropoff < 1000 && self.pickUp.enabled == false && status == "leg2"{
+            
+            //Local notification that they can drop off passenger and end trip
+            if notifiedOfDropoff == false{
+                print("Got into drop off")
+                let notification = UILocalNotification()
+                notification.alertBody = "You can now end the trip once you drop \(rider!.name!) off"
+                notification.soundName = UILocalNotificationDefaultSoundName
+                UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+                
+                notifiedOfDropoff = true
+            }
             
             //show end trip button
             self.endTripButton.enabled = true

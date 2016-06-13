@@ -12,6 +12,7 @@ import CoreLocation
 
 class SharingCenter{
     
+    var didJustLogIn:Bool = false
     var accessToken:String?
     var shouldReset = false
     var start:String = ""

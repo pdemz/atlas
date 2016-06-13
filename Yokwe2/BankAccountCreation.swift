@@ -14,7 +14,6 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var routingNum: UITextField!
     @IBOutlet weak var accountNum: UITextField!
-    @IBOutlet weak var saveButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +27,7 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func save(sender: AnyObject) {
+    func saveInfo() {
         if fieldsAreCorrectLength(){
             YokweHelper.addBankAccount(name.text!, email: email.text, accountNum: accountNum.text!, routingNum: routingNum.text!, completion: { (result) -> Void in
                 

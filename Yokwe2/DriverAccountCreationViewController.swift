@@ -20,7 +20,6 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
     @IBOutlet weak var city: UITextField!
     @IBOutlet weak var state: UITextField!
     @IBOutlet weak var zip: UITextField!
-    @IBOutlet weak var saveButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +33,7 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
         }
     }
     
-    @IBAction func save(sender: AnyObject) {
+    func saveInfo() {
         if fieldsAreCorrectLength(){
             YokweHelper.createStripeAccount(first.text!, lastName: last.text!, day: day.text!, month: month.text!, year: year.text!, line1: street.text!.stringByReplacingOccurrencesOfString(" ", withString: "+"), line2: nil, city: city.text!, state: state.text!, zip: zip.text!, last4: ssn.text!, completion: { (result) -> Void in
                 
@@ -159,10 +158,8 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
-        navController.navigationBar.tintColor = UIColor.blackColor()
-        navController.navigationBar.barTintColor = UIColor.whiteColor()
+        navController.navigationBar.tintColor = colorHelper.orange
         navController.navigationBar.translucent = false
-        navController.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 22)!, NSForegroundColorAttributeName: colorHelper.indigo]
         
         return navController
     }
@@ -173,6 +170,10 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
         //Dismiss button
         let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
+        
+        //Save button
+        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "saveInfo")
+        vc.navigationItem.rightBarButtonItem = barSaveButton
         
         return vc
     }

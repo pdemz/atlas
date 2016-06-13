@@ -167,6 +167,8 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
     }
     
     func proceedToHomeScreen(user:User){
+        SharingCenter.sharedInstance.didJustLogIn = true
+        
         YokweHelper.storeUser()
         
         let selfRider = Rider(name: user.name, origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: SharingCenter.sharedInstance.userID, accessToken: SharingCenter.sharedInstance.accessToken)
