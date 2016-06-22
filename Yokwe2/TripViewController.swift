@@ -242,6 +242,11 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             
             //Open Google Maps
             UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps-x-callback://?saddr=&daddr=" + dest + "&directionsmode=driving&x-success=yokwe://?resume=true&x-source=Yokwe")!)
+            
+        //Otherwise open Apple Maps
+        }else{
+            UIApplication.sharedApplication().openURL(NSURL(string: "http://maps.apple.com/?daddr=\(dest)")!)
+            
         }
         
     }

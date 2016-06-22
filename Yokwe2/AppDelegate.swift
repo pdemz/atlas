@@ -103,6 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKAppEvents.activateApp()
         if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
+            application.applicationIconBadgeNumber = 0
 
         }
     }
@@ -125,14 +126,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Notification received")
         if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
-            
+            application.applicationIconBadgeNumber = 0
+
         }
         
     }
     
     func getUpdate(){
         YokweHelper.getUpdate({(result) -> Void in
-            
             print("shouldve updated")
             
             if result != nil{

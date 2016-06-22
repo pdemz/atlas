@@ -16,40 +16,52 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
     var phoneText:String?
     var educationText:String?
     var locationText:String?
-    var friendIconHidden:Bool = false
     
     @IBOutlet weak var aboutMe: UITextView!
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var phone: UILabel!
-    @IBOutlet weak var friendIcon: UIImageView!
     @IBOutlet weak var education: UILabel!
-    
+    @IBOutlet weak var phoneButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         photo.image = photoImage
         photo.layer.masksToBounds = false
-        photo.layer.cornerRadius = photo.frame.height/2
+        photo.layer.cornerRadius = 5
         photo.clipsToBounds = true
         
         aboutMe.delegate = self
         aboutMe.text = aboutMeText
+        aboutMe.layer.borderColor = UIColor.groupTableViewBackgroundColor().CGColor
+        
+        aboutMe.layer.borderWidth = 1
+        aboutMe.layer.cornerRadius = 4
         aboutMe.keyboardType  = .ASCIICapable
         
-        phone.text = phoneText
+        if phoneText != nil{
+            phone.text = phoneText
+
+        }else{
+            phone.text = "Not available until you start trip"
+            
+        }
         phone.adjustsFontSizeToFitWidth = true
         
         education.text = educationText
         education.adjustsFontSizeToFitWidth = true
         
-        location.textColor = colorHelper.orange
-        location.text = locationText
+        if locationText != nil{
+            location.text = locationText
+
+        }
         
+        /*
         friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         friendIcon.tintColor = colorHelper.orange
         
         friendIcon.hidden = friendIconHidden
+        */
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
@@ -95,7 +107,6 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         
         aboutMe.editable = false
         aboutMe.bounces = false
-        aboutMe.layer.borderWidth = 0
         
     }
     
@@ -119,15 +130,25 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
     func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            //self.view.frame.origin.y -= keyboardSize.height
+            self.view.frame.origin.y -= keyboardSize.height
         }
         
     }
     
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            //self.view.frame.origin.y += keyboardSize.height
+            self.view.frame.origin.y += keyboardSize.height
         }
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange,
+                   replacementString string: String) -> Bool
+    {
+        let maxLength = 140
+        let currentString: NSString = textField.text!
+        let newString: NSString =
+            currentString.stringByReplacingCharactersInRange(range, withString: string)
+        return newString.length <= maxLength
     }
     
 }

@@ -15,6 +15,18 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Set up text field backing views
+        originTextFieldBacking.layer.cornerRadius = 2
+        destinationTextFieldBacking.layer.cornerRadius = 2
+        
+        originTextFieldBacking.layer.shadowOpacity = 0.1
+        destinationTextFieldBacking.layer.shadowOpacity = 0.1
+        
+        originTextFieldBacking.layer.shadowOffset = CGSize(width: 0, height: 1)
+        originTextFieldBacking.layer.shadowRadius = 1
+        destinationTextFieldBacking.layer.shadowOffset = CGSize(width: 0, height: 1)
+        destinationTextFieldBacking.layer.shadowRadius = 1
+        
         self.distance.adjustsFontSizeToFitWidth = true
         self.duration.adjustsFontSizeToFitWidth = true
         
@@ -123,6 +135,8 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     let beige = colorHelper.beige
 
 
+    @IBOutlet weak var destinationTextFieldBacking: UIView!
+    @IBOutlet weak var originTextFieldBacking: UIView!
     @IBOutlet weak var startLabel: UILabel!
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var originTextField: UITextField!

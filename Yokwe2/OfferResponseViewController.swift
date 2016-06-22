@@ -200,7 +200,7 @@ class OfferResponseViewController: UIViewController {
             selfProfile.phoneText = self.rider?.phone
             selfProfile.aboutMeText = self.rider?.aboutMe
             selfProfile.locationText = self.rider?.mutualFriends
-            selfProfile.educationText = self.driver?.education
+            selfProfile.educationText = self.rider?.education
             
         }
         

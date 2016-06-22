@@ -76,7 +76,6 @@ class SlideOutMenuViewController: UITableViewController {
             selfProfile.photoImage = SharingCenter.sharedInstance.rider?.photo
 
         }
-        selfProfile.friendIconHidden = true
         
         if let aboutMeText = SharingCenter.sharedInstance.aboutMe{
             selfProfile.aboutMeText = aboutMeText
