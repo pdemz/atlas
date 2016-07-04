@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>FacebookAppID</key>
 	<string>1634059496844473</string>
 	<key>FacebookDisplayName</key>
@@ -57,7 +57,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Atlas requires your location for it to work properly</string>
+	<string>Atlas requires the driver's location during trips in order to update the status of the trip.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Atlas requires your location for it to work</string>
 	<key>UIBackgroundModes</key>
