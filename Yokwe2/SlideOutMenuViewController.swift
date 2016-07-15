@@ -16,8 +16,9 @@ class SlideOutMenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.row{
-        //case 0:
-            //Open trips
+        case 0:
+            //Present payment manager
+            presentPayment()
             
         case 1:
             //Open profile with edit button
@@ -57,6 +58,18 @@ class SlideOutMenuViewController: UITableViewController {
         navController = customizeNavController(navController)
         
         presentViewController(navController, animated: true, completion: nil)
+    }
+    
+    func presentPayment(){
+        var paymentVC = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentManager") as! PaymentManagementController
+        paymentVC = customizeVC(paymentVC) as! PaymentManagementController
+        
+        var navController = UINavigationController(rootViewController: paymentVC)
+        navController = customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: nil)
+
+        
     }
     
     func presentProfile(){

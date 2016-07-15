@@ -12,6 +12,130 @@ import UIKit
 
 class YokweHelper{
     
+    class func getCardInfo(completion:(result:String?)->Void){
+        let addr = NSURL(string: "https://www.yokweapp.com/profile")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "getCardInfo"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                completion(result: nil)
+            }
+            
+            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
+                if responseString != "null"{
+                    completion(result: responseString)
+                    
+                }else{
+                    completion(result: nil)
+
+                }
+            }
+            completion(result: nil)
+
+        }
+        task.resume()
+    }
+    
+    class func getBankInfo(completion:(result:String?)->Void){
+        let addr = NSURL(string: "https://www.yokweapp.com/profile")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "getBankInfo"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                completion(result: nil)
+            }
+            
+            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
+                if responseString != "null"{
+                    completion(result: responseString)
+                    
+                }else{
+                    completion(result: nil)
+                    
+                }
+            }
+            completion(result: nil)
+            
+        }
+        task.resume()
+    }
+    
+    class func deleteBank(){
+        let addr = NSURL(string: "https://www.yokweapp.com/profile")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "deleteBank"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+            }
+            
+        }
+        task.resume()
+    }
+    
+    class func deleteCard(){
+        let addr = NSURL(string: "https://www.yokweapp.com/profile")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "deleteCustomer"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+            }
+            
+        }
+        task.resume()
+    }
+    
     class func submitReview(stars: Int, review: String, revieweeID:String, reviewType:String){
         let addr = NSURL(string: "https://www.yokweapp.com/atlas")
         let request = NSMutableURLRequest(URL: addr!)

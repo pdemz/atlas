@@ -13,6 +13,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var logout: UILabel!
     @IBOutlet weak var phone: UITextField!
+    
     var phoneText:String?
     var canClose = true
     

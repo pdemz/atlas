@@ -38,6 +38,7 @@
 		DB68DA4D1CADC0AE005B4158 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4C1CADC0AE005B4158 /* User.swift */; };
 		DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7C66BA1C592AF10087474F /* colorHelper.swift */; };
 		DB81671C1CE6335200712459 /* TripDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB81671B1CE6335200712459 /* TripDetails.swift */; };
+		DB86DAF81D32A1E70050ED25 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB86DAF71D32A1E70050ED25 /* UIHelper.swift */; };
 		DB8C94711CBAE9B100FFF48C /* BankAccountCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */; };
 		DB914AAC1C9A37D1002BA5A3 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */; };
 		DB914AAE1C9A386C002BA5A3 /* PaymentFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB914AAD1C9A386C002BA5A3 /* PaymentFormViewController.swift */; };
@@ -48,6 +49,7 @@
 		DB9D94A31C7BAC5D0072992B /* RideRequestResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9D94A21C7BAC5D0072992B /* RideRequestResponseViewController.swift */; };
 		DBA80AEC1C5FBF85003B8B73 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */; };
 		DBA80AF21C605CC2003B8B73 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA80AF11C605CC2003B8B73 /* SWRevealViewController.m */; };
+		DBB1C46F1D2DE7F9003E6633 /* PaymentManagementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB1C46E1D2DE7F9003E6633 /* PaymentManagementController.swift */; };
 		DBCB03171D06114E001AC1A7 /* RideOrDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */; };
 		DBD32B201C8161440015CF06 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD32B1F1C8161440015CF06 /* TripViewController.swift */; };
 		DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */; };
@@ -106,6 +108,7 @@
 		DB68DA4C1CADC0AE005B4158 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB7C66BA1C592AF10087474F /* colorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = colorHelper.swift; sourceTree = "<group>"; };
 		DB81671B1CE6335200712459 /* TripDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetails.swift; sourceTree = "<group>"; };
+		DB86DAF71D32A1E70050ED25 /* UIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankAccountCreation.swift; sourceTree = "<group>"; };
 		DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Stripe.framework; sourceTree = "<group>"; };
 		DB914AAD1C9A386C002BA5A3 /* PaymentFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentFormViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +121,7 @@
 		DBA80AEF1C605CC2003B8B73 /* Yokwe2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Yokwe2-Bridging-Header.h"; sourceTree = "<group>"; };
 		DBA80AF01C605CC2003B8B73 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		DBA80AF11C605CC2003B8B73 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		DBB1C46E1D2DE7F9003E6633 /* PaymentManagementController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentManagementController.swift; sourceTree = "<group>"; };
 		DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideOrDriveViewController.swift; sourceTree = "<group>"; };
 		DBD32B1F1C8161440015CF06 /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsHelper.swift; sourceTree = "<group>"; };
@@ -239,6 +243,7 @@
 				BE0D70351BA5028300F201FE /* DateTimeViewController.swift */,
 				BE0D70171BA5024400F201FE /* ViewController.swift */,
 				BEC40C841BDED3C60032A8F4 /* MapTestViewController.swift */,
+				DBB1C46E1D2DE7F9003E6633 /* PaymentManagementController.swift */,
 				DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */,
 				BE8239EB1BCF546900BD5103 /* ConfirmationViewController.swift */,
 				BE92C9641BC1ABEB008D22E5 /* DriverOptionsTableViewController.swift */,
@@ -276,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				BE8239EF1BD043B100BD5103 /* SharingCenter.swift */,
+				DB86DAF71D32A1E70050ED25 /* UIHelper.swift */,
 				DB979C051C4D50A9000B91B4 /* FacebookHelper.swift */,
 				DB979C071C4D5123000B91B4 /* YokweHelper.swift */,
 				DB7C66BA1C592AF10087474F /* colorHelper.swift */,
@@ -502,6 +508,7 @@
 				DB68DA491CA0BEA8005B4158 /* PaymentConfirmationViewController.swift in Sources */,
 				BE92C9651BC1ABEB008D22E5 /* DriverOptionsTableViewController.swift in Sources */,
 				BE0128CF1BE2CA8800D78FD7 /* Rider.swift in Sources */,
+				DBB1C46F1D2DE7F9003E6633 /* PaymentManagementController.swift in Sources */,
 				DBA80AEC1C5FBF85003B8B73 /* PhoneNumberViewController.swift in Sources */,
 				BEC40C851BDED3C60032A8F4 /* MapTestViewController.swift in Sources */,
 				DB5543F61C7B6058001503EB /* DashboardTableViewController.swift in Sources */,
@@ -509,6 +516,7 @@
 				DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */,
 				BEBEC17E1BE95B8400986839 /* UserProfileViewController.swift in Sources */,
 				DB8C94711CBAE9B100FFF48C /* BankAccountCreation.swift in Sources */,
+				DB86DAF81D32A1E70050ED25 /* UIHelper.swift in Sources */,
 				DB81671C1CE6335200712459 /* TripDetails.swift in Sources */,
 				BE8BD91D1BE81E9900B77BDD /* ConfirmRiderViewController.swift in Sources */,
 				DBED151B1C7B451800351D10 /* DashboardTableViewCell.swift in Sources */,
