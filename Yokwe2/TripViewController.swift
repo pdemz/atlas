@@ -30,23 +30,18 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     @IBOutlet weak var startTripButton: UIButton!
     @IBOutlet weak var detailsContainer: UIView!
     @IBOutlet weak var endTripButton: UIButton!
-    @IBOutlet weak var pickUp: UIButton!
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var containerBottomm: NSLayoutConstraint!
-    @IBOutlet weak var pickUpButtonWidth: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //Button button who's got the button...
-        pickUp.titleLabel?.adjustsFontSizeToFitWidth = true
-        self.pickUp.enabled = false
-        self.pickUp.hidden = true
-        pickUpButtonWidth.constant -= self.view.bounds.width
-        pickUp.alpha = 0
         endTripButton.alpha = 0
         endTripButton.enabled = false
         endTripButton.hidden = true
+        
+        startTripButton.titleLabel?.text
         
         //Google map view set up
         self.mapView!.myLocationEnabled = true
@@ -79,8 +74,6 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             //Mapview padding
             let mapInsets = UIEdgeInsetsMake(0, 0, (self.detailsContainer.frame.height + 8), 0)
             self.mapView.padding = mapInsets
-            
-            pickUp.setTitle("Tap here once you've picked \(rider!.name!) up", forState: .Normal)
             
             if status == "waiting"{
                 startTripButton.alpha = 1
@@ -237,6 +230,8 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         //Open google maps, and route to currentDestination
         let dest = self.currentDestination!.stringByReplacingOccurrencesOfString(" ", withString: "+")
         
+        //Add waypoints here
+        
         //Check if Google Maps is installed
         if UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!){
             
@@ -253,17 +248,12 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     
     @IBAction func pressedPickup(sender: AnyObject) {
         
+        print("pickup happened")
+        
         completedPickUp = true
         status = "leg2"
         
         self.currentDestination = rider?.destination!
-        self.pickUp.enabled = false
-        pickUpButtonWidth.constant -= self.view.bounds.width
-        
-        UIView.animateWithDuration(0.5, animations: {
-            self.pickUp.layer.opacity = 0
-            self.view.layoutIfNeeded()
-        })
         
         //Notify server that rider has been picked up
         YokweHelper.pickUp((self.rider?.userID)!)
@@ -444,16 +434,29 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         //Check if they are within about 1 mile of pickup point
         if distanceInMetersFromPickup < 1000 && status == "leg1"{
             
-            //Local notification that they need to select that they picked up the passenger.
-            if notifiedOfPickup == false{
-                let notification = UILocalNotification()
-                notification.alertBody = "You must confirm in the app once you've picked \(rider!.name!) up"
-                notification.soundName = UILocalNotificationDefaultSoundName
-                UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+            //Set location services to be very accurate
+            SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+            
+            //Determine if they are within 200 meters of the drop off point
+            if distanceInMetersFromPickup < 200 && status == "leg1"{
+                pressedPickup(self)
                 
-                notifiedOfPickup = true
+                //Notify driver that they have arrived
+                if notifiedOfPickup == false{
+                    let notification = UILocalNotification()
+                    notification.alertBody = "You've arrived at \(rider!.name!)'s location"
+                    notification.soundName = UILocalNotificationDefaultSoundName
+                    UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+                    
+                    notifiedOfPickup = true
+                }
+                
+                //Set location services to be less accurate to conserve battery
+                SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyKilometer
+                
             }
             
+            /*
             //show pickup button
             self.pickUp.enabled = true
             self.pickUp.hidden = false
@@ -463,9 +466,10 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
                 self.pickUp.alpha = 0.9
                 self.view.layoutIfNeeded()
             }
+            */
             
         //Check if they are within about 1 mile of drop off point and rider has been picked up.
-        }else if distanceInMetersFromDropoff < 1000 && self.pickUp.enabled == false && status == "leg2"{
+        }else if distanceInMetersFromDropoff < 1000 && status == "leg2"{
             
             //Local notification that they can drop off passenger and end trip
             if notifiedOfDropoff == false{
@@ -481,7 +485,6 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             //show end trip button
             self.endTripButton.enabled = true
             self.endTripButton.hidden = false
-            pickUpButtonWidth.constant += self.view.bounds.width
             
             //Now animate
             UIView.animateWithDuration(0.5){

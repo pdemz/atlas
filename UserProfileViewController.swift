@@ -43,7 +43,7 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
             phone.text = phoneText
 
         }else{
-            phone.text = "Not available until you start trip"
+            phone.text = "Not available until trip starts"
             
         }
         phone.adjustsFontSizeToFitWidth = true

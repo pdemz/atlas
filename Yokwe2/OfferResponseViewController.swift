@@ -161,15 +161,36 @@ class OfferResponseViewController: UIViewController {
     
     @IBAction func pressedAccept(sender: AnyObject) {
         if type == "ride"{
-            YokweHelper.acceptRequest((driver?.userID)!, requestType: "drive")
+            if SharingCenter.sharedInstance.customerToken == nil{
+                 //Present the card view controller if they don't have one on file. When it's completed, tell the server they accepted the request. If they close it, reject the request.
+                presentCustomerForm()
+                print("ok sweet")
+            }else{
+                //Accept the ride request and open the active trip view
+                
+                YokweHelper.acceptRequest((driver?.userID)!, requestType: "drive")
+                
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                appDelegate.getUpdate()
+                
+                dismissViewControllerAnimated(true, completion: nil)
+    
+            }
         }else{
-            YokweHelper.acceptRequest((rider?.userID)!, requestType: "ride")
+            if SharingCenter.sharedInstance.accountToken == nil{
+                //Present the Bank view controller if they don't have one on file. When it's completed, tell the server they accepted the request. If they close it, reject the request.
+                presentDriverForm()
+            }else{
+                //Accept the ride request and open the active trip view
+                
+                YokweHelper.acceptRequest((rider?.userID)!, requestType: "ride")
+                
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                appDelegate.getUpdate()
+                
+                dismissViewControllerAnimated(true, completion: nil)
+            }
         }
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        appDelegate.getUpdate()
-        
-        dismissViewControllerAnimated(true, completion: nil)
         
     }
     
@@ -225,6 +246,27 @@ class OfferResponseViewController: UIViewController {
         
         return vc
     }
-
+    
+    func presentCustomerForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        vc = RideOrDriveViewController.customizeVC(vc) as! PaymentFormViewController
+        vc.title = "Payment Info"
+        
+        var navController = UINavigationController(rootViewController: vc)
+        navController = RideOrDriveViewController.customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: nil)
+    }
+    
+    func presentDriverForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        vc = RideOrDriveViewController.customizeVC(vc) as! DriverAccountCreationViewController
+        vc.title = "Create Driver Account"
+        
+        var navController = UINavigationController(rootViewController: vc)
+        navController = RideOrDriveViewController.customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: nil)
+    }
 
 }

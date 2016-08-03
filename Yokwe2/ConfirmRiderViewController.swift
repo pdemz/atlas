@@ -19,6 +19,8 @@ class ConfirmRiderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Offer ride"
+        
         photo.image = rider.photo
         photo.layer.masksToBounds = false
         photo.layer.cornerRadius = photo.frame.height/2
@@ -26,8 +28,12 @@ class ConfirmRiderViewController: UIViewController {
         
         name.text = rider.name
         
-        addedTime.text = "Time added: \(rider.addedTime!) mins"
-        totalTripTime.text = "Total trip: \(getTotalTripTime())"
+        //Handle trip time labels
+        addedTime.adjustsFontSizeToFitWidth = true
+        totalTripTime.adjustsFontSizeToFitWidth = true
+        
+        addedTime.text = "+\(rider.addedTime!) mins"
+        totalTripTime.text = "\(getTotalTripTime()) total"
         
         loadMapView()
         
@@ -102,16 +108,21 @@ class ConfirmRiderViewController: UIViewController {
     
     
     @IBAction func pressedOffer(sender: AnyObject) {
-        YokweHelper.riderSelection(rider.userID!, addedTime: rider.addedTime!, price: rider.price!)
         
-        let alertString = "You will be alerted when \(rider.name!) responds to your offer"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-            self.returnToHomeScreen()
-        })
-        alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
+        if SharingCenter.sharedInstance.accountToken == nil{
+            presentDriverForm()
+            
+        }else{
+            YokweHelper.riderSelection(rider.userID!, addedTime: rider.addedTime!, price: rider.price!)
+            
+            let alertString = "You will be alerted when \(rider.name!) responds to your offer"
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                self.returnToHomeScreen()
+            })
+            alert.addAction(okAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     /*
@@ -141,11 +152,24 @@ class ConfirmRiderViewController: UIViewController {
     }
 */
     
+    
+    func presentDriverForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        vc = RideOrDriveViewController.customizeVC(vc) as! DriverAccountCreationViewController
+        vc.title = "Create Driver Account"
+        
+        var navController = UINavigationController(rootViewController: vc)
+        navController = RideOrDriveViewController.customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: nil)
+    }
+    
     func returnToHomeScreen(){
         SharingCenter.sharedInstance.shouldReset = true
         navigationController?.popToRootViewControllerAnimated(true)
     }
     
+    //Store the damn time here instead. this is so stupid and is a big example of how time is wasted and how you need to avoid complexity.
     func getTotalTripTime() -> String{
         let tripTimeString = SharingCenter.sharedInstance.tripTime
         let splitString = tripTimeString!.componentsSeparatedByString(" ")

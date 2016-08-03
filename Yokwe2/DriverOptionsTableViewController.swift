@@ -14,6 +14,8 @@ class DriverOptionsTableViewController: UITableViewController {
     
     var drivers = [Driver]()
     var driverList:[Driver]?
+    let myBool = true
+    
     
     @IBOutlet weak var indicatorr: UIActivityIndicatorView!
     
@@ -33,6 +35,16 @@ class DriverOptionsTableViewController: UITableViewController {
         self.title = "Select driver"
         
         populateRows()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.title = "Select driver"
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.title = ""
     }
     
     func populateRows(){

@@ -19,12 +19,14 @@ class DriverTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         photo.layer.masksToBounds = false
-        photo.layer.cornerRadius = photo.frame.height/2
+        //photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
 
-        mutualFriends.textColor = colorHelper.orange
+        mutualFriends.textColor = UIColor.blackColor()
         friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        friendIcon.tintColor = colorHelper.orange
+        friendIcon.tintColor = UIColor.blackColor()
+        mutualFriends.alpha = 0.7
+        friendIcon.alpha = 0.7
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

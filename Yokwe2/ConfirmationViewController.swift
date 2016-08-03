@@ -19,13 +19,17 @@ class ConfirmationViewController: UIViewController {
         override func viewDidLoad() {
             super.viewDidLoad()
             
-            // Do any additional setup after loading the view.
+            self.title = "Request ride"
+            
+            //Manage driver photo
             photo.image = driver.photo
             photo.layer.masksToBounds = false
-            photo.layer.cornerRadius = photo.frame.height/2
+            //photo.layer.cornerRadius = photo.frame.height/2
             photo.clipsToBounds = true
             name.text = driver.name
-            totalTripTime.text = "Trip duration: \(SharingCenter.sharedInstance.tripTime!)"
+            
+            totalTripTime.adjustsFontSizeToFitWidth = true
+            totalTripTime.text = "\(SharingCenter.sharedInstance.tripTime!)"
             
             loadMapView()
             
@@ -80,19 +84,35 @@ class ConfirmationViewController: UIViewController {
         }
     
     @IBAction func pressedRequest(sender: AnyObject) {
-        print("This is being stored: \(String(driver.addedTime!))")
-        YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!)
         
-        let alertString = "You will be alerted when \(driver.name!) responds to your request"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-            self.returnToHomeScreen()
-        })
-        alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
+        if SharingCenter.sharedInstance.customerToken == nil{
+            presentCustomerForm()
+            
+        }else{
+            print("This is being stored: \(String(driver.addedTime!))")
+            YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!)
+            
+            let alertString = "You will be alerted when \(driver.name!) responds to your request"
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                self.returnToHomeScreen()
+            })
+            alert.addAction(okAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
+    
+    func presentCustomerForm(){
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        vc = RideOrDriveViewController.customizeVC(vc) as! PaymentFormViewController
+        vc.title = "Payment Info"
         
+        var navController = UINavigationController(rootViewController: vc)
+        navController = RideOrDriveViewController.customizeNavController(navController)
+        
+        presentViewController(navController, animated: true, completion: nil)
+    }
+    
     func returnToHomeScreen(){
         SharingCenter.sharedInstance.shouldReset = true
         navigationController?.popToRootViewControllerAnimated(true)

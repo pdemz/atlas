@@ -36,9 +36,12 @@ class FacebookHelper{
                 if let schoolName = school?.valueForKey("school")?.valueForKey("name") as? String{
                     education += schoolName
                 }
+                
+                
+                /* I think this is too much information
                 if let schoolYear = school?.valueForKey("year")?.valueForKey("name") as? String{
                     education += " \(schoolYear)"
-                }
+                }*/
                 
                 driver.education = education
                 print(driver.education)
@@ -81,9 +84,11 @@ class FacebookHelper{
                 if let schoolName = school?.valueForKey("school")?.valueForKey("name") as? String{
                     education += schoolName
                 }
-                if let schoolYear = school?.valueForKey("year")?.valueForKey("name") as? String{
+                
+                /*if let schoolYear = school?.valueForKey("year")?.valueForKey("name") as? String{
                     education += " \(schoolYear)"
-                }
+                }*/
+                
                 rider.education = education
                 print(education)
                 

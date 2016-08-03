@@ -34,6 +34,16 @@ class RiderOptionsTableViewController: UITableViewController{
         populateRows()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.title = "Select rider"
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.title = ""
+    }
+    
     func populateRows(){
         YokweHelper.getRiderList{(result) -> Void in
             if result.count == 0{

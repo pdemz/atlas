@@ -53,11 +53,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         let mapInsets = UIEdgeInsetsMake(self.destinationTextField.frame.maxY + 40, 0, (self.bottomView.frame.height + 8), 0)
         self.mapView.padding = mapInsets
         
-        additionalSetup()
+        additionalUISetup()
         
     }
     
-    func additionalSetup(){
+    func additionalUISetup(){
         originTextField.attributedPlaceholder = NSAttributedString(string:"Current location",
             attributes:[NSForegroundColorAttributeName: blue])
         
@@ -70,7 +70,9 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         originTextField.layer.cornerRadius = 4
         originTextField.clipsToBounds = true
         
-
+        searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        searchButton.titleLabel?.numberOfLines = 2
+        searchButton.titleLabel?.textAlignment = NSTextAlignment.Center
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,7 +84,6 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         }
         
         //Reset text boxes and locations and ensure bottom view is not visible
-        
         SharingCenter.sharedInstance.locationManager!.delegate = self
         
         if SharingCenter.sharedInstance.shouldReset{
@@ -98,19 +99,33 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             SharingCenter.sharedInstance.shouldReset = false
         }
 
-        
+        //Set up the screen to reflect if the user is riding or driving
         if SharingCenter.sharedInstance.mode == "driver"{
-            self.title = "Drive"
+            self.title = "Offer a trip"
+            searchButton.setTitle("Search for riders", forState: UIControlState.Normal)
+
+            destinationTextField.placeholder = "Where are you driving?"
+            destinationTextField.layoutIfNeeded()
+            
         }else{
-            self.title = "Ride"
+            self.title = "Request a ride"
+            searchButton.setTitle("Search for drivers", forState: UIControlState.Normal)
+            
+            destinationTextField.placeholder = "Where do you want to go?"
+            destinationTextField.layoutIfNeeded()
+
         }
         
-        self.navigationController?.navigationBar.tintColor = colorHelper.orange
-        //self.navigationController?.navigationBar.barTintColor = colorHelper.beige
-        self.navigationController?.navigationBar.translucent = false
-        //self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 20)!, NSForegroundColorAttributeName: colorHelper.indigo]
-        //self.navigationController
+        print("updated placehodler: \(destinationTextField.placeholder!)")
         
+        self.navigationController?.navigationBar.tintColor = colorHelper.orange
+        self.navigationController?.navigationBar.translucent = false
+        //self.navigationController?.navigationBar.barTintColor = colorHelper.orange
+        //self.navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.whiteColor()]
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.title = ""
     }
     
     //Disables mapview while menu is open
@@ -118,10 +133,18 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         if position == FrontViewPosition.Left{
             self.mapView.userInteractionEnabled = true
             if SharingCenter.sharedInstance.mode == "driver"{
-                self.title = "Drive"
+                self.title = "Offer a trip"
+                self.destinationTextField.placeholder = "Where are you driving to?"
+                searchButton.setTitle("Search for riders", forState: UIControlState.Normal)
+
             }else{
-                self.title = "Ride"
+                self.title = "Request a ride"
+                self.destinationTextField.placeholder = "Where do you want to go?"
+                searchButton.setTitle("Search for drivers", forState: UIControlState.Normal)
+
+
             }
+            
         }else{
             self.mapView.userInteractionEnabled = false
         }
@@ -145,6 +168,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     @IBOutlet weak var distance: UILabel!
     @IBOutlet weak var duration: UILabel!
     @IBOutlet weak var menuButton: UIBarButtonItem!
+    @IBOutlet weak var searchButton: UIButton!
     
     // MARK: - Navigation
     func openAutocomplete(){
@@ -194,23 +218,26 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             SharingCenter.sharedInstance.locationManager!.stopUpdatingLocation()
             
             if SharingCenter.sharedInstance.mode == "driver"{
+                /*
                 //Check if their account info is on file
                 if SharingCenter.sharedInstance.accountToken == nil{
                     presentDriverForm()
-                    
-                }else{
-                    performSegueWithIdentifier("driverSegue", sender: sender)
                 }
+                */
+                
+                performSegueWithIdentifier("driverSegue", sender: sender)
+                
                 
             }else if SharingCenter.sharedInstance.mode ==  "rider"{
                 //Check if payment info is on file
+                /*
                 if SharingCenter.sharedInstance.customerToken == nil{
                     presentCustomerForm()
                     
-                }else{
-                    performSegueWithIdentifier("riderSegue", sender: sender)
-                    
                 }
+                */
+                performSegueWithIdentifier("riderSegue", sender: sender)
+                    
                 
             }
         }
