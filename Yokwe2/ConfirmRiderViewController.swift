@@ -109,20 +109,29 @@ class ConfirmRiderViewController: UIViewController {
     
     @IBAction func pressedOffer(sender: AnyObject) {
         
+        //Presenting an alert no matter what
+        var alertString = "You will be alerted when \(rider.name!) responds to your offer"
+        
+        var okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+            YokweHelper.riderSelection(self.rider.userID!, addedTime: self.rider.addedTime!, price: self.rider.price!)
+            self.returnToHomeScreen()
+        })
+        
         if SharingCenter.sharedInstance.accountToken == nil{
-            presentDriverForm()
+            //Presenting an alert no matter what
+            alertString = "You must create a driver account using the payments section of the main menu before you can offer rides."
+            okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+            
             
         }else{
-            YokweHelper.riderSelection(rider.userID!, addedTime: rider.addedTime!, price: rider.price!)
+            //YokweHelper.riderSelection(rider.userID!, addedTime: rider.addedTime!, price: rider.price!)
             
-            let alertString = "You will be alerted when \(rider.name!) responds to your offer"
-            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                self.returnToHomeScreen()
-            })
-            alert.addAction(okAction)
-            self.presentViewController(alert, animated: true, completion: nil)
         }
+        
+        //Present an alert no matter what
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        alert.addAction(okAction)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     /*

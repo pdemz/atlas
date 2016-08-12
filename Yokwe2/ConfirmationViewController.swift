@@ -24,7 +24,7 @@ class ConfirmationViewController: UIViewController {
             //Manage driver photo
             photo.image = driver.photo
             photo.layer.masksToBounds = false
-            //photo.layer.cornerRadius = photo.frame.height/2
+            photo.layer.cornerRadius = photo.frame.height/2
             photo.clipsToBounds = true
             name.text = driver.name
             
@@ -85,11 +85,16 @@ class ConfirmationViewController: UIViewController {
     
     @IBAction func pressedRequest(sender: AnyObject) {
         
+        //Check if the rider has a credit card on file
         if SharingCenter.sharedInstance.customerToken == nil{
-            presentCustomerForm()
+            let alertString = "You must have a credit card on file before you can accept rides. You can add one via the payments section in the main menu."
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+            alert.addAction(okAction)
+            self.presentViewController(alert, animated: true, completion: nil)
             
+        //Otherwise let the request go through
         }else{
-            print("This is being stored: \(String(driver.addedTime!))")
             YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!)
             
             let alertString = "You will be alerted when \(driver.name!) responds to your request"
@@ -100,17 +105,6 @@ class ConfirmationViewController: UIViewController {
             alert.addAction(okAction)
             self.presentViewController(alert, animated: true, completion: nil)
         }
-    }
-    
-    func presentCustomerForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
-        vc = RideOrDriveViewController.customizeVC(vc) as! PaymentFormViewController
-        vc.title = "Payment Info"
-        
-        var navController = UINavigationController(rootViewController: vc)
-        navController = RideOrDriveViewController.customizeNavController(navController)
-        
-        presentViewController(navController, animated: true, completion: nil)
     }
     
     func returnToHomeScreen(){

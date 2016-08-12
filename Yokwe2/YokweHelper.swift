@@ -297,10 +297,14 @@ class YokweHelper{
                 
                 for rider in riderStringList{
                     if rider != "" && rider.containsString(";"){
+                        print(rider)
                         var newb = rider.componentsSeparatedByString(";")
                         let newRider = Rider(name: nil, origin: newb[2], destination: newb[3], photo: nil, mutualFriends: newb[5], fareEstimate: nil, addedTime: newb[4], userID: newb[0], accessToken: newb[1])
                         newRider.price = newb[6]
                         newRider.aboutMe = newb[7]
+                        
+                        print("newb5: \(newb[5])")
+                        
                         riderList.append(newRider)
                         
                     }
@@ -790,9 +794,11 @@ class YokweHelper{
         let type = "riderSelection"
         
         request.HTTPMethod = "POST"
+        
         var postString = "type=\(type)&riderID=\(riderID)&addedTime=\(addedTime)&price=\(price)"
         postString = addCredentials(postString)
 
+        print("POST STRINGGGGG: \(postString)")
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request

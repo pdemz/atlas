@@ -89,6 +89,8 @@ class RiderOptionsTableViewController: UITableViewController{
         if riderList == nil{
             return 0
         }else{
+            
+            print("riderList count: \(riderList!.count)")
             return riderList!.count
         }
     }
@@ -107,7 +109,10 @@ class RiderOptionsTableViewController: UITableViewController{
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RiderOptionTableViewCell", forIndexPath: indexPath) as! RiderOptionTableViewCell
         
-        //let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+        print("riders count: \(riders!.count)")
+        print("indexPathRow: \(indexPath.row)")
+
+        
         let rider = riders![indexPath.row]
         
         cell.name.text = rider.name

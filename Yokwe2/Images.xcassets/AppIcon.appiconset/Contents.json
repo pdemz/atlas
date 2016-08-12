@@ -27,13 +27,13 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "120bow.png",
+      "filename" : "120bowSmaller.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "180bow-1.png",
+      "filename" : "180bowSmaller.png",
       "scale" : "3x"
     }
   ],
