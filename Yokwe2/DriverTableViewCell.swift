@@ -12,7 +12,6 @@ class DriverTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var mutualFriends: UILabel!
-    @IBOutlet weak var friendIcon: UIImageView!
     @IBOutlet weak var price: UILabel!
     
     override func awakeFromNib() {
@@ -23,10 +22,8 @@ class DriverTableViewCell: UITableViewCell {
         photo.clipsToBounds = true
 
         mutualFriends.textColor = UIColor.blackColor()
-        friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        friendIcon.tintColor = UIColor.blackColor()
+        mutualFriends.adjustsFontSizeToFitWidth = true
         mutualFriends.alpha = 0.7
-        friendIcon.alpha = 0.7
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

@@ -60,6 +60,8 @@ class YokweHelper{
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
+        print("Here is the post string: \(postString)")
+        
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
         //Send HTTP post request
@@ -249,6 +251,7 @@ class YokweHelper{
                         let newDriver = Driver(name: nil, photo: nil, mutualFriends: newb[3], fareEstimate: nil, eta: nil, userID: newb[0], accessToken: newb[1], addedTime: Double(newb[2]))
                         newDriver.price = newb[4]
                         newDriver.aboutMe = newb[5]
+                        newDriver.name = newb[6]
                         print(newb[4])
                         driverList.append(newDriver)
                     }
@@ -302,6 +305,7 @@ class YokweHelper{
                         let newRider = Rider(name: nil, origin: newb[2], destination: newb[3], photo: nil, mutualFriends: newb[5], fareEstimate: nil, addedTime: newb[4], userID: newb[0], accessToken: newb[1])
                         newRider.price = newb[6]
                         newRider.aboutMe = newb[7]
+                        newRider.name = newb[8]
                         
                         print("newb5: \(newb[5])")
                         
@@ -1134,6 +1138,81 @@ class YokweHelper{
         task.resume()
     }
     
+    //Verify code for sms
+    class func verifyCode(code:String, completion:(result: Bool)->Void){
+        
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "sms"
+        let action = "verify"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)&action=\(action)&code=\(code)&number=\(SharingCenter.sharedInstance.phone!)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                completion(result: false)
+            }
+            
+            do {
+                if let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
+                    print("json result: \(jsonResults)")
+                    let valid = jsonResults.valueForKey("verified") as! Bool
+                    completion(result: valid)
+                    
+                }else{
+                    completion(result: false)
+                }
+                
+            } catch {
+                // failure
+                print("Code verification failed: \((error as NSError).localizedDescription)")
+                completion(result: false)
+            }
+
+            
+            
+        }
+        task.resume()
+    }
+    
+    class func requestVerificationCode(){
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "sms"
+        let action = "send"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)&action=\(action)&number=\(SharingCenter.sharedInstance.phone!)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+            }
+            
+        }
+        task.resume()
+
+        
+    }
+    
     class func addCredentials(postString:String) -> String{
         var newString = postString
         
@@ -1157,7 +1236,6 @@ class YokweHelper{
         
         return newString
     }
-
 
     
 }

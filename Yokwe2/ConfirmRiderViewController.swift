@@ -119,7 +119,7 @@ class ConfirmRiderViewController: UIViewController {
         
         if SharingCenter.sharedInstance.accountToken == nil{
             //Presenting an alert no matter what
-            alertString = "You must create a driver account using the payments section of the main menu before you can offer rides."
+            alertString = "You must enter driver account info using the payments section of the main menu before you can offer rides."
             okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
             
             

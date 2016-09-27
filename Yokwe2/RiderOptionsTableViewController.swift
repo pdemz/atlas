@@ -118,7 +118,7 @@ class RiderOptionsTableViewController: UITableViewController{
         cell.name.text = rider.name
         cell.addedTime.text = "+\(rider.addedTime!) min"
         cell.photo.image = rider.photo
-        cell.mutualFriends.text = rider.mutualFriends
+        cell.mutualFriends.text = "\(rider.mutualFriends!) mutual friends"
         cell.price.text = ("$\(Double(rider.price!)!/100)")
         
         return cell

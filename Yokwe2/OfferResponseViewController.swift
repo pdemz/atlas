@@ -161,10 +161,16 @@ class OfferResponseViewController: UIViewController {
     
     @IBAction func pressedAccept(sender: AnyObject) {
         if type == "ride"{
+            
+            
+            print("nope we got here")
+            //Notify the rider if they need to enter a credit card
             if SharingCenter.sharedInstance.customerToken == nil{
-                 //Present the card view controller if they don't have one on file. When it's completed, tell the server they accepted the request. If they close it, reject the request.
-                presentCustomerForm()
-                print("ok sweet")
+                let alertString = "You must have a credit card on file before you can accept rides. You can add one via the payments section in the main menu."
+                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+                let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
             }else{
                 //Accept the ride request and open the active trip view
                 
@@ -177,10 +183,19 @@ class OfferResponseViewController: UIViewController {
     
             }
         }else{
+            
+            print("Did we get in here?")
             if SharingCenter.sharedInstance.accountToken == nil{
-                //Present the Bank view controller if they don't have one on file. When it's completed, tell the server they accepted the request. If they close it, reject the request.
-                presentDriverForm()
+                //Alert the driver that they need to create an account before they can drive people
+                let alertString = "You must add driver account info using the payments section of the main menu before you can drive people."
+                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+                let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+
             }else{
+                print("account token isn't nil for some reason")
+                print(SharingCenter.sharedInstance.accountToken)
                 //Accept the ride request and open the active trip view
                 
                 YokweHelper.acceptRequest((rider?.userID)!, requestType: "ride")
@@ -247,6 +262,7 @@ class OfferResponseViewController: UIViewController {
         return vc
     }
     
+    //Actually just presents a pop up
     func presentCustomerForm(){
         var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
         vc = RideOrDriveViewController.customizeVC(vc) as! PaymentFormViewController

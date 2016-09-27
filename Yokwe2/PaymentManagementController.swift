@@ -142,9 +142,9 @@ class PaymentManagementController: UITableViewController {
     }
     
     func presentBankForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("BankAccountCreation") as! BankAccountCreation
-        vc = UIHelper.customizeVC(vc) as! BankAccountCreation
-        vc.title = "Payment Info"
+        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        vc = UIHelper.customizeVC(vc) as! DriverAccountCreationViewController
+        vc.title = "Create driver account"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = UIHelper.customizeNavController(navController)

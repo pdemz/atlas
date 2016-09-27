@@ -26,6 +26,11 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     var notifiedOfPickup = false
     var notifiedOfDropoff = false
 
+    @IBOutlet weak var driverStatusViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var driverWaypointLabel: UILabel!
+    @IBOutlet weak var driverInstructionLabel: UILabel!
+    @IBOutlet weak var driverStatusView: UIView!
+    
     @IBOutlet weak var statusBar: UILabel!
     @IBOutlet weak var startTripButton: UIButton!
     @IBOutlet weak var detailsContainer: UIView!
@@ -68,6 +73,14 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         }else{
             self.title = "Driving"
             
+            //initialize driver status view
+            driverInstructionLabel.text = "Pick \(rider!.name!) up at"
+            driverWaypointLabel.text = "\(rider!.originAddress!)"
+            driverInstructionLabel.adjustsFontSizeToFitWidth = true
+            driverWaypointLabel.adjustsFontSizeToFitWidth = true
+            slideDriverStatusView()
+            
+            
             //Hide the status bar
             statusBar.alpha = 0
             
@@ -76,6 +89,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             self.mapView.padding = mapInsets
             
             if status == "waiting"{
+                slideDriverStatusView()
                 startTripButton.alpha = 1
                 startTripButton.enabled = true
             }else{
@@ -88,10 +102,8 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             containerVC?.phoneText = rider!.phone
             
             currentDestination = rider?.origin
-            let hours = Int((driver?.addedTime!)!/60)
-            let mins = Int((driver?.addedTime!)!)
             
-            containerVC?.addedTime.text = "+\(mins) mins"
+            containerVC?.addedTime.text = "+\(Int(driver!.addedTime!)) mins"
             
             //Handle location updates
             SharingCenter.sharedInstance.locationManager?.delegate = self
@@ -139,6 +151,20 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         
     }
     
+    func slideDriverStatusView(){
+        //Change constraint
+        if self.driverStatusViewTopConstraint.constant < 0{
+            self.driverStatusViewTopConstraint.constant = 0
+        }else{
+            self.driverStatusViewTopConstraint.constant = -100
+        }
+        
+        //Now animate
+        UIView.animateWithDuration(0.2){
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     func loadMapView(){
         //let newPath = GMSPath(fromEncodedPath: SharingCenter.sharedInstance.myPath!)
         
@@ -151,7 +177,9 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         let riderDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((riderDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((riderDestinationSplit[1] as NSString).doubleValue))
         
         let riderStartMarker = GMSMarker(position: riderOrigin)
+        riderStartMarker.icon = GMSMarker.markerImageWithColor(colorHelper.orange)
         let riderEndMarker = GMSMarker(position: riderDestination)
+        riderEndMarker.icon = GMSMarker.markerImageWithColor(colorHelper.orange)
         riderStartMarker.title = "Start"
         riderEndMarker.title = "End"
         
@@ -166,6 +194,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             let driverDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((driverDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((driverDestinationSplit[1] as NSString).doubleValue))
             
             let driverStartMarker = GMSMarker(position: driverOrigin)
+            driverStartMarker.icon = GMSMarker.markerImageWithColor(UIColor.greenColor())
             driverStartMarker.map = mapView
             driverStartMarker.title = "Start"
             
@@ -258,6 +287,9 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         //Notify server that rider has been picked up
         YokweHelper.pickUp((self.rider?.userID)!)
         
+        //Change driver status view
+        driverInstructionLabel.text = "Drop \(rider!.name!) off at"
+        driverWaypointLabel.text = "\(rider!.destinationAddress!)"
     }
     
     //Cancels the trip - no charge is made. Exactly like end trip otherwise
@@ -297,6 +329,9 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             self.startTripButton.layer.opacity = 0
             self.view.layoutIfNeeded()
         })
+        
+        //Slide driver status view
+        slideDriverStatusView()
     }
     
     //Completes the trip and charges the rider
@@ -323,6 +358,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         alert.addAction(okAction)
         alert.addAction(cancelAction)
         self.presentViewController(alert, animated: true, completion: nil)
+        
     }
     
     func updateDriverStatus(){
@@ -444,7 +480,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
                 //Notify driver that they have arrived
                 if notifiedOfPickup == false{
                     let notification = UILocalNotification()
-                    notification.alertBody = "You've arrived at \(rider!.name!)'s location"
+                    notification.alertBody = "Now arriving at \(rider!.name!)'s location"
                     notification.soundName = UILocalNotificationDefaultSoundName
                     UIApplication.sharedApplication().presentLocalNotificationNow(notification)
                     
@@ -480,6 +516,9 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
                 UIApplication.sharedApplication().presentLocalNotificationNow(notification)
                 
                 notifiedOfDropoff = true
+                
+                //Hide driver status view
+                slideDriverStatusView()
             }
             
             //show end trip button

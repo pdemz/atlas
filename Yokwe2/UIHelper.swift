@@ -11,7 +11,7 @@ import Foundation
 class UIHelper{
     class func customizeNavController(navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         return navController
     }

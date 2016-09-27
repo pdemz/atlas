@@ -32,14 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         var initialViewController: UIViewController
         
-        
-        
-        if (FBSDKAccessToken.currentAccessToken() != nil){
+        if FBSDKAccessToken.currentAccessToken() != nil{
             
             let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
             
             SharingCenter.sharedInstance.userID = FBSDKAccessToken.currentAccessToken().userID
             
+            //updates Facebook info on DB
             YokweHelper.storeUser()
             
             FacebookHelper.riderGraphRequest(selfRider, completion: {(result)-> Void in
@@ -63,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             
         }else{
+            print("tried to open titular")
             let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("TitularViewController")
             initialViewController = protectedPage
             
@@ -133,6 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func getUpdate(){
+        return
         YokweHelper.getUpdate({(result) -> Void in
             print("shouldve updated")
             
@@ -175,7 +176,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navController:UINavigationController = UINavigationController(rootViewController: review)
     
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         //Get user photo and name with access token
         if json.valueForKey("accessToken") != nil{
@@ -202,6 +203,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let mf = json.valueForKey("mutualFriends") as? String
         let driver = Driver(name: nil, photo: nil, mutualFriends: mf, fareEstimate: nil, eta: nil, userID: dj!.valueForKey("id") as? String, accessToken: dj!.valueForKey("accessToken") as? String, addedTime: nil)
+        driver.name = dj!.valueForKey("name") as? String
         
         driver.origin = dj!.valueForKey("origin") as? String
         driver.destination = dj!.valueForKey("destination") as? String
@@ -214,15 +216,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         formatter.minimumIntegerDigits = 1
         driver.price = formatter.stringFromNumber(priceNumber)
         
-        driver.aboutMe = dj!.valueForKey("aboutMe") as? String;
-        driver.phone = dj!.valueForKey("phone") as? String;
-        let addedTime = (json.valueForKey("duration") as! Double) - (dj!.valueForKey("duration") as! Double)
-        driver.addedTime = addedTime
+        driver.aboutMe = dj!.valueForKey("aboutMe") as? String
+        driver.phone = dj!.valueForKey("phone") as? String
+        
+        //Da fuq??
+        driver.addedTime = (json.valueForKey("addedTime") as! Double)
         
         let rj = json.objectForKey("rider")
         let rider = Rider(name: nil, origin: rj?.valueForKey("origin") as? String, destination: rj?.valueForKey("destination") as? String, photo: nil, mutualFriends: mf, fareEstimate: nil, addedTime: nil, userID: rj?.valueForKey("id") as? String, accessToken: rj?.valueForKey("accessToken") as? String)
-        rider.aboutMe = rj!.valueForKey("aboutMe") as? String;
-        rider.phone = rj!.valueForKey("phone") as? String;
+        rider.aboutMe = rj!.valueForKey("aboutMe") as? String
+        rider.phone = rj!.valueForKey("phone") as? String
+        rider.name = rj?.valueForKey("name") as? String
+        
+        rider.originAddress = rj!.valueForKey("originAddress") as? String
+        rider.destinationAddress = rj!.valueForKey("destinationAddress") as? String
         
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
         let driveOffer = mainStoryBoard.instantiateViewControllerWithIdentifier("Trip") as! TripViewController
@@ -242,7 +249,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         print("xxx~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~xxx")
         print(UIApplication.sharedApplication().keyWindow?.rootViewController!.presentedViewController?.childViewControllers.first?.title)
@@ -313,7 +320,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         FacebookHelper.driverGraphRequest(driver, completion: { (result)->Void in
             dispatch_async(dispatch_get_main_queue(), {
@@ -359,7 +366,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         FacebookHelper.riderGraphRequest(rider, completion: { (result)->Void in
             dispatch_async(dispatch_get_main_queue(), {

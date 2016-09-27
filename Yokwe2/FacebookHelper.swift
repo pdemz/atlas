@@ -19,7 +19,7 @@ class FacebookHelper{
         
         //Don't try to add Facebook info if they don't have an access token
         if driver.accessToken == nil || driver.accessToken == "null"{
-            driver.name = ""
+            driver.photo = UIImage(named: "noUserPhoto")
             completion(result: driver)
         }
         
@@ -67,7 +67,7 @@ class FacebookHelper{
         
         //Don't try to add Facebook info if they don't have an access token
         if rider.accessToken == nil || rider.accessToken == "null"{
-            rider.name = ""
+            rider.photo = UIImage(named: "noUserPhoto")
             completion(result: rider)
         }
         

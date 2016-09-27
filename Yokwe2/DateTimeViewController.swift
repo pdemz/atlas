@@ -15,6 +15,29 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if self.revealViewController() != nil {
+            menuButton.target = self.revealViewController()
+            menuButton.action = "revealToggle:"
+            self.revealViewController().delegate = self
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+        }
+        
+        SharingCenter.sharedInstance.locationManager!.delegate = self
+        SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
+
+        additionalUISetup()
+        
+        //Get user phone number where applicable
+        phoneHandler()
+        
+    }
+    
+    func additionalUISetup(){
+        //set up bottom view
+        self.bottomView.layer.shadowOpacity = 0.1
+        self.bottomView.hidden = true
+        
         //Set up text field backing views
         originTextFieldBacking.layer.cornerRadius = 2
         destinationTextFieldBacking.layer.cornerRadius = 2
@@ -30,34 +53,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         self.distance.adjustsFontSizeToFitWidth = true
         self.duration.adjustsFontSizeToFitWidth = true
         
-        if self.revealViewController() != nil {
-            menuButton.target = self.revealViewController()
-            menuButton.action = "revealToggle:"
-            self.revealViewController().delegate = self
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-            self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
-        }
-        
-        self.bottomView.layer.shadowOpacity = 0.1
-        self.bottomView.hidden = true
-        
-        SharingCenter.sharedInstance.locationManager!.delegate = self
-        SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
-        
-        originTextField.delegate = self
-        destinationTextField.delegate = self
-
-        self.mapView!.myLocationEnabled = true
-        self.mapView!.settings.myLocationButton = true
-        
-        let mapInsets = UIEdgeInsetsMake(self.destinationTextField.frame.maxY + 40, 0, (self.bottomView.frame.height + 8), 0)
-        self.mapView.padding = mapInsets
-        
-        additionalUISetup()
-        
-    }
-    
-    func additionalUISetup(){
+        //Set up text fields themselves
         originTextField.attributedPlaceholder = NSAttributedString(string:"Current location",
             attributes:[NSForegroundColorAttributeName: blue])
         
@@ -70,6 +66,17 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         originTextField.layer.cornerRadius = 4
         originTextField.clipsToBounds = true
         
+        originTextField.delegate = self
+        destinationTextField.delegate = self
+        
+        //Set up map view
+        self.mapView!.myLocationEnabled = true
+        self.mapView!.settings.myLocationButton = true
+        
+        let mapInsets = UIEdgeInsetsMake(self.destinationTextField.frame.maxY + 40, 0, (self.bottomView.frame.height + 8), 0)
+        self.mapView.padding = mapInsets
+        
+        //Set up search button
         searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
         searchButton.titleLabel?.numberOfLines = 2
         searchButton.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -152,6 +159,8 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     
     //MARK: Properties
     var originWasTapped = false
+    var origin:CLLocationCoordinate2D?
+    var destination:CLLocationCoordinate2D?
     var startLocation:String?
     var endLocation:String?
     let blue = colorHelper.blue
@@ -267,10 +276,25 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             self.pressedGo(self)
         })
     }
+    
+    //Checks if there is a phone number on file for this user and gets it if they don't
+    func phoneHandler(){
+        if SharingCenter.sharedInstance.phone == nil{
+            var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
+            vc = customizeVC(vc) as! PhoneNumberViewController
+            vc.title = "Enter Phone Number"
+            
+            var navController = UINavigationController(rootViewController: vc)
+            navController = customizeNavController(navController)
+            
+            presentViewController(navController, animated: true, completion: nil)
+        }
+        
+    }
  
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         return navController
     }
@@ -294,11 +318,15 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
 extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
     func viewController(viewController: GMSAutocompleteViewController!, didAutocompleteWithPlace place: GMSPlace!) {
         if originWasTapped{
+            origin = place.coordinate
+            
             self.originTextField.text = place.name
             startLocation = "\(place.coordinate.latitude),\(place.coordinate.longitude)"
             SharingCenter.sharedInstance.startLocation = place.coordinate
             originWasTapped = false
         }else{
+            destination = place.coordinate
+            
             self.destinationTextField.text = place.name
             endLocation = "\(place.coordinate.latitude),\(place.coordinate.longitude)"
             SharingCenter.sharedInstance.endLocation = place.coordinate
@@ -329,8 +357,16 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
                     polyLine.map = self.mapView
                     let update = GMSCameraUpdate.fitBounds(bounds)
                     self.mapView.moveCamera(update)
+                    
+                    let riderStartMarker = GMSMarker(position: self.origin!)
+                    riderStartMarker.icon = GMSMarker.markerImageWithColor(UIColor.greenColor())
+                    riderStartMarker.map = self.mapView
+                    
+                    let riderEndMarker = GMSMarker(position: self.destination!)
+                    riderEndMarker.map = self.mapView
                 })
             }
+            
             self.bottomView.hidden = false
 
         }
@@ -347,6 +383,7 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
         if self.originWasTapped{
             self.originTextField.text = nil
             self.startLocation = "\(SharingCenter.sharedInstance.locationManager!.location!.coordinate.latitude),\(SharingCenter.sharedInstance.locationManager!.location!.coordinate.longitude)"
+            self.origin = SharingCenter.sharedInstance.locationManager!.location!.coordinate
         }else{
             self.destinationTextField.text = nil
             self.endLocation = nil
@@ -356,6 +393,7 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
         self.originWasTapped = false
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
 }
 
 extension DateTimeViewController{
@@ -383,6 +421,7 @@ extension DateTimeViewController{
         print("did update location")
         
         SharingCenter.sharedInstance.startLocation = SharingCenter.sharedInstance.locationManager?.location!.coordinate
+        origin = SharingCenter.sharedInstance.locationManager?.location!.coordinate
         
         startLocation = "\(SharingCenter.sharedInstance.locationManager!.location!.coordinate.latitude),\(SharingCenter.sharedInstance.locationManager!.location!.coordinate.longitude)"
         

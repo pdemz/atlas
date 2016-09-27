@@ -25,11 +25,20 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.title = "Enter Phone Number"
+        
         self.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
         
         //Dismiss button
         let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: self, action: "closeView")
         self.navigationItem.leftBarButtonItem = dismissButton
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.title = ""
     }
     
     @IBAction func continuePress(sender: AnyObject) {
@@ -92,16 +101,20 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
     }
     
     func proceedToHomeScreen(){
+       // let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
         
-        let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
-        
-        SharingCenter.sharedInstance.phone = phone.text
         YokweHelper.storeUser()
         
-        FacebookHelper.riderGraphRequest(selfRider, completion: {(result)-> Void in
+        //Notice this is called after store user - this is because we only want to store this number if the user confirms it.
+        SharingCenter.sharedInstance.phone = phone.text
+        
+        YokweHelper.requestVerificationCode()
+        
+        /*FacebookHelper.riderGraphRequest(selfRider, completion: {(result)-> Void in
             SharingCenter.sharedInstance.rider = result
         })
-        
+ */       
+ 
         let notificationTypes : UIUserNotificationType = [.Alert, .Badge, .Sound]
         let notificationSettings : UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationTypes, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
@@ -110,9 +123,13 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
         SharingCenter.sharedInstance.locationManager = CLLocationManager()
         SharingCenter.sharedInstance.locationManager!.requestWhenInUseAuthorization()
         
-        let protectedPage = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneConfirmation") as! PhoneConfirmationViewController
+        self.showViewController(vc, sender: self)
+        
+        /*let protectedPage = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
         
         presentViewController(protectedPage, animated: false, completion: nil)
+ */
         
     }
 

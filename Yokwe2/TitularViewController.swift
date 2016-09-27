@@ -13,25 +13,50 @@ import MapKit
 
 class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFieldDelegate {
 
+    var shouldDisplayTutorial = true
+    
     @IBOutlet weak var loginButton: FBSDKLoginButton!
     @IBOutlet weak var verticalSpacingConstraint: NSLayoutConstraint!
     @IBOutlet weak var logo: UIImageView!
-    @IBOutlet weak var titleLable: UILabel!
+    //@IBOutlet weak var titleLable: UILabel!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var emailLoginButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var useEmailLabel: UILabel!
     
+    var logoFrameMaxY:CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.logoFrameMaxY = self.logo.frame.maxY
+        
         loginButton.delegate = self
         emailTextField.delegate = self
         passwordTextField.delegate = self
         
-        loginButton.readPermissions = ["public_profile", "user_friends", "email", "user_photos", "user_education_history"]
+        loginButton.readPermissions = ["public_profile", "user_friends", "user_photos", "user_education_history"]
         self.emailLoginButton.layer.cornerRadius = 5
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //Display tutorial
+        if shouldDisplayTutorial{
+            
+            shouldDisplayTutorial = false
+            
+            let tutorial = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(tutorial, animated: true, completion: nil)
+                
+            })
+            
+        }
     }
     
     @IBAction func emailLogin(sender: AnyObject) {
@@ -79,10 +104,13 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
         
         self.view.layoutIfNeeded()
         UIView.animateWithDuration(0.5) {
-            self.verticalSpacingConstraint.constant -= self.titleLable.frame.maxY + 75
+            self.verticalSpacingConstraint.constant -= self.logoFrameMaxY + 75
+            print("VSC contstant after tapping email: \(self.verticalSpacingConstraint.constant)")
+            print("logoFreame:\(self.logo.frame.maxY)")
+            
             self.useEmailLabel.alpha = 0
             self.loginButton.alpha = 0
-            self.titleLable.alpha = 0
+            //self.titleLable.alpha = 0
             self.logo.alpha = 0
             self.loginButton.enabled = false
             self.passwordTextField.enabled = true
@@ -102,11 +130,12 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
 
         self.view.layoutIfNeeded()
         UIView.animateWithDuration(0.5) {
-            self.verticalSpacingConstraint.constant += self.titleLable.frame.maxY + 75
+            self.verticalSpacingConstraint.constant += self.logoFrameMaxY + 75
+            print("VSC contstant after tapping back: \(self.verticalSpacingConstraint.constant)")
+            print("logoFrame:\(self.logo.frame.maxY)")
 
             self.useEmailLabel.alpha = 1
             self.loginButton.alpha = 1
-            self.titleLable.alpha = 1
             self.logo.alpha = 1
             self.loginButton.enabled = true
             self.passwordTextField.enabled = false
@@ -209,7 +238,7 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
     
     func customizeNavController(navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.translucent = true
         
         return navController
     }

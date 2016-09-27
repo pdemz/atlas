@@ -29,14 +29,16 @@
 		BEC40C851BDED3C60032A8F4 /* MapTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC40C841BDED3C60032A8F4 /* MapTestViewController.swift */; };
 		DB0914CC1C867F2300D52B36 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB0914CB1C867F2300D52B36 /* Launch Screen.storyboard */; };
 		DB0A3E7C1C6180D500187B9C /* SlideOutMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */; };
-		DB1A42821D5AF7EB004FD298 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1A42811D5AF7EB004FD298 /* TutorialViewController.swift */; };
 		DB1DD0391CD64C5E00645C0E /* EmailSignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */; };
 		DB2727D41C723DEF00A528CE /* DriverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */; };
 		DB4B88B11BFC01F50006F974 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */; };
 		DB5543F61C7B6058001503EB /* DashboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */; };
+		DB5A02621D61866A0081493E /* TutorialContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5A02611D61866A0081493E /* TutorialContentViewController.swift */; };
+		DB5A02641D6186800081493E /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5A02631D6186800081493E /* TutorialViewController.swift */; };
 		DB68DA491CA0BEA8005B4158 /* PaymentConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */; };
 		DB68DA4B1CAB20C5005B4158 /* DriverAccountCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */; };
 		DB68DA4D1CADC0AE005B4158 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4C1CADC0AE005B4158 /* User.swift */; };
+		DB70FA431D8AC9F5005A391C /* PhoneConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB70FA421D8AC9F5005A391C /* PhoneConfirmationViewController.swift */; };
 		DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7C66BA1C592AF10087474F /* colorHelper.swift */; };
 		DB81671C1CE6335200712459 /* TripDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB81671B1CE6335200712459 /* TripDetails.swift */; };
 		DB86DAF81D32A1E70050ED25 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB86DAF71D32A1E70050ED25 /* UIHelper.swift */; };
@@ -100,14 +102,16 @@
 		DB0260641C20568100B237E9 /* .entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = .entitlements; sourceTree = "<group>"; };
 		DB0914CB1C867F2300D52B36 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideOutMenuViewController.swift; sourceTree = "<group>"; };
-		DB1A42811D5AF7EB004FD298 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailSignupViewController.swift; sourceTree = "<group>"; };
 		DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverTableViewCell.swift; sourceTree = "<group>"; };
 		DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardTableViewController.swift; sourceTree = "<group>"; };
+		DB5A02611D61866A0081493E /* TutorialContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialContentViewController.swift; sourceTree = "<group>"; };
+		DB5A02631D6186800081493E /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentConfirmationViewController.swift; sourceTree = "<group>"; };
 		DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverAccountCreationViewController.swift; sourceTree = "<group>"; };
 		DB68DA4C1CADC0AE005B4158 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DB70FA421D8AC9F5005A391C /* PhoneConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneConfirmationViewController.swift; sourceTree = "<group>"; };
 		DB7C66BA1C592AF10087474F /* colorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = colorHelper.swift; sourceTree = "<group>"; };
 		DB81671B1CE6335200712459 /* TripDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetails.swift; sourceTree = "<group>"; };
 		DB86DAF71D32A1E70050ED25 /* UIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
@@ -279,6 +283,15 @@
 			name = Objects;
 			sourceTree = "<group>";
 		};
+		DB5A025E1D6185A40081493E /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				DB5A02611D61866A0081493E /* TutorialContentViewController.swift */,
+				DB5A02631D6186800081493E /* TutorialViewController.swift */,
+			);
+			name = Tutorial;
+			sourceTree = "<group>";
+		};
 		DBA80AED1C605B44003B8B73 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -305,11 +318,12 @@
 		DBCB03151D0610E2001AC1A7 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				DB5A025E1D6185A40081493E /* Tutorial */,
 				DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */,
 				DBD79D541BFD13F400BF383C /* TitularViewController.swift */,
 				DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */,
 				DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */,
-				DB1A42811D5AF7EB004FD298 /* TutorialViewController.swift */,
+				DB70FA421D8AC9F5005A391C /* PhoneConfirmationViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -497,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */,
+				DB5A02621D61866A0081493E /* TutorialContentViewController.swift in Sources */,
 				DBE564C91CF5DC7A00B96659 /* ReviewViewController.swift in Sources */,
 				BE0D70181BA5024400F201FE /* ViewController.swift in Sources */,
 				DBD32B201C8161440015CF06 /* TripViewController.swift in Sources */,
@@ -517,11 +532,12 @@
 				DB5543F61C7B6058001503EB /* DashboardTableViewController.swift in Sources */,
 				DB9D94A11C7BAC4F0072992B /* OfferResponseViewController.swift in Sources */,
 				DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */,
+				DB5A02641D6186800081493E /* TutorialViewController.swift in Sources */,
 				BEBEC17E1BE95B8400986839 /* UserProfileViewController.swift in Sources */,
+				DB70FA431D8AC9F5005A391C /* PhoneConfirmationViewController.swift in Sources */,
 				DB8C94711CBAE9B100FFF48C /* BankAccountCreation.swift in Sources */,
 				DB86DAF81D32A1E70050ED25 /* UIHelper.swift in Sources */,
 				DB81671C1CE6335200712459 /* TripDetails.swift in Sources */,
-				DB1A42821D5AF7EB004FD298 /* TutorialViewController.swift in Sources */,
 				BE8BD91D1BE81E9900B77BDD /* ConfirmRiderViewController.swift in Sources */,
 				DBED151B1C7B451800351D10 /* DashboardTableViewCell.swift in Sources */,
 				DB0A3E7C1C6180D500187B9C /* SlideOutMenuViewController.swift in Sources */,

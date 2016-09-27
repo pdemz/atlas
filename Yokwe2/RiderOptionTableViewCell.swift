@@ -14,7 +14,6 @@ class RiderOptionTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var addedTime: UILabel!
-    @IBOutlet weak var friendIcon: UIImageView!
     @IBOutlet weak var mutualFriends: UILabel!
     @IBOutlet weak var price: UILabel!
     
@@ -23,15 +22,18 @@ class RiderOptionTableViewCell: UITableViewCell {
         // Initialization code
         
         photo.layer.masksToBounds = false
-        photo.layer.cornerRadius = photo.frame.height/2
+        //photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
         
         self.name.textColor = colorHelper.orange
         mutualFriends.textColor = UIColor.blackColor()
-        friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        friendIcon.tintColor = UIColor.blackColor()
+        
+        mutualFriends.adjustsFontSizeToFitWidth = true
+        
+        //friendIcon.image = friendIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        //friendIcon.tintColor = UIColor.blackColor()
+        
         mutualFriends.alpha = 0.7
-        friendIcon.alpha = 0.7
         
     }
     

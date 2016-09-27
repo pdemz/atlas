@@ -87,7 +87,7 @@ class ConfirmationViewController: UIViewController {
         
         //Check if the rider has a credit card on file
         if SharingCenter.sharedInstance.customerToken == nil{
-            let alertString = "You must have a credit card on file before you can accept rides. You can add one via the payments section in the main menu."
+            let alertString = "You must have a credit card on file before you can request rides. You can add one via the payments section in the main menu."
             let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
             let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
             alert.addAction(okAction)

@@ -12,7 +12,7 @@ class RideOrDriveViewController: UIViewController {
         
         if SharingCenter.sharedInstance.customerToken == nil{
             //Ask if they want to submit payment info now or later, if they select yes, open the payment view controller, otherwise do nothing
-            let alertString = "You'll have to enter a credit card before you can get a ride. Want to do that now?"
+            let alertString = "You can search for drivers heading your way, but you won't be able to request rides from them until you enter a credit card. Want to do that now?"
             let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
             
             let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
@@ -40,7 +40,7 @@ class RideOrDriveViewController: UIViewController {
         
         if SharingCenter.sharedInstance.accountToken == nil{
             //Ask if they want to submit personal info and payment info now or later
-            let alertString = "You'll have to enter some personal info before we can legally allow you to drive with us. Want to take care of that now?"
+            let alertString = "You'll have to enter some personal info before we can legally allow you to drive with us. If not, you'll still be able to search for riders, you just won't be able to drive them."
             let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
             
             let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
