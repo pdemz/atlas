@@ -44,7 +44,7 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        if phoneIsValid && allCompleted && password.text! == confirmPassword.text!{
+        if allCompleted && password.text! == confirmPassword.text!{
             continueButton.alpha = 1
             continueButton.enabled = true
         }else{
@@ -57,7 +57,6 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
         
         let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: nil, accessToken: nil)
         
-        SharingCenter.sharedInstance.phone = phone.text
         SharingCenter.sharedInstance.email = email.text
         SharingCenter.sharedInstance.name = name.text
         SharingCenter.sharedInstance.password = password.text

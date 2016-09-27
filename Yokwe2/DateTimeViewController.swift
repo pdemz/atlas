@@ -28,9 +28,6 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
 
         additionalUISetup()
         
-        //Get user phone number where applicable
-        phoneHandler()
-        
     }
     
     func additionalUISetup(){
@@ -85,10 +82,17 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        //Update facebook info, apns key, and other things
+        YokweHelper.storeUser()
+        
         //Present ride or drive if they just logged in
         if SharingCenter.sharedInstance.didJustLogIn{
             presentRideOrDrive()
+            
         }
+        
+        //Get user phone number where applicable
+        phoneHandler()
         
         //Reset text boxes and locations and ensure bottom view is not visible
         SharingCenter.sharedInstance.locationManager!.delegate = self
@@ -279,9 +283,12 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     
     //Checks if there is a phone number on file for this user and gets it if they don't
     func phoneHandler(){
-        if SharingCenter.sharedInstance.phone == nil{
+        print("phone:")
+        print(SharingCenter.sharedInstance.phone)
+        
+        if SharingCenter.sharedInstance.phone == nil || SharingCenter.sharedInstance.phone! == ""{
             var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
-            vc = customizeVC(vc) as! PhoneNumberViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
             vc.title = "Enter Phone Number"
             
             var navController = UINavigationController(rootViewController: vc)

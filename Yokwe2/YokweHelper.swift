@@ -1139,7 +1139,7 @@ class YokweHelper{
     }
     
     //Verify code for sms
-    class func verifyCode(code:String, completion:(result: Bool)->Void){
+    class func verifyCode(code:String, number:String, completion:(result: Bool)->Void){
         
         let addr = NSURL(string: "https://www.yokweapp.com/atlas")
         let request = NSMutableURLRequest(URL: addr!)
@@ -1149,8 +1149,10 @@ class YokweHelper{
         let action = "verify"
         
         request.HTTPMethod = "POST"
-        var postString = "type=\(type)&action=\(action)&code=\(code)&number=\(SharingCenter.sharedInstance.phone!)"
+        var postString = "type=\(type)&action=\(action)&code=\(code)&number=\(number)"
         postString = addCredentials(postString)
+        
+        print("Verify code post string: \(postString)")
         
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         
@@ -1185,7 +1187,7 @@ class YokweHelper{
         task.resume()
     }
     
-    class func requestVerificationCode(){
+    class func requestVerificationCode(number:String){
         let addr = NSURL(string: "https://www.yokweapp.com/atlas")
         let request = NSMutableURLRequest(URL: addr!)
         
@@ -1194,7 +1196,7 @@ class YokweHelper{
         let action = "send"
         
         request.HTTPMethod = "POST"
-        var postString = "type=\(type)&action=\(action)&number=\(SharingCenter.sharedInstance.phone!)"
+        var postString = "type=\(type)&action=\(action)&number=\(number)"
         postString = addCredentials(postString)
         
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)

@@ -1853,10 +1853,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mI4-dS-xPB">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mI4-dS-xPB">
                                 <rect key="frame" x="252" y="280" width="97" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Continue">
+                                <state key="normal" title="Enter">
                                     <color key="titleColor" red="0.0" green="0.4823529412" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -1950,13 +1950,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d50-iE-cVK">
-                                <rect key="frame" x="60" y="158" width="480" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F1-4C-nOi">
-                                <rect key="frame" x="218" y="242" width="164" height="41"/>
+                                <rect key="frame" x="218" y="204" width="164" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Create account">
                                     <color key="titleColor" red="0.18823529780000001" green="0.77254903320000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1966,7 +1961,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name (first name, nickname, whatever)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yce-8e-TAh">
-                                <rect key="frame" x="60" y="196" width="480" height="30"/>
+                                <rect key="frame" x="60" y="158" width="480" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -1974,29 +1969,20 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Nce-dE-cQy" firstAttribute="top" secondItem="cYH-b7-pqm" secondAttribute="bottom" constant="8" id="3Dd-el-waK"/>
-                            <constraint firstItem="Yce-8e-TAh" firstAttribute="top" secondItem="d50-iE-cVK" secondAttribute="bottom" constant="8" id="6tL-an-Smz"/>
                             <constraint firstItem="KIq-Um-Us1" firstAttribute="width" secondItem="Qfd-T6-7h5" secondAttribute="width" multiplier="0.8" id="9aP-T3-Bq5"/>
                             <constraint firstItem="4F1-4C-nOi" firstAttribute="centerX" secondItem="Qfd-T6-7h5" secondAttribute="centerX" id="Agn-rT-RSr"/>
                             <constraint firstItem="Yce-8e-TAh" firstAttribute="centerX" secondItem="Qfd-T6-7h5" secondAttribute="centerX" id="FWn-2O-EQE"/>
-                            <constraint firstItem="d50-iE-cVK" firstAttribute="top" secondItem="Nce-dE-cQy" secondAttribute="bottom" constant="8" id="HPz-Wf-Tpo"/>
                             <constraint firstItem="cYH-b7-pqm" firstAttribute="width" secondItem="KIq-Um-Us1" secondAttribute="width" id="Oh5-5x-ca8"/>
                             <constraint firstItem="Nce-dE-cQy" firstAttribute="centerX" secondItem="Qfd-T6-7h5" secondAttribute="centerX" id="PdE-Oa-qsV"/>
                             <constraint firstItem="cYH-b7-pqm" firstAttribute="top" secondItem="KIq-Um-Us1" secondAttribute="bottom" constant="8" id="Svy-S2-vgT"/>
+                            <constraint firstItem="Yce-8e-TAh" firstAttribute="width" secondItem="Nce-dE-cQy" secondAttribute="width" id="UVc-04-ZGM"/>
                             <constraint firstItem="KIq-Um-Us1" firstAttribute="centerX" secondItem="Qfd-T6-7h5" secondAttribute="centerX" id="brT-5d-xR6"/>
-                            <constraint firstItem="d50-iE-cVK" firstAttribute="width" secondItem="KIq-Um-Us1" secondAttribute="width" id="hBO-hE-Foi"/>
                             <constraint firstItem="Nce-dE-cQy" firstAttribute="width" secondItem="KIq-Um-Us1" secondAttribute="width" id="hYA-17-CVd"/>
-                            <constraint firstItem="Yce-8e-TAh" firstAttribute="width" secondItem="d50-iE-cVK" secondAttribute="width" id="hfv-k8-XQB"/>
                             <constraint firstItem="4F1-4C-nOi" firstAttribute="top" secondItem="Yce-8e-TAh" secondAttribute="bottom" constant="16" id="kXC-Y3-XF0"/>
                             <constraint firstItem="cYH-b7-pqm" firstAttribute="centerX" secondItem="Qfd-T6-7h5" secondAttribute="centerX" id="ofr-Ue-Eax"/>
-                            <constraint firstItem="d50-iE-cVK" firstAttribute="centerX" secondItem="Qfd-T6-7h5" secondAttribute="centerX" id="rpr-Ce-7Ui"/>
-                            <constraint firstItem="4F1-4C-nOi" firstAttribute="top" secondItem="d50-iE-cVK" secondAttribute="bottom" constant="8" id="tGE-te-dIX"/>
                             <constraint firstItem="KIq-Um-Us1" firstAttribute="top" secondItem="AGu-qw-y90" secondAttribute="bottom" constant="24" id="udB-AT-fXP"/>
+                            <constraint firstItem="Yce-8e-TAh" firstAttribute="top" secondItem="Nce-dE-cQy" secondAttribute="bottom" constant="8" id="vvl-zS-m28"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="tGE-te-dIX"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
                         <outlet property="confirmPassword" destination="Nce-dE-cQy" id="QV3-eZ-Jas"/>
@@ -2004,7 +1990,6 @@
                         <outlet property="email" destination="KIq-Um-Us1" id="NpB-xJ-mEl"/>
                         <outlet property="name" destination="Yce-8e-TAh" id="k7J-WC-ual"/>
                         <outlet property="password" destination="cYH-b7-pqm" id="9aB-xs-lvr"/>
-                        <outlet property="phone" destination="d50-iE-cVK" id="RrZ-ij-rPA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mYe-bH-lNH" userLabel="First Responder" sceneMemberID="firstResponder"/>

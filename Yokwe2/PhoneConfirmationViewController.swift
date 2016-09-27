@@ -8,6 +8,7 @@
 
 class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
 
+    var phoneNumber:String?
     @IBOutlet weak var codeTextBox: UITextField!
     
     override func viewDidLoad() {
@@ -20,10 +21,7 @@ class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
     }
     
     func proceedToHomeScreen(){
-        let homeScreen = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
-         
-         presentViewController(homeScreen, animated: false, completion: nil)
-        
+        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
         
     }
     
@@ -33,10 +31,11 @@ class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
         print(code!)
         
         //Call api
-        YokweHelper.verifyCode(code!, completion: {(result) -> Void in
+        YokweHelper.verifyCode(code!, number: phoneNumber!, completion: {(result) -> Void in
             let valid = result
             dispatch_async(dispatch_get_main_queue(), {
                 if valid{
+                    SharingCenter.sharedInstance.phone = self.phoneNumber!
                     self.proceedToHomeScreen()
                 }else{
                     //Notify user that code is wrong

@@ -30,9 +30,11 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
         
         self.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
         
+        /*
         //Dismiss button
         let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: self, action: "closeView")
         self.navigationItem.leftBarButtonItem = dismissButton
+ */
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -101,35 +103,12 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
     }
     
     func proceedToHomeScreen(){
-       // let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
-        
-        YokweHelper.storeUser()
-        
-        //Notice this is called after store user - this is because we only want to store this number if the user confirms it.
-        SharingCenter.sharedInstance.phone = phone.text
-        
-        YokweHelper.requestVerificationCode()
-        
-        /*FacebookHelper.riderGraphRequest(selfRider, completion: {(result)-> Void in
-            SharingCenter.sharedInstance.rider = result
-        })
- */       
+        YokweHelper.requestVerificationCode(phone.text!)
  
-        let notificationTypes : UIUserNotificationType = [.Alert, .Badge, .Sound]
-        let notificationSettings : UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationTypes, categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-        
-        SharingCenter.sharedInstance.locationManager = CLLocationManager()
-        SharingCenter.sharedInstance.locationManager!.requestWhenInUseAuthorization()
-        
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneConfirmation") as! PhoneConfirmationViewController
+        
+        vc.phoneNumber = phone.text!
         self.showViewController(vc, sender: self)
-        
-        /*let protectedPage = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
-        
-        presentViewController(protectedPage, animated: false, completion: nil)
- */
         
     }
 
