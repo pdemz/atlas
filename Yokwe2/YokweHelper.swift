@@ -622,6 +622,68 @@ class YokweHelper{
         task.resume()
     }
 
+    //Store/update user
+    //Verbose, but simple - and probably the least amount of code for the job
+    class func storeUserWithCompletion(completion:()->Void){
+        let addr = NSURL(string: "https://www.yokweapp.com/profile")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        var postString = "type=storeUser"
+        
+        if FBSDKAccessToken.currentAccessToken() != nil{
+            if let userID = SharingCenter.sharedInstance.userID{
+                postString += "&userID=\(userID)"
+            }
+            if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+                postString += "&accessToken=\(accessToken)"
+            }
+        }else{
+            if let name = SharingCenter.sharedInstance.name{
+                postString += "&name=\(name)"
+            }
+            if let password = SharingCenter.sharedInstance.password{
+                postString += "&password=\(password)"
+            }
+        }
+        if let apnsToken = SharingCenter.sharedInstance.apnsToken{
+            postString += "&apnsToken=\(apnsToken)"
+        }
+        if let aboutMe = SharingCenter.sharedInstance.aboutMe{
+            postString += "&aboutMe=\(aboutMe)"
+        }
+        if let phone = SharingCenter.sharedInstance.phone{
+            postString += "&phone=\(phone)"
+        }
+        if let accountToken = SharingCenter.sharedInstance.accountToken{
+            postString += "&accountToken=\(accountToken)"
+            
+        }
+        if let email = SharingCenter.sharedInstance.email{
+            postString += "&email=\(email)"
+            
+        }
+        
+        print("post string: \(postString)")
+        
+        request.HTTPMethod = "POST"
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+                return
+            }
+            
+        }
+        task.resume()
+    }
+
+    
     //Store aboutMe in DB
     class func storeAboutMe(aboutMe:String){
         let addr = NSURL(string: "https://www.yokweapp.com/profile")

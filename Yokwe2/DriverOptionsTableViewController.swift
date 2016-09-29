@@ -95,7 +95,7 @@ class DriverOptionsTableViewController: UITableViewController {
         if driverList == nil{
             return 0
         }else{
-            return driverList!.count
+            return drivers.count
         }
     }
     
@@ -112,15 +112,22 @@ class DriverOptionsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        if drivers.count > tableView.numberOfRowsInSection(0){
+            tableView.reloadData()
+        }
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("DriverTableViewCell", forIndexPath: indexPath) as! DriverTableViewCell
         cell.alpha = 0
-        //let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-        let driver = drivers[indexPath.row]
         
-        cell.name.text = driver.name
-        cell.photo.image = driver.photo
-        cell.mutualFriends.text = "\(driver.mutualFriends!) mutual friends"
-        cell.price.text = ("$\(Double(driver.price!)!/100)")
+        if indexPath.row < drivers.count{
+            //let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+            let driver = drivers[indexPath.row]
+            
+            cell.name.text = driver.name
+            cell.photo.image = driver.photo
+            cell.mutualFriends.text = "\(driver.mutualFriends!) mutual friends"
+            cell.price.text = ("$\(Double(driver.price!)!/100)")
+        }
         
         return cell
         

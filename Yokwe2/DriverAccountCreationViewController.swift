@@ -168,11 +168,11 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
         vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: #selector(DriverAccountCreationViewController.closeView))
         vc.navigationItem.leftBarButtonItem = dismissButton
         
         //Save button
-        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "saveInfo")
+        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(DriverAccountCreationViewController.saveInfo))
         vc.navigationItem.rightBarButtonItem = barSaveButton
         
         return vc

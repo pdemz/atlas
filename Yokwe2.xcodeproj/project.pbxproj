@@ -396,6 +396,8 @@
 					BE0D700F1BA5024400F201FE = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 69W48383FK;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -413,7 +415,7 @@
 					};
 					BE0D70241BA5024400F201FE = {
 						CreatedOnToolsVersion = 6.4;
-						TestTargetID = BE0D700F1BA5024400F201FE;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -691,7 +693,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Yokwe2/.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Demarreau (MGNCLU2LGU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jack Demarreau (MGNCLU2LGU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -701,9 +704,11 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.demarreau.Yokwe;
 				PRODUCT_NAME = Atlas;
-				PROVISIONING_PROFILE = "0d175d6c-fe6a-425a-b6f5-9730c6f4840c";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Yokwe2/Yokwe2-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -715,7 +720,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Yokwe2/.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Demarreau (MGNCLU2LGU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jack Demarreau (MGNCLU2LGU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -725,15 +731,16 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.demarreau.Yokwe;
 				PRODUCT_NAME = Atlas;
-				PROVISIONING_PROFILE = "0d175d6c-fe6a-425a-b6f5-9730c6f4840c";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Yokwe2/Yokwe2-Bridging-Header.h";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
 		BE0D70331BA5024400F201FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -746,14 +753,13 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "demz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Yokwe2.app/Yokwe2";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
 		BE0D70341BA5024400F201FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -762,7 +768,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "demz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Yokwe2.app/Yokwe2";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};

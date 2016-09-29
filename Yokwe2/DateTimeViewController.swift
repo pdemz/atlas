@@ -17,7 +17,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
-            menuButton.action = "revealToggle:"
+            menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.revealViewController().delegate = self
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
@@ -82,17 +82,19 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        //Update facebook info, apns key, and other things
-        YokweHelper.storeUser()
+        //Update facebook info, apns key, and other things. Ask user for phone number if they havent entered one
+        YokweHelper.storeUserWithCompletion{() -> Void in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.phoneHandler()
+                
+            })
+        }
         
-        //Present ride or drive if they just logged in
+        //Ask if they want to ride or drive just logged in
         if SharingCenter.sharedInstance.didJustLogIn{
             presentRideOrDrive()
             
         }
-        
-        //Get user phone number where applicable
-        phoneHandler()
         
         //Reset text boxes and locations and ensure bottom view is not visible
         SharingCenter.sharedInstance.locationManager!.delegate = self
@@ -215,7 +217,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         let rideOrDrive = self.storyboard?.instantiateViewControllerWithIdentifier("rideOrDrive") as! RideOrDriveViewController
         rideOrDrive.title = "I want to..."
         
-        var navController = UINavigationController(rootViewController: rideOrDrive)
+        let navController = UINavigationController(rootViewController: rideOrDrive)
         
         self.presentViewController(navController, animated: true, completion: nil)
         
@@ -287,7 +289,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         print(SharingCenter.sharedInstance.phone)
         
         if SharingCenter.sharedInstance.phone == nil || SharingCenter.sharedInstance.phone! == ""{
-            var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
+            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
             vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
             vc.title = "Enter Phone Number"
             

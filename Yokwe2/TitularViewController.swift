@@ -15,6 +15,7 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
 
     var shouldDisplayTutorial = true
     
+    @IBOutlet weak var useEmailButton: UIButton!
     @IBOutlet weak var loginButton: FBSDKLoginButton!
     @IBOutlet weak var verticalSpacingConstraint: NSLayoutConstraint!
     @IBOutlet weak var logo: UIImageView!
@@ -58,6 +59,9 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
             
         }
     }
+    @IBAction func tappedEmailButton(sender: AnyObject) {
+        tappedEmail()
+    }
     
     @IBAction func emailLogin(sender: AnyObject) {
         
@@ -100,15 +104,20 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
         })
     }
     
-    @IBAction func tappedEmail(sender: AnyObject) {
+    func tappedEmail() {
         
         self.view.layoutIfNeeded()
         UIView.animateWithDuration(0.5) {
-            self.verticalSpacingConstraint.constant -= self.logoFrameMaxY + 75
+            self.verticalSpacingConstraint.constant -= 300
             print("VSC contstant after tapping email: \(self.verticalSpacingConstraint.constant)")
-            print("logoFreame:\(self.logo.frame.maxY)")
+            print("logoFrame:\(self.logo.frame.maxY)")
+            print("logoframemaxy: \(self.logoFrameMaxY)")
             
+            self.emailTextField.enabled = true
+            self.emailTextField.alpha = 1
             self.useEmailLabel.alpha = 0
+            self.useEmailButton.alpha = 0
+            self.useEmailButton.enabled = false
             self.loginButton.alpha = 0
             //self.titleLable.alpha = 0
             self.logo.alpha = 0
@@ -129,12 +138,15 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
         passwordTextField.resignFirstResponder()
 
         self.view.layoutIfNeeded()
+        self.verticalSpacingConstraint.constant += 300
         UIView.animateWithDuration(0.5) {
-            self.verticalSpacingConstraint.constant += self.logoFrameMaxY + 75
             print("VSC contstant after tapping back: \(self.verticalSpacingConstraint.constant)")
             print("logoFrame:\(self.logo.frame.maxY)")
 
-            self.useEmailLabel.alpha = 1
+            self.emailTextField.alpha = 0
+            self.emailTextField.enabled = false
+            self.useEmailButton.alpha = 1
+            self.useEmailButton.enabled = true
             self.loginButton.alpha = 1
             self.logo.alpha = 1
             self.loginButton.enabled = true

@@ -63,13 +63,13 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
         friendIcon.hidden = friendIconHidden
         */
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UserProfileViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UserProfileViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
     }
     
     func editProfile(){
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "finishedEditing")
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: #selector(UserProfileViewController.finishedEditing))
         self.navigationItem.rightBarButtonItem = doneButton
         self.navigationItem.leftBarButtonItem = nil
         
@@ -93,10 +93,10 @@ class UserProfileViewController: UIViewController, UITextViewDelegate {
     }
     
     func finishedEditing(){
-        let editButton = UIBarButtonItem(image: UIImage(named: "Pencil"), style: UIBarButtonItemStyle.Plain, target: self, action: "editProfile")
+        let editButton = UIBarButtonItem(image: UIImage(named: "Pencil"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.editProfile))
         self.navigationItem.rightBarButtonItem = editButton
         
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: self, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.closeView))
         self.navigationItem.leftBarButtonItem = dismissButton
         
         if aboutMe.textColor == UIColor.lightGrayColor(){

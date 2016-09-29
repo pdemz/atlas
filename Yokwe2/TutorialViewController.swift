@@ -31,8 +31,8 @@ class TutorialViewController: UIViewController, UIPageViewControllerDataSource {
         self.pageViewController.dataSource = self
         
         
-        var startVC = self.viewControllerAtIndex(0) as TutorialContentViewController
-        var viewControllers = NSArray(object: startVC)
+        let startVC = self.viewControllerAtIndex(0) as TutorialContentViewController
+        let viewControllers = NSArray(object: startVC)
         
         self.pageViewController.setViewControllers(viewControllers as! [UIViewController], direction: .Forward, animated: true, completion: nil)
         
@@ -78,7 +78,7 @@ class TutorialViewController: UIViewController, UIPageViewControllerDataSource {
             return TutorialContentViewController()
         }
         
-        var vc: TutorialContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialContentViewController") as! TutorialContentViewController
+        let vc: TutorialContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialContentViewController") as! TutorialContentViewController
         
         vc.imageFile = self.pageImages[index] as! String
         vc.titleText = self.pageTitles[index] as! String
@@ -95,7 +95,7 @@ class TutorialViewController: UIViewController, UIPageViewControllerDataSource {
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
     {
         
-        var vc = viewController as! TutorialContentViewController
+        let vc = viewController as! TutorialContentViewController
         var index = vc.pageIndex as Int
         
         if (index == 0 || index == NSNotFound)
@@ -105,14 +105,14 @@ class TutorialViewController: UIViewController, UIPageViewControllerDataSource {
         }
         pageControl.currentPage = index
         
-        index--
+        index -= 1
         return self.viewControllerAtIndex(index)
         
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
         
-        var vc = viewController as! TutorialContentViewController
+        let vc = viewController as! TutorialContentViewController
         var index = vc.pageIndex as Int
         
         if index == 4{
@@ -126,7 +126,7 @@ class TutorialViewController: UIViewController, UIPageViewControllerDataSource {
             return nil
         }
         
-        index++
+        index += 1
         
         if (index == self.pageTitles.count)
         {

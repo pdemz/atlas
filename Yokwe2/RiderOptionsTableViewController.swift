@@ -46,10 +46,12 @@ class RiderOptionsTableViewController: UITableViewController{
     
     func populateRows(){
         YokweHelper.getRiderList{(result) -> Void in
+            
+            //Alert the user that there is no one heading their way
             if result.count == 0{
                 dispatch_async(dispatch_get_main_queue(), {
                     let alertString = "No riders heading your way right now. We'll let you know when one becomes available!"
-                    var alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+                    let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
                     let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
                         self.returnToHomeScreen()
                     })
@@ -58,13 +60,21 @@ class RiderOptionsTableViewController: UITableViewController{
                 })
                 
             }else{
+                //Once we get the list of riders from the server...
                 self.riderList = result
                 dispatch_async(dispatch_get_main_queue(), {
+                    //We iterate through it...
                     for (index,rider) in self.riderList!.enumerate(){
+                        print("yet the index is: \(index)")
+                        //Get info from FB
                         FacebookHelper.riderGraphRequest(rider, completion: {(result) -> Void in
                             let newRider = result
                             dispatch_async(dispatch_get_main_queue(), {
+                                //And add each rider to a new list
+                                print("Total number of riders: \(self.riders!.count)")
                                 self.riders!.append(newRider)
+                                
+                                //Once we get to the last rider, we stop the loading process
                                 if index == self.riderList!.count-1{
                                     self.tableView.reloadData()
                                     self.indicatorr.stopAnimating()
@@ -89,9 +99,9 @@ class RiderOptionsTableViewController: UITableViewController{
         if riderList == nil{
             return 0
         }else{
-            
+            print("rider count: \(riders!.count)")
             print("riderList count: \(riderList!.count)")
-            return riderList!.count
+            return riders!.count
         }
     }
     
@@ -109,20 +119,21 @@ class RiderOptionsTableViewController: UITableViewController{
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RiderOptionTableViewCell", forIndexPath: indexPath) as! RiderOptionTableViewCell
         
-        print("riders count: \(riders!.count)")
-        print("indexPathRow: \(indexPath.row)")
-
+        if riders!.count > tableView.numberOfRowsInSection(0){
+            tableView.reloadData()
+        }
         
-        let rider = riders![indexPath.row]
-        
-        cell.name.text = rider.name
-        cell.addedTime.text = "+\(rider.addedTime!) min"
-        cell.photo.image = rider.photo
-        cell.mutualFriends.text = "\(rider.mutualFriends!) mutual friends"
-        cell.price.text = ("$\(Double(rider.price!)!/100)")
-        
+        if indexPath.row < riders!.count{
+            let rider = riders![indexPath.row]
+            
+            cell.name.text = rider.name
+            cell.addedTime.text = "+\(rider.addedTime!) min"
+            cell.photo.image = rider.photo
+            cell.mutualFriends.text = "\(rider.mutualFriends!) mutual friends"
+            cell.price.text = ("$\(Double(rider.price!)!/100)")
+        }
         return cell
-        
+
     }
     
     func returnToHomeScreen(){
