@@ -15,6 +15,15 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Start trips testing
+        print("Didn't crash")
+        let trips = self.storyboard?.instantiateViewControllerWithIdentifier("Trips") as! TripsViewController
+        trips.title = "Active trips + requests"
+        let navController = UINavigationController(rootViewController: trips)
+        self.presentViewController(navController, animated: true, completion: nil)
+        //end
+        
+        /*
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -23,10 +32,12 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         }
         
+        
         SharingCenter.sharedInstance.locationManager!.delegate = self
         SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
 
         additionalUISetup()
+ */
         
     }
     
@@ -79,16 +90,12 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         searchButton.titleLabel?.textAlignment = NSTextAlignment.Center
     }
     
+    /*
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        //Update facebook info, apns key, and other things. Ask user for phone number if they havent entered one
-        YokweHelper.storeUserWithCompletion{() -> Void in
-            dispatch_async(dispatch_get_main_queue(), {
-                self.phoneHandler()
-                
-            })
-        }
+        //Update facebook info, apns key, and other things.
+        YokweHelper.storeUser()
         
         //Ask if they want to ride or drive just logged in
         if SharingCenter.sharedInstance.didJustLogIn{
@@ -136,7 +143,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         //self.navigationController?.navigationBar.barTintColor = colorHelper.orange
         //self.navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.whiteColor()]
     }
-    
+    */
     override func viewWillDisappear(animated: Bool) {
         self.title = ""
     }

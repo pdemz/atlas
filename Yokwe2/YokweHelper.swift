@@ -49,6 +49,73 @@ class YokweHelper{
         task.resume()
     }
     
+    class func getActiveTrips(completion:(result:[[TripStatusObject]])->Void){
+        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
+        let request = NSMutableURLRequest(URL: addr!)
+        
+        //Add parameters
+        let type = "getActiveTrips"
+        
+        request.HTTPMethod = "POST"
+        var postString = "type=\(type)"
+        postString = addCredentials(postString)
+        
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        var tripStatusObjects = [[TripStatusObject]]()
+        var rideStatusObjects = [TripStatusObject]()
+        var driveStatusObjects = [TripStatusObject]()
+        
+        //Send HTTP post request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+            data, response, error in
+            
+            if error != nil {
+                print("error\(error)")
+            }
+            
+            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)
+            
+            if responseString != nil && responseString != ""{
+                do {
+                    if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
+                     
+                        let drive = json.objectForKey("drive") as! [NSDictionary]
+                        let ride = json.objectForKey("ride") as! [NSDictionary]
+                        
+                        //Store all the driving trips
+                        for trip in drive{
+                            let tt = TripStatusObject(newTo: trip.valueForKey("to") as! String, newFrom: trip.valueForKey("from") as! String, newStatus: trip.valueForKey("status") as! String, newIsActive: trip.valueForKey("isActive") as! Bool)
+                
+                            driveStatusObjects.append(tt)
+                        }
+                        
+                        //Store all the riding trips
+                        for trip in ride{
+                            let tt = TripStatusObject(newTo: trip.valueForKey("to") as! String, newFrom: trip.valueForKey("from") as! String, newStatus: trip.valueForKey("status") as! String, newIsActive: trip.valueForKey("isActive") as! Bool)
+                            
+                            rideStatusObjects.append(tt)
+                        }
+                        
+                        tripStatusObjects.append(driveStatusObjects)
+                        tripStatusObjects.append(rideStatusObjects)
+                        
+                        completion(result: tripStatusObjects)
+                    }
+                    
+                } catch {
+                    // failure
+                    print("Fetch failed: \((error as NSError).localizedDescription)")
+                }
+            }
+            
+            completion(result: tripStatusObjects)
+            
+        }
+        
+        task.resume()
+    }
+    
     class func getBankInfo(completion:(result:String?)->Void){
         let addr = NSURL(string: "https://www.yokweapp.com/profile")
         let request = NSMutableURLRequest(URL: addr!)
@@ -288,6 +355,8 @@ class YokweHelper{
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
             data, response, error in
             
+            print("Finished the call")
+            
             if error != nil {
                 print("error\(error)")
                 return
@@ -297,6 +366,10 @@ class YokweHelper{
             if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
                 let riderStringList = responseString.componentsSeparatedByString("_")
                 var riderList:[Rider] = [Rider]()
+                
+                print("Finished the call successfully.")
+                
+                print("response stringg:\(responseString)")
                 
                 for rider in riderStringList{
                     if rider != "" && rider.containsString(";"){
@@ -628,6 +701,9 @@ class YokweHelper{
         let addr = NSURL(string: "https://www.yokweapp.com/profile")
         let request = NSMutableURLRequest(URL: addr!)
         
+        
+        print("Well, we tried to store the user")
+        
         //Add parameters
         var postString = "type=storeUser"
         
@@ -678,6 +754,8 @@ class YokweHelper{
                 print("error\(error)")
                 return
             }
+            
+            completion()
             
         }
         task.resume()

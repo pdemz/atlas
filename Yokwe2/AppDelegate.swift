@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        /*
         GMSServices.provideAPIKey("AIzaSyCqZ50c_NV-tYwVOMwxaS4XY-vomaxsOEc")
         
         Stripe.setDefaultPublishableKey("pk_live_bd9UGPnXebRwYRUCsz7a3F5e")
@@ -28,11 +30,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
+ */
+ 
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         var initialViewController: UIViewController
         
         if FBSDKAccessToken.currentAccessToken() != nil{
+            
+            /*
             
             let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
             
@@ -51,16 +57,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     SharingCenter.sharedInstance.phone = user.phone
                     SharingCenter.sharedInstance.accountToken = user.accountToken
                     SharingCenter.sharedInstance.customerToken = user.customerToken
+                    
+                    //Check if user has a phone number on file
+                    self.phoneHandler()
                 }
             })
-            
+ */
+ 
             let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
             initialViewController = protectedPage
             
+            /*
             SharingCenter.sharedInstance.locationManager = CLLocationManager()
             SharingCenter.sharedInstance.locationManager?.requestAlwaysAuthorization()
             SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            
+            */
         }else{
             print("tried to open titular")
             let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("TitularViewController")
@@ -194,6 +205,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         //In the future - get this directly from json for users without facebook
+    }
+    
+    func phoneHandler(){
+        let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
+        
+        print("phone:")
+        print(SharingCenter.sharedInstance.phone)
+        
+        if SharingCenter.sharedInstance.phone == nil || SharingCenter.sharedInstance.phone! == ""{
+            let vc = mainStoryBoard.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+            vc.title = "Enter Phone Number"
+            
+            let navController = UINavigationController(rootViewController: vc)
+            navController.navigationBar.tintColor = colorHelper.orange
+            navController.navigationBar.translucent = true
+            
+            self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+        }
+        
     }
     
     func presentTrip(json:NSDictionary){

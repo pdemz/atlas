@@ -77,6 +77,8 @@ class OfferResponseViewController: UIViewController {
         let riderDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((riderDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((riderDestinationSplit[1] as NSString).doubleValue))
 
         let riderStartMarker = GMSMarker(position: riderOrigin)
+        riderStartMarker.icon = GMSMarker.markerImageWithColor(UIColor.greenColor())
+        
         let riderEndMarker = GMSMarker(position: riderDestination)
         riderStartMarker.title = "Start"
         riderEndMarker.title = "End"

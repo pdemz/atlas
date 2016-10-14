@@ -45,6 +45,15 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        let trips = self.storyboard?.instantiateViewControllerWithIdentifier("TripsViewController") as! TripsViewController
+        
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(trips, animated: true, completion: nil)
+            
+        })
+        
+        /*
         //Display tutorial
         if shouldDisplayTutorial{
             
@@ -58,6 +67,7 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
             })
             
         }
+ */
     }
     @IBAction func tappedEmailButton(sender: AnyObject) {
         tappedEmail()

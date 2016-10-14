@@ -58,6 +58,9 @@
 		DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */; };
 		DBD79D551BFD13F400BF383C /* TitularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD79D541BFD13F400BF383C /* TitularViewController.swift */; };
 		DBD79D571BFD31B300BF383C /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */; };
+		DBD9A41B1DA1D36D00FC1780 /* TripsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD9A41A1DA1D36D00FC1780 /* TripsViewController.swift */; };
+		DBD9A41F1DA1DAD900FC1780 /* TripsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD9A41E1DA1DAD900FC1780 /* TripsTableViewCell.swift */; };
+		DBD9A4211DA1E9C700FC1780 /* TripStatusObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD9A4201DA1E9C700FC1780 /* TripStatusObject.swift */; };
 		DBE564C91CF5DC7A00B96659 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */; };
 		DBED151B1C7B451800351D10 /* DashboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBED151A1C7B451800351D10 /* DashboardTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -133,6 +136,9 @@
 		DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsHelper.swift; sourceTree = "<group>"; };
 		DBD79D541BFD13F400BF383C /* TitularViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitularViewController.swift; sourceTree = "<group>"; };
 		DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		DBD9A41A1DA1D36D00FC1780 /* TripsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsViewController.swift; sourceTree = "<group>"; };
+		DBD9A41E1DA1DAD900FC1780 /* TripsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsTableViewCell.swift; sourceTree = "<group>"; };
+		DBD9A4201DA1E9C700FC1780 /* TripStatusObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripStatusObject.swift; sourceTree = "<group>"; };
 		DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		DBED151A1C7B451800351D10 /* DashboardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -237,6 +243,7 @@
 				DBA80AED1C605B44003B8B73 /* Helpers */,
 				DBCB03151D0610E2001AC1A7 /* Login */,
 				DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */,
+				DBD9A41A1DA1D36D00FC1780 /* TripsViewController.swift */,
 				DB81671B1CE6335200712459 /* TripDetails.swift */,
 				DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */,
 				DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */,
@@ -268,6 +275,7 @@
 			children = (
 				BE0128D01BE2CB0B00D78FD7 /* RiderOptionTableViewCell.swift */,
 				DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */,
+				DBD9A41E1DA1DAD900FC1780 /* TripsTableViewCell.swift */,
 				DBED151A1C7B451800351D10 /* DashboardTableViewCell.swift */,
 			);
 			name = Cells;
@@ -277,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				BE92C95E1BC19960008D22E5 /* Driver.swift */,
+				DBD9A4201DA1E9C700FC1780 /* TripStatusObject.swift */,
 				BE0128CE1BE2CA8800D78FD7 /* Rider.swift */,
 				DB68DA4C1CADC0AE005B4158 /* User.swift */,
 			);
@@ -521,6 +530,7 @@
 				DB979C081C4D5123000B91B4 /* YokweHelper.swift in Sources */,
 				DBD79D551BFD13F400BF383C /* TitularViewController.swift in Sources */,
 				BE8239EC1BCF546900BD5103 /* ConfirmationViewController.swift in Sources */,
+				DBD9A41F1DA1DAD900FC1780 /* TripsTableViewCell.swift in Sources */,
 				BE0128D11BE2CB0B00D78FD7 /* RiderOptionTableViewCell.swift in Sources */,
 				BE0D70161BA5024400F201FE /* AppDelegate.swift in Sources */,
 				BE92C95F1BC19960008D22E5 /* Driver.swift in Sources */,
@@ -542,9 +552,11 @@
 				DB81671C1CE6335200712459 /* TripDetails.swift in Sources */,
 				BE8BD91D1BE81E9900B77BDD /* ConfirmRiderViewController.swift in Sources */,
 				DBED151B1C7B451800351D10 /* DashboardTableViewCell.swift in Sources */,
+				DBD9A4211DA1E9C700FC1780 /* TripStatusObject.swift in Sources */,
 				DB0A3E7C1C6180D500187B9C /* SlideOutMenuViewController.swift in Sources */,
 				DB68DA4B1CAB20C5005B4158 /* DriverAccountCreationViewController.swift in Sources */,
 				DB9D94A31C7BAC5D0072992B /* RideRequestResponseViewController.swift in Sources */,
+				DBD9A41B1DA1D36D00FC1780 /* TripsViewController.swift in Sources */,
 				DB979C061C4D50A9000B91B4 /* FacebookHelper.swift in Sources */,
 				DB914AAE1C9A386C002BA5A3 /* PaymentFormViewController.swift in Sources */,
 				DBCB03171D06114E001AC1A7 /* RideOrDriveViewController.swift in Sources */,

@@ -16,12 +16,13 @@ class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
         
         self.title = "Confirm Phone Number"
         
+        codeTextBox.keyboardType = .NumberPad
         codeTextBox.isFirstResponder()
         
     }
     
     func proceedToHomeScreen(){
-        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
         
     }
     

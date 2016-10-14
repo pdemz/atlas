@@ -49,6 +49,8 @@ class DriverOptionsTableViewController: UITableViewController {
     
     func populateRows(){
         YokweHelper.getDriverList{(result) -> Void in
+            
+            print("call to server has completed")
             if result.count == 0{
                 dispatch_async(dispatch_get_main_queue(), {
                     let alertString = "No drivers heading your way right now. We'll let you know when one becomes available!"
@@ -114,6 +116,7 @@ class DriverOptionsTableViewController: UITableViewController {
         
         if drivers.count > tableView.numberOfRowsInSection(0){
             tableView.reloadData()
+            print("reloaded")
         }
         
         let cell = tableView.dequeueReusableCellWithIdentifier("DriverTableViewCell", forIndexPath: indexPath) as! DriverTableViewCell

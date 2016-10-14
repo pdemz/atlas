@@ -45,8 +45,10 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         endTripButton.alpha = 0
         endTripButton.enabled = false
         endTripButton.hidden = true
+        endTripButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
         startTripButton.titleLabel?.text
+        startTripButton.titleLabel?.adjustsFontSizeToFitWidth
         
         //Google map view set up
         self.mapView!.myLocationEnabled = true
