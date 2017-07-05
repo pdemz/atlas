@@ -22,7 +22,7 @@ class colorHelper{
     
     static let maroonOrange = UIColor(red: 184/255, green: 106/255, blue: 93/255, alpha: 1)
     //static let redOrange = UIColor(red: 214/255, green: 121/255, blue: 103/255, alpha: 1)
-    static let redOrange = UIColor.cyanColor()
+    static let redOrange = UIColor.cyan
 
     static let lavender = UIColor(red: 119/255, green: 108/255, blue: 138/255, alpha: 1)
     //Now green

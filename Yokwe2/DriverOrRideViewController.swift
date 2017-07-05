@@ -22,31 +22,31 @@ class DriverOrRideViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
     }
 
-    @IBAction func driveButtonPush(sender: AnyObject) {
+    @IBAction func driveButtonPush(_ sender: AnyObject) {
         SharingCenter.sharedInstance.mode = "driver"
-        performSegueWithIdentifier("modeSelectSegue", sender: sender)
+        performSegue(withIdentifier: "modeSelectSegue", sender: sender)
     }
     
-    @IBAction func rideButtonPush(sender: AnyObject) {
+    @IBAction func rideButtonPush(_ sender: AnyObject) {
         SharingCenter.sharedInstance.mode = "rider"
-        performSegueWithIdentifier("modeSelectSegue", sender: sender)
+        performSegue(withIdentifier: "modeSelectSegue", sender: sender)
 
     }
     
-    @IBAction func logOut(sender: AnyObject) {
+    @IBAction func logOut(_ sender: AnyObject) {
         let manager = FBSDKLoginManager()
         manager.logOut()
-        performSegueWithIdentifier("titleSegue", sender: self)
+        performSegue(withIdentifier: "titleSegue", sender: self)
     }
     
     

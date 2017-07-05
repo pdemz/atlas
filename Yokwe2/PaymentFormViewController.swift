@@ -23,11 +23,11 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
         emailTextField.delegate = self
         
         cardTextField.borderWidth = 0.5
-        cardTextField.borderColor = UIColor.lightGrayColor()
+        cardTextField.borderColor = UIColor.lightGray
         
     }
     
-    func paymentCardTextFieldDidChange(textField: STPPaymentCardTextField) {
+    func paymentCardTextFieldDidChange(_ textField: STPPaymentCardTextField) {
         if textField.valid{
             canContinue = true
         }else{
@@ -35,7 +35,7 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
         }
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         if cardTextField.valid{
             canContinue = true
         }else{
@@ -43,28 +43,28 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
         }
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
     func closeView(){
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func save(sender: AnyObject) {
+    @IBAction func save(_ sender: AnyObject) {
         let newCard = cardTextField.cardParams
         
         //Either get the token and save the card to server
-        STPAPIClient.sharedClient().createTokenWithCard(newCard, completion: { (token, error) -> Void in
+        STPAPIClient.shared().createToken(withCard: newCard, completion: { (token, error) -> Void in
             var alertString:String?
             var okAction:UIAlertAction?
             if let error = error {
                 print(error)
                 //Create alert for error, and ask user to retry
                 alertString = "There were errors processing your payment information. Please try again."
-                okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                    self.dismiss(animated: true, completion: nil)
                 })
                 
             }else if let token = token {
@@ -74,52 +74,64 @@ class PaymentFormViewController: UIViewController, STPPaymentCardTextFieldDelega
                 print(token.tokenId)
                 
                 alertString = "Payment information stored successfully"
-                okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                    self.dismiss(animated: true, completion: nil)
                 })
                 
             }
             if alertString != nil{
-                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.Alert)
+                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(okAction!)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
     
     func saveInfo() {
+        
+        //Get source params from card
         let newCard = cardTextField.cardParams
+        let sourceParams = STPSourceParams.cardParams(withCard: newCard)
         
         if canContinue{
-        
-            //Either get the token and save the card to server
-            STPAPIClient.sharedClient().createTokenWithCard(newCard, completion: { (token, error) -> Void in
+            
+            //get the token and save the card to the stripe server
+            STPAPIClient.shared().createSource(with: sourceParams, completion: { (source, error) in
                 var alertString:String?
                 var okAction:UIAlertAction?
+                
+                print("checkpoint 1")
+                
+                //Check for any errors
                 if let error = error {
                     print(error)
+                    
                     //Create alert for error, and ask user to retry
                     alertString = "There were errors processing your payment information. Please try again."
-                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                        self.dismiss(animated: true, completion: nil)
                     })
                     
-                }else if let token = token {
-                    YokweHelper.updatePaymentInfo(token.tokenId, email: self.emailTextField.text!)
-                    SharingCenter.sharedInstance.customerToken = token.tokenId
+                    print("checkpoint 2")
                     
-                    print(token.tokenId)
+                //If successful, store the information
+                }else if let s = source, s.flow == .none && s.status == .chargeable {
+                    YokweHelper.updatePaymentInfo(s.stripeID, email: self.emailTextField.text!)
+                    SharingCenter.sharedInstance.customerToken = s.stripeID
+                    
+                    print(s.stripeID)
                     
                     alertString = "Payment information stored successfully"
-                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                        self.dismiss(animated: true, completion: nil)
                     })
                     
                 }
+                
                 if alertString != nil{
-                    let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.Alert)
+                    let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(okAction!)
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.present(alert, animated: true, completion: nil)
                 }
             })
             

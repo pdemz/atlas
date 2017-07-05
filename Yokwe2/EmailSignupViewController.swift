@@ -28,10 +28,10 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
             textField.delegate = self
         }
         
-        phone.keyboardType = .PhonePad
+        phone.keyboardType = .phonePad
     }
     
-    @IBAction func createAccount(sender: AnyObject) {
+    @IBAction func createAccount(_ sender: AnyObject) {
         proceedToHomeScreen()
     }
     
@@ -46,10 +46,10 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
         
         if allCompleted && password.text! == confirmPassword.text!{
             continueButton.alpha = 1
-            continueButton.enabled = true
+            continueButton.isEnabled = true
         }else{
             continueButton.alpha = 0.5
-            continueButton.enabled = false
+            continueButton.isEnabled = false
         }
     }
     
@@ -62,7 +62,7 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
         SharingCenter.sharedInstance.password = password.text
         
         //Store credentials locally here
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
         
         /*
         defaults.setObject(email, forKey: "email")
@@ -76,32 +76,32 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
             SharingCenter.sharedInstance.rider = result
         })
         
-        let notificationTypes : UIUserNotificationType = [.Alert, .Badge, .Sound]
-        let notificationSettings : UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationTypes, categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
+        let notificationTypes : UIUserNotificationType = [.alert, .badge, .sound]
+        let notificationSettings : UIUserNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: nil)
+        UIApplication.shared.registerUserNotificationSettings(notificationSettings)
+        UIApplication.shared.registerForRemoteNotifications()
         
         SharingCenter.sharedInstance.locationManager = CLLocationManager()
         SharingCenter.sharedInstance.locationManager!.requestWhenInUseAuthorization()
         
-        let protectedPage = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
+        let protectedPage = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
         
-        presentViewController(protectedPage, animated: false, completion: nil)
+        present(protectedPage, animated: false, completion: nil)
         
     }
     
     //Formats the phone number as the user enters it
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
      
         checkFields()
         if textField == phone{
-            let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
-            let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            let components = newString.components(separatedBy: CharacterSet.decimalDigits.inverted)
             
-            let decimalString = components.joinWithSeparator("") as NSString
+            let decimalString = components.joined(separator: "") as NSString
             let length = decimalString.length
-            let hasLeadingOne = length > 0 && decimalString.characterAtIndex(0) == (1 as unichar)
+            let hasLeadingOne = length > 0 && decimalString.character(at: 0) == (1 as unichar)
             
             if length == 0 || (length > 10 && !hasLeadingOne) || length > 11
             {
@@ -114,18 +114,18 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
             
             if hasLeadingOne
             {
-                formattedString.appendString("1 ")
+                formattedString.append("1 ")
                 index += 1
             }
             if (length - index) > 3
             {
-                let areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let areaCode = decimalString.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("(%@) ", areaCode)
                 index += 3
             }
             if length - index > 3
             {
-                let prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let prefix = decimalString.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
             }
@@ -136,8 +136,8 @@ class EmailSignupViewController: UIViewController, UITextFieldDelegate {
                 phoneIsValid = false
         
             }
-            let remainder = decimalString.substringFromIndex(index)
-            formattedString.appendString(remainder)
+            let remainder = decimalString.substring(from: index)
+            formattedString.append(remainder)
             textField.text = formattedString as String
             
             checkFields()

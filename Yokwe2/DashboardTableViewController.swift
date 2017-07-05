@@ -13,9 +13,9 @@ class DashboardTableViewController: UITableViewController {
     var requestList:[String]?
     
     //MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let riderIndex = tableView.indexPathForSelectedRow!.row
-        let nextController = segue.destinationViewController as! ConfirmRiderViewController
+        let nextController = segue.destination as! ConfirmRiderViewController
         
     }
     
@@ -28,11 +28,11 @@ class DashboardTableViewController: UITableViewController {
 
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if requestList == nil{
             return 0
         }else{
@@ -40,19 +40,19 @@ class DashboardTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.alpha = 0
         cell.frame.offsetInPlace(dx: 0, dy: 20)
         
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             cell.alpha = 1
             cell.frame.offsetInPlace(dx: 0, dy: -20)
         })
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("DashboardTableViewCell", forIndexPath: indexPath) as! DashboardTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DashboardTableViewCell", for: indexPath) as! DashboardTableViewCell
         
         //let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let request = requestList![indexPath.row]
@@ -68,8 +68,13 @@ class DashboardTableViewController: UITableViewController {
     
     func returnToHomeScreen(){
         SharingCenter.sharedInstance.shouldReset = true
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
-
     
+}
+
+extension CGRect {
+    mutating func offsetInPlace(dx: CGFloat, dy: CGFloat) {
+        self = self.offsetBy(dx: dx, dy: dy)
+    }
 }

@@ -67,14 +67,14 @@ class ConfirmationViewController: UIViewController {
             polyLine.strokeWidth = 5
             polyLine.strokeColor = colorHelper.blue
             let bounds = GMSCoordinateBounds(path: newPath!)
-            let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/5)
+            let update = GMSCameraUpdate.fit(bounds, withPadding: self.mapView.frame.width/5)
             self.mapView.moveCamera(update)
             
         }
         
-        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             if segue.identifier == "driverProfileSegue"{
-                let destination = segue.destinationViewController as! UserProfileViewController
+                let destination = segue.destination as! UserProfileViewController
                 destination.title = driver.name!
                 destination.photoImage = driver.photo!
                 destination.locationText = driver.mutualFriends!
@@ -83,33 +83,33 @@ class ConfirmationViewController: UIViewController {
             }
         }
     
-    @IBAction func pressedRequest(sender: AnyObject) {
+    @IBAction func pressedRequest(_ sender: AnyObject) {
         
         //Check if the rider has a credit card on file
         if SharingCenter.sharedInstance.customerToken == nil{
             let alertString = "You must have a credit card on file before you can request rides. You can add one via the payments section in the main menu."
-            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil)
             alert.addAction(okAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
             
         //Otherwise let the request go through
         }else{
             YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!)
             
             let alertString = "You will be alerted when \(driver.name!) responds to your request"
-            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
                 self.returnToHomeScreen()
             })
             alert.addAction(okAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     func returnToHomeScreen(){
         SharingCenter.sharedInstance.shouldReset = true
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
         
 }

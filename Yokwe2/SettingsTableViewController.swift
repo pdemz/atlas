@@ -24,11 +24,11 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         
         phone.delegate = self
         phone.text = phoneText
-        phone.keyboardType = .NumberPad
+        phone.keyboardType = .numberPad
         
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 1{
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()
@@ -40,23 +40,23 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
     
     func goToLoginScreen(){
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let initialViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("TitularViewController")
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let initialViewController = mainStoryBoard.instantiateViewController(withIdentifier: "TitularViewController")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.window?.rootViewController = initialViewController
         
     }
     
     //Formats the phone number as the user enters it
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print("editing text field")
         //Formats the phone number as the user enters it
         if textField == phone{
-            let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
-            let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            let components = newString.components(separatedBy: CharacterSet.decimalDigits.inverted)
             
-            let decimalString = components.joinWithSeparator("") as NSString
+            let decimalString = components.joined(separator: "") as NSString
             let length = decimalString.length
-            let hasLeadingOne = length > 0 && decimalString.characterAtIndex(0) == (1 as unichar)
+            let hasLeadingOne = length > 0 && decimalString.character(at: 0) == (1 as unichar)
             
             if length == 0 || (length > 10 && !hasLeadingOne) || length > 11
             {
@@ -69,18 +69,18 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
             
             if hasLeadingOne
             {
-                formattedString.appendString("1 ")
+                formattedString.append("1 ")
                 index += 1
             }
             if (length - index) > 3
             {
-                let areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let areaCode = decimalString.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("(%@) ", areaCode)
                 index += 3
             }
             if length - index > 3
             {
-                let prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let prefix = decimalString.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
             }
@@ -90,8 +90,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
                 canClose = false
             }
             
-            let remainder = decimalString.substringFromIndex(index)
-            formattedString.appendString(remainder)
+            let remainder = decimalString.substring(from: index)
+            formattedString.append(remainder)
             textField.text = formattedString as String
             
             return false
@@ -102,7 +102,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         }
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
@@ -113,7 +113,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
                 SharingCenter.sharedInstance.phone = phone.text!
                 YokweHelper.storeUser()
             }
-            dismissViewControllerAnimated(true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
     }
 

@@ -28,14 +28,14 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
             textField.delegate = self
             
             if textField == month || textField == day || textField == year || textField == ssn || textField == zip{
-                textField.keyboardType = UIKeyboardType.NumberPad
+                textField.keyboardType = UIKeyboardType.numberPad
             }
         }
     }
     
     func saveInfo() {
         if fieldsAreCorrectLength(){
-            YokweHelper.createStripeAccount(first.text!, lastName: last.text!, day: day.text!, month: month.text!, year: year.text!, line1: street.text!.stringByReplacingOccurrencesOfString(" ", withString: "+"), line2: nil, city: city.text!, state: state.text!, zip: zip.text!, last4: ssn.text!, completion: { (result) -> Void in
+            YokweHelper.createStripeAccount(first.text!, lastName: last.text!, day: day.text!, month: month.text!, year: year.text!, line1: street.text!.replacingOccurrences(of: " ", with: "+"), line2: nil, city: city.text!, state: state.text!, zip: zip.text!, last4: ssn.text!, completion: { (result) -> Void in
                 
                 var alertString:String?
                 var okAction:UIAlertAction?
@@ -45,7 +45,7 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
                     print("New account token: \(token)")
                     
                     alertString = "Account created successfully"
-                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
                         self.presentBankForm()
                     })
                     
@@ -53,16 +53,16 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
                 else{
                     //Create alert for error, and ask user to retry
                     alertString = "There were errors processing your payment information. Please try again."
-                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
                         self.presentBankForm()
                     })
                 }
                 
                 if alertString != nil{
-                    dispatch_async(dispatch_get_main_queue(), {
-                        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.Alert)
+                    DispatchQueue.main.async(execute: {
+                        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(okAction!)
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        self.present(alert, animated: true, completion: nil)
                     })
                 }
             })
@@ -74,16 +74,16 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
     
     
     //Below code helps ensure info is entered correctly
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool{
         
         var maxLength = 100
         
@@ -146,40 +146,40 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
     }
     
     func presentBankForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("BankAccountCreation") as! BankAccountCreation
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "BankAccountCreation") as! BankAccountCreation
         vc = customizeVC(vc) as! BankAccountCreation
         vc.title = "Payment Info"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = customizeNavController(navController)
         
-        navController.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
-        presentViewController(navController, animated: true, completion: nil)
+        navController.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+        present(navController, animated: true, completion: nil)
     }
     
-    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.isTranslucent = false
         
         return navController
     }
     
-    func customizeVC(vc:UIViewController) -> UIViewController{
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+    func customizeVC(_ vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: #selector(DriverAccountCreationViewController.closeView))
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.plain, target: vc, action: #selector(DriverAccountCreationViewController.closeView))
         vc.navigationItem.leftBarButtonItem = dismissButton
         
         //Save button
-        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(DriverAccountCreationViewController.saveInfo))
+        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .done, target: vc, action: #selector(DriverAccountCreationViewController.saveInfo))
         vc.navigationItem.rightBarButtonItem = barSaveButton
         
         return vc
     }
     
     func closeView(){
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
 }

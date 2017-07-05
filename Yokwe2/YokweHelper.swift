@@ -12,87 +12,90 @@ import UIKit
 
 class YokweHelper{
     
-    class func getCardInfo(completion:(result:String?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
+    //static let serverAddress = "http://localhost:8080/yokwe"
+    static let serverAddress = "https://www.atlascarpool.com/"
+
+    class func getCardInfo(_ completion:@escaping (_ result:String?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
         
         //Add parameters
         let type = "getCardInfo"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        URLSession.shared.dataTask(with: request){
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
-                completion(result: nil)
+                completion(nil)
             }
             
-            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
+            if let responseString = String(data: data!, encoding: String.Encoding.utf8){
                 if responseString != "null"{
-                    completion(result: responseString)
+                    completion(responseString)
                     
                 }else{
-                    completion(result: nil)
+                    completion(nil)
 
                 }
             }
-            completion(result: nil)
+            completion(nil)
 
-        }
-        task.resume()
+        }.resume()
     }
     
-    class func getActiveTrips(completion:(result:[[TripStatusObject]])->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
+    class func getActiveTrips(_ completion:@escaping (_ result:[[TripStatusObject]])->Void){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+        let session = URLSession.shared
         
         //Add parameters
         let type = "getActiveTrips"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         var tripStatusObjects = [[TripStatusObject]]()
         var rideStatusObjects = [TripStatusObject]()
         var driveStatusObjects = [TripStatusObject]()
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)
             
             if responseString != nil && responseString != ""{
                 do {
-                    if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
+                    if let json = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary{
                      
-                        let drive = json.objectForKey("drive") as! [NSDictionary]
-                        let ride = json.objectForKey("ride") as! [NSDictionary]
+                        let drive = json.object(forKey: "drive") as! [NSDictionary]
+                        let ride = json.object(forKey: "ride") as! [NSDictionary]
                         
                         //Store all the driving trips
                         for trip in drive{
-                            let tt = TripStatusObject(newTo: trip.valueForKey("to") as! String, newFrom: trip.valueForKey("from") as! String, newStatus: trip.valueForKey("status") as! String, newIsActive: trip.valueForKey("isActive") as! Bool)
+                            let tt = TripStatusObject(newTo: trip.value(forKey: "to") as! String, newFrom: trip.value(forKey: "from") as! String, newStatus: trip.value(forKey: "status") as! String, newIsActive: trip.value(forKey: "isActive") as! Bool)
                 
                             driveStatusObjects.append(tt)
                         }
                         
                         //Store all the riding trips
                         for trip in ride{
-                            let tt = TripStatusObject(newTo: trip.valueForKey("to") as! String, newFrom: trip.valueForKey("from") as! String, newStatus: trip.valueForKey("status") as! String, newIsActive: trip.valueForKey("isActive") as! Bool)
+                            let tt = TripStatusObject(newTo: trip.value(forKey: "to") as! String, newFrom: trip.value(forKey: "from") as! String, newStatus: trip.value(forKey: "status") as! String, newIsActive: trip.value(forKey: "isActive") as! Bool)
                             
                             rideStatusObjects.append(tt)
                         }
@@ -100,7 +103,7 @@ class YokweHelper{
                         tripStatusObjects.append(driveStatusObjects)
                         tripStatusObjects.append(rideStatusObjects)
                         
-                        completion(result: tripStatusObjects)
+                        completion(tripStatusObjects)
                     }
                     
                 } catch {
@@ -109,119 +112,117 @@ class YokweHelper{
                 }
             }
             
-            completion(result: tripStatusObjects)
+            completion(tripStatusObjects)
             
-        }
+        })
         
         task.resume()
     }
     
-    class func getBankInfo(completion:(result:String?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
+    class func getBankInfo(_ completion:@escaping (_ result:String?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
         
         //Add parameters
         let type = "getBankInfo"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
-        print("Here is the post string: \(postString)")
-        
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
-                completion(result: nil)
+                completion(nil)
             }
             
-            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
+            if let responseString = String(data: data!, encoding: String.Encoding.utf8){
                 if responseString != "null"{
-                    completion(result: responseString)
+                    completion(responseString)
                     
                 }else{
-                    completion(result: nil)
+                    completion(nil)
                     
                 }
             }
-            completion(result: nil)
+            completion(nil)
             
-        }
+        })
         task.resume()
     }
     
     class func deleteBank(){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "deleteBank"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
             }
             
-        }
+        })
         task.resume()
     }
     
     class func deleteCard(){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "deleteCustomer"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
             }
             
-        }
+        })
         task.resume()
     }
     
-    class func submitReview(stars: Int, review: String, revieweeID:String, reviewType:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func submitReview(_ stars: Int, review: String, revieweeID:String, reviewType:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "review"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         
         var postString = "type=\(type)&stars=\(stars)&review=\(review)&revieweeID=\(revieweeID)&reviewType=\(reviewType)"
         
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -229,16 +230,16 @@ class YokweHelper{
                 return
             }
             
-        }
+        })
         task.resume()
     }
     
     //Authenticates a user with email and password combo
-    class func authenticateEmail(completion:(result:Bool)->Void){
+    class func authenticateEmail(_ completion:@escaping (_ result:Bool)->Void){
         //Main part of address
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "authenticateEmail"
         let email = SharingCenter.sharedInstance.email
@@ -246,59 +247,58 @@ class YokweHelper{
         
         let postString = "type=\(type)&email=\(email!)&password=\(password!)"
         
-        request.HTTPMethod = "POST"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
-                completion(result: false)
+                completion(false)
             }
             
             //userID;accessToken_
-            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
-                print("response string: \(responseString)")
+            if let responseString = String(data: data!, encoding: String.Encoding.utf8){
                 
                 //User logged in successfully!
                 if(responseString == "success"){
-                    completion(result: true)
+                    completion(true)
 
                 }else{
-                    completion(result: false)
+                    completion(false)
 
                 }
                 
             }
             
-        }
+        })
         
         task.resume()
     }
     
     //Returns a list of drivers given a rider
-    class func getDriverList(completion:(result:[Driver])->Void){
+    class func getDriverList(_ completion:@escaping (_ result:[Driver])->Void){
         
         //Main part of address
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "rideRequest"
-        let start = SharingCenter.sharedInstance.start.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        let dest = SharingCenter.sharedInstance.destination.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        let start = SharingCenter.sharedInstance.start.replacingOccurrences(of: " ", with: "+")
+        let dest = SharingCenter.sharedInstance.destination.replacingOccurrences(of: " ", with: "+")
         
         var postString = "origin=\(start)&destination=\(dest)&type=\(type)"
         
         postString = addCredentials(postString)
         
-        request.HTTPMethod = "POST"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -307,55 +307,52 @@ class YokweHelper{
             }
             
             //userID;accessToken_
-            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
-                let driverStringList = responseString.componentsSeparatedByString("_")
-                print("responseString \(responseString)")
+            if let responseString = String(data: data!, encoding: String.Encoding.utf8){
+                let driverStringList = responseString.components(separatedBy: "_")
                 
                 var driverList:[Driver] = [Driver]()
                 for driver in driverStringList{
                     if driver != "" && responseString != "null\n"{
-                        var newb = driver.componentsSeparatedByString(";")
+                        var newb = driver.components(separatedBy: ";")
                         let newDriver = Driver(name: nil, photo: nil, mutualFriends: newb[3], fareEstimate: nil, eta: nil, userID: newb[0], accessToken: newb[1], addedTime: Double(newb[2]))
                         newDriver.price = newb[4]
                         newDriver.aboutMe = newb[5]
                         newDriver.name = newb[6]
-                        print(newb[4])
                         driverList.append(newDriver)
                     }
                 }
-                completion(result: driverList)
+                completion(driverList)
 
             }
             
-        }
+        })
         
         task.resume()
     }
     
     //returns a list of riders given a driver
-    class func getRiderList(completion:(result:[Rider])->Void){
+    class func getRiderList(_ completion:@escaping (_ result:[Rider])->Void){
         
         //Main part of address
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "driveRequest"
-        let start = SharingCenter.sharedInstance.start.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        let dest = SharingCenter.sharedInstance.destination.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        let start = SharingCenter.sharedInstance.start.replacingOccurrences(of: " ", with: "+")
+        let dest = SharingCenter.sharedInstance.destination.replacingOccurrences(of: " ", with: "+")
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
+        
         var postString = "origin=\(start)&destination=\(dest)&type=\(type)&limit=30"
         
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
-            
-            print("Finished the call")
             
             if error != nil {
                 print("error\(error)")
@@ -363,151 +360,143 @@ class YokweHelper{
             }
             
             //id;accessToken;origin;destination;addedTime_
-            if let responseString = String(data: data!, encoding: NSUTF8StringEncoding){
-                let riderStringList = responseString.componentsSeparatedByString("_")
+            if let responseString = String(data: data!, encoding: String.Encoding.utf8){
+                let riderStringList = responseString.components(separatedBy: "_")
                 var riderList:[Rider] = [Rider]()
                 
-                print("Finished the call successfully.")
-                
-                print("response stringg:\(responseString)")
-                
                 for rider in riderStringList{
-                    if rider != "" && rider.containsString(";"){
-                        print(rider)
-                        var newb = rider.componentsSeparatedByString(";")
+                    if rider != "" && rider.contains(";"){
+                        var newb = rider.components(separatedBy: ";")
                         let newRider = Rider(name: nil, origin: newb[2], destination: newb[3], photo: nil, mutualFriends: newb[5], fareEstimate: nil, addedTime: newb[4], userID: newb[0], accessToken: newb[1])
                         newRider.price = newb[6]
                         newRider.aboutMe = newb[7]
                         newRider.name = newb[8]
                         
-                        print("newb5: \(newb[5])")
-                        
                         riderList.append(newRider)
                         
                     }
                 }
-                completion(result: riderList)
+                
+                completion(riderList)
                 
             }
         
-        }
+        })
         
         task.resume()
     }
     
     //Checks if user has received any drive/ride requests
      //If not nil, will return type;userID;accessToken;origin;destination;driver.available;addedTime
-    class func update(completion:(result:[String]?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func update(_ completion:@escaping (_ result:[String]?)->Void){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "update"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
-                completion(result: nil)
+                completion(nil)
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             if responseString != "nothing"{
-                let resultsArray = responseString.componentsSeparatedByString(";")
-                completion(result: resultsArray)
+                let resultsArray = responseString.components(separatedBy: ";")
+                completion(resultsArray)
             }
             else{
-                completion(result: nil)
+                completion(nil)
             }
             
             
-        }
+        })
         task.resume()
     }
     
     //Checks if user has received any drive/ride requests
     //If not nil, will return type;userID;accessToken;origin;destination;driver.available;addedTime
-    class func getUser(completion:(result:User?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func getUser(_ completion:@escaping (_ result:User?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "getUser"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
-                completion(result: nil)
+                completion(nil)
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)
             
             
             if responseString != nil && responseString != ""{
 
-                print("response \(responseString)")
                 do {
-                    if let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
-                        print("json: \(jsonResults)")
+                    if let jsonResults = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary{
                         let uu = User(json: jsonResults)
-                        completion(result: uu)
+                        completion(uu)
                     }
                     
                 } catch {
                     // failure
                     print("Fetch failed: \((error as NSError).localizedDescription)")
-                    completion(result: nil)
+                    completion(nil)
                 }
             }
             else{
-                completion(result: nil)
+                completion(nil)
             }
             
             
-        }
+        })
         task.resume()
     }
     
     //Store payment info
-    class func updatePaymentInfo(token:String, email:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
+    class func updatePaymentInfo(_ token:String, email:String){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
         
         //Add parameters
         let type = "updatePaymentInfo"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         
         var postString = "type=\(type)&token=\(token)"
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.current() != nil{
             postString += "&email=\(email)"
         }
         
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -515,16 +504,19 @@ class YokweHelper{
                 return
             }
             
-        }
+            print("token: \(token)")
+            print("Payment info stored.")
+            
+        })
         task.resume()
     }
     
     //Create stripe account
-    class func createStripeAccount(firstName:String, lastName:String, day:String, month:String,year:String,
-                                 line1:String, line2:String?, city:String, state:String, zip:String, last4:String, completion:(result:String?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func createStripeAccount(_ firstName:String, lastName:String, day:String, month:String,year:String,
+                                 line1:String, line2:String?, city:String, state:String, zip:String, last4:String, completion:@escaping (_ result:String?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "createStripeAccount"
         
@@ -532,11 +524,11 @@ class YokweHelper{
         "&day=\(day)&month=\(month)&year=\(year)&line1=\(line1)&city=\(city)&state=\(state)&zip=\(zip)&last4=\(last4)"
         postString = addCredentials(postString)
         
-        request.HTTPMethod = "POST"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -544,20 +536,20 @@ class YokweHelper{
                 return
             }
             
-            if let response = String(data: data!, encoding: NSUTF8StringEncoding){
-                completion(result: response)
+            if let response = String(data: data!, encoding: String.Encoding.utf8){
+                completion(response)
             }
             
-            completion(result: nil)
+            completion(nil)
             
-        }
+        })
         task.resume()
     }
     
-    class func addBankAccount(name:String, email:String?, accountNum:String, routingNum:String, completion:(result:String?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func addBankAccount(_ name:String, email:String?, accountNum:String, routingNum:String, completion:@escaping (_ result:String?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "addBankAccount"
         
@@ -569,11 +561,11 @@ class YokweHelper{
             postString += "&email=\(emailString)"
         }
         
-        request.HTTPMethod = "POST"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -581,32 +573,32 @@ class YokweHelper{
                 return
             }
             
-            if let response = String(data: data!, encoding: NSUTF8StringEncoding){
+            if let response = String(data: data!, encoding: String.Encoding.utf8){
                 if response != "null"{
-                    completion(result: response)
+                    completion(response)
                 }
             }
             
-            completion(result: nil)
+            completion(nil)
             
-        }
+        })
         task.resume()
     }
     
     //Store/update user
     //Verbose, but simple - and probably the least amount of code for the job
     class func storeUser(){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         var postString = "type=storeUser"
         
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.current() != nil{
             if let userID = SharingCenter.sharedInstance.userID{
                 postString += "&userID=\(userID)"
             }
-            if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+            if let accessToken = FBSDKAccessToken.current().tokenString{
                 postString += "&accessToken=\(accessToken)"
             }
         }else{
@@ -634,15 +626,13 @@ class YokweHelper{
             postString += "&email=\(email)"
 
         }
+                
+        request.httpMethod = "POST"
         
-        print("post string: \(postString)")
-        
-        request.HTTPMethod = "POST"
-        
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -650,21 +640,21 @@ class YokweHelper{
                 return
             }
             
-        }
+        })
         task.resume()
     }
     
     //Store/update user
-    class func storeUser(user:User){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func storeUser(_ user:User){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         var postString = "type=storeUser"
         if let userID = SharingCenter.sharedInstance.userID{
             postString += "&userID=\(userID)"
         }
-        if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+        if let accessToken = FBSDKAccessToken.current().tokenString{
             postString += "&accessToken=\(accessToken)"
         }
         if let apnsToken = SharingCenter.sharedInstance.apnsToken{
@@ -678,12 +668,12 @@ class YokweHelper{
         }
 
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -691,27 +681,26 @@ class YokweHelper{
                 return
             }
             
-        }
+        })
         task.resume()
     }
 
     //Store/update user
     //Verbose, but simple - and probably the least amount of code for the job
-    class func storeUserWithCompletion(completion:()->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func storeUserWithCompletion(_ completion:@escaping ()->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
         
         print("Well, we tried to store the user")
         
         //Add parameters
         var postString = "type=storeUser"
         
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.current() != nil{
             if let userID = SharingCenter.sharedInstance.userID{
                 postString += "&userID=\(userID)"
             }
-            if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+            if let accessToken = FBSDKAccessToken.current().tokenString{
                 postString += "&accessToken=\(accessToken)"
             }
         }else{
@@ -742,12 +731,12 @@ class YokweHelper{
         
         print("post string: \(postString)")
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -757,27 +746,27 @@ class YokweHelper{
             
             completion()
             
-        }
+        })
         task.resume()
     }
 
     
     //Store aboutMe in DB
-    class func storeAboutMe(aboutMe:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func storeAboutMe(_ aboutMe:String){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "updateProfile"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&aboutMe=\(aboutMe)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -785,28 +774,28 @@ class YokweHelper{
                 return
             }
             
-        }
+        })
         task.resume()
     }
     
     //Get about me from db
-    class func getProfile(completion:(result: String?)->Void){
-        //Gets about me and phone number -- for when the user views their profile
+    class func getProfile(_ completion:@escaping (_ result: String?)->Void){
+        //Gets about me and phone number -- for when the user views their own profile
         
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "getProfile"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -814,36 +803,36 @@ class YokweHelper{
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             if responseString != "null"{
                 print("profile:")
                 print(responseString)
-                completion(result: responseString)
+                completion(responseString)
             }
             else{
-                completion(result: nil)
+                completion(nil)
             }
             
             
-        }
+        })
         task.resume()
     }
     
-    class func doesUserExist(completion:(result: Bool)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func doesUserExist(_ completion:@escaping (_ result: Bool)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "doesUserExist"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -851,37 +840,37 @@ class YokweHelper{
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             if responseString == "true"{
-                completion(result: true)
+                completion(true)
                 
             }else{
-                completion(result: false)
+                completion(false)
                 
             }
             
-        }
+        })
         task.resume()
         
     }
     
     //Store phone number
-    class func storePhone(phone:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func storePhone(_ phone:String){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "updatePhone"
         
                 
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&phone=\(phone)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -889,26 +878,26 @@ class YokweHelper{
                 return
             }
             
-        }
+        })
         task.resume()
     }
     
     //Get phone number from db
-    class func getPhone(completion:(result: String?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func getPhone(_ completion:@escaping (_ result: String?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "getPhone"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -916,309 +905,309 @@ class YokweHelper{
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             if responseString != "NULL"{
-                completion(result: responseString)
+                completion(responseString)
             }
             else{
-                completion(result: nil)
+                completion(nil)
             }
             
             
-        }
+        })
         task.resume()
     }
     
     //Called after a rider is selected by a driver
-    class func riderSelection(riderID:String, addedTime:String, price:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func riderSelection(_ riderID:String, addedTime:String, price:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "riderSelection"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         
         var postString = "type=\(type)&riderID=\(riderID)&addedTime=\(addedTime)&price=\(price)"
         postString = addCredentials(postString)
 
         print("POST STRINGGGGG: \(postString)")
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called after a driver is selected by a rider
-    class func driverSelection(driverID:String, addedTime:String, price:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func driverSelection(_ driverID:String, addedTime:String, price:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "driverSelection"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&driverID=\(driverID)&addedTime=\(addedTime)&price=\(price)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called when a request is accepted
-    class func acceptRequest(requesterID:String, requestType:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func acceptRequest(_ requesterID:String, requestType:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "accept"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&requesterID=\(requesterID)&requestType=\(requestType)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called when driver rejects a request from a rider
-    class func rideReject(requesterID:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func rideReject(_ requesterID:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "rideReject"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&requesterID=\(requesterID)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called when rider rejects a request from a driver
-    class func driveReject(requesterID:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func driveReject(_ requesterID:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "driveReject"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&requesterID=\(requesterID)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called when user cancels an active trip - no charge is made
-    class func cancelTrip(riderID:String, driverID:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func cancelTrip(_ riderID:String, driverID:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "cancel"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&riderID=\(riderID)&driverID=\(driverID)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called when driver arrives at rider origin
-    class func pickUp(riderID:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func pickUp(_ riderID:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "pickUp"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&riderID=\(riderID)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         
         task.resume()
     }
     
     //Called when driver starts the trip
-    class func startTrip(riderID:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func startTrip(_ riderID:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "start"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&riderID=\(riderID)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Called when user ends an active trip $$
-    class func endTrip(riderID:String, driverID:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func endTrip(_ riderID:String, driverID:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "end"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&riderID=\(riderID)&driverID=\(driverID)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
                 return
             }
-        }
+        })
         task.resume()
     }
     
     //Fetches trips, pending responses, or any requests
-    class func getUpdate(completion:(result: NSDictionary?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func getUpdate(_ completion:@escaping (_ result: NSDictionary?)->Void){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "update"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
     
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             if error != nil {
                 print("error\(error)")
-                completion(result: nil)
+                completion(nil)
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             print("update: \(responseString)")
             
             print("the response: \(response)")
             
             do {
-                if let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
+                if let jsonResults = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary{
                     print("json: \(jsonResults)")
-                    completion(result: jsonResults)
+                    completion(jsonResults)
                 }else{
-                    completion(result: nil)
+                    completion(nil)
                 }
                 
             } catch {
                 // failure
                 print("Fetch failed: \((error as NSError).localizedDescription)")
-                completion(result: nil)
+                completion(nil)
             }
             
-        }
+        })
         task.resume()
     }
     
     //Get phone number from db with user ID and accessToken
-    class func getPhoneWithID(userID:String, accessToken:String, completion:(result: String?)->Void){
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func getPhoneWithID(_ userID:String, accessToken:String, completion:@escaping (_ result: String?)->Void){
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "getPhone"
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         
         var postString = "type=\(type)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -1226,36 +1215,36 @@ class YokweHelper{
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             if responseString != "NULL"{
-                completion(result: responseString)
+                completion(responseString)
             }
             else{
-                completion(result: nil)
+                completion(nil)
             }
             
             
-        }
+        })
         task.resume()
     }
     
     //Get about me from db with ID and accessToken
-    class func getProfileWithID(userID:String, accessToken:String, completion:(result: String?)->Void){
+    class func getProfileWithID(_ userID:String, accessToken:String, completion:@escaping (_ result: String?)->Void){
         //Gets about me and phone number -- for when the user views their profile
         
-        let addr = NSURL(string: "https://www.yokweapp.com/profile")
-        let request = NSMutableURLRequest(URL: addr!)
+        let addr = URL(string: "\(serverAddress)/profile")
+        var request = URLRequest(url: addr!)
         
         //Add parameters
         let type = "getProfile"
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)"
         postString = addCredentials(postString)
 
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
@@ -1263,103 +1252,103 @@ class YokweHelper{
                 return
             }
             
-            let responseString = String(data: data!, encoding: NSUTF8StringEncoding)!
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)!
             if responseString != "null"{
                 print("profile:")
                 print(responseString)
-                completion(result: responseString)
+                completion(responseString)
             }
             else{
-                completion(result: nil)
+                completion(nil)
             }
             
             
-        }
+        })
         task.resume()
     }
     
     //Verify code for sms
-    class func verifyCode(code:String, number:String, completion:(result: Bool)->Void){
+    class func verifyCode(_ code:String, number:String, completion:@escaping (_ result: Bool)->Void){
         
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+
         //Add parameters
         let type = "sms"
         let action = "verify"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&action=\(action)&code=\(code)&number=\(number)"
         postString = addCredentials(postString)
         
         print("Verify code post string: \(postString)")
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
-                completion(result: false)
+                completion(false)
             }
             
             do {
-                if let jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary{
+                if let jsonResults = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary{
                     print("json result: \(jsonResults)")
-                    let valid = jsonResults.valueForKey("verified") as! Bool
-                    completion(result: valid)
+                    let valid = jsonResults.value(forKey: "verified") as! Bool
+                    completion(valid)
                     
                 }else{
-                    completion(result: false)
+                    completion(false)
                 }
                 
             } catch {
                 // failure
                 print("Code verification failed: \((error as NSError).localizedDescription)")
-                completion(result: false)
+                completion(false)
             }
 
             
             
-        }
+        })
         task.resume()
     }
     
-    class func requestVerificationCode(number:String){
-        let addr = NSURL(string: "https://www.yokweapp.com/atlas")
-        let request = NSMutableURLRequest(URL: addr!)
-        
+    class func requestVerificationCode(_ number:String){
+        let addr = URL(string: "\(serverAddress)/atlas")
+        var request = URLRequest(url: addr!)
+()
         //Add parameters
         let type = "sms"
         let action = "send"
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
         var postString = "type=\(type)&action=\(action)&number=\(number)"
         postString = addCredentials(postString)
         
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             data, response, error in
             
             if error != nil {
                 print("error\(error)")
             }
             
-        }
+        })
         task.resume()
 
         
     }
     
-    class func addCredentials(postString:String) -> String{
+    class func addCredentials(_ postString:String) -> String{
         var newString = postString
         
         //Attach proper credentials
-        if FBSDKAccessToken.currentAccessToken() == nil{
+        if FBSDKAccessToken.current() == nil{
             if let email = SharingCenter.sharedInstance.email{
                 newString += "&email=\(email)"
             }
@@ -1368,10 +1357,10 @@ class YokweHelper{
             }
             
         }else{
-            if let userID = FBSDKAccessToken.currentAccessToken().userID{
+            if let userID = FBSDKAccessToken.current().userID{
                 newString += "&userID=\(userID)"
             }
-            if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString{
+            if let accessToken = FBSDKAccessToken.current().tokenString{
                 newString += "&accessToken=\(accessToken)"
             }
         }

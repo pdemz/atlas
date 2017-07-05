@@ -24,15 +24,15 @@ class User{
     
     init(json:NSDictionary){
         
-        self.aboutMe = json.valueForKey("aboutMe") as? String
-        self.accessToken = json.valueForKey("accesstoken") as? String
-        self.apnsToken = json.valueForKey("apnsToken") as? String
-        self.email = json.valueForKey("email") as? String
-        self.userID = json.valueForKey("id") as? String
-        self.phone = json.valueForKey("phone") as? String
-        self.customerToken = json.valueForKey("customerToken") as? String
-        self.accountToken = json.valueForKey("accountToken") as? String
-        self.name = json.valueForKey("name") as? String
+        self.aboutMe = json.value(forKey: "aboutMe") as? String
+        self.accessToken = json.value(forKey: "accesstoken") as? String
+        self.apnsToken = json.value(forKey: "apnsToken") as? String
+        self.email = json.value(forKey: "email") as? String
+        self.userID = json.value(forKey: "id") as? String
+        self.phone = json.value(forKey: "phone") as? String
+        self.customerToken = json.value(forKey: "customerToken") as? String
+        self.accountToken = json.value(forKey: "accountToken") as? String
+        self.name = json.value(forKey: "name") as? String
     }
     
 }

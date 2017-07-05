@@ -21,12 +21,12 @@ class DriverTableViewCell: UITableViewCell {
         //photo.layer.cornerRadius = photo.frame.height/2
         photo.clipsToBounds = true
 
-        mutualFriends.textColor = UIColor.blackColor()
+        mutualFriends.textColor = UIColor.black
         mutualFriends.adjustsFontSizeToFitWidth = true
         mutualFriends.alpha = 0.7
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

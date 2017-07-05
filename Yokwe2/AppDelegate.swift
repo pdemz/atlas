@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMaps
+import GooglePlaces
 import FBSDKCoreKit
 import FBSDKLoginKit
 import Stripe
@@ -18,31 +19,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        /*
         GMSServices.provideAPIKey("AIzaSyCqZ50c_NV-tYwVOMwxaS4XY-vomaxsOEc")
+        GMSPlacesClient.provideAPIKey("AIzaSyD5aRAiNtUOfUvYplUIiXxtxApicvoQ1p8")
         
-        Stripe.setDefaultPublishableKey("pk_live_bd9UGPnXebRwYRUCsz7a3F5e")
-        
-        FBSDKLoginButton.classForCoder()
+        //Stripe.setDefaultPublishableKey("pk_live_bd9UGPnXebRwYRUCsz7a3F5e")
+        STPPaymentConfiguration.shared().publishableKey = "pk_live_bd9UGPnXebRwYRUCsz7a3F5e"
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
- */
  
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         var initialViewController: UIViewController
         
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.current() != nil{
             
-            /*
             
-            let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.currentAccessToken().userID, accessToken: FBSDKAccessToken.currentAccessToken().tokenString)
+            let selfRider = Rider(name: "", origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: FBSDKAccessToken.current().userID, accessToken: FBSDKAccessToken.current().tokenString)
             
-            SharingCenter.sharedInstance.userID = FBSDKAccessToken.currentAccessToken().userID
+            SharingCenter.sharedInstance.userID = FBSDKAccessToken.current().userID
             
             //updates Facebook info on DB
             YokweHelper.storeUser()
@@ -62,19 +59,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.phoneHandler()
                 }
             })
- */
  
-            let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
+            let protectedPage = mainStoryBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
             initialViewController = protectedPage
             
-            /*
+            
             SharingCenter.sharedInstance.locationManager = CLLocationManager()
             SharingCenter.sharedInstance.locationManager?.requestAlwaysAuthorization()
             SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            */
+            
+            
         }else{
             print("tried to open titular")
-            let protectedPage = mainStoryBoard.instantiateViewControllerWithIdentifier("TitularViewController")
+            let protectedPage = mainStoryBoard.instantiateViewController(withIdentifier: "TitularViewController")
             initialViewController = protectedPage
             
         }
@@ -86,56 +83,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool{
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool{
         
-        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        return FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
+        if FBSDKAccessToken.current() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
             
         }
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
-        if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
+        if FBSDKAccessToken.current() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
             application.applicationIconBadgeNumber = 0
 
         }
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        print("device token: \(deviceToken)")
-        SharingCenter.sharedInstance.apnsToken = "\(deviceToken)"
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        print(token)
+        SharingCenter.sharedInstance.apnsToken = "\(token)"
         YokweHelper.storeUser()
     }
     
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error)
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         print("Notification received")
-        if FBSDKAccessToken.currentAccessToken() != nil || SharingCenter.sharedInstance.email != nil{
+        if FBSDKAccessToken.current() != nil || SharingCenter.sharedInstance.email != nil{
             getUpdate()
             application.applicationIconBadgeNumber = 0
 
@@ -149,31 +147,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("shouldve updated")
             
             if result != nil{
-                let type = result!.valueForKey("type") as! String
+                let type = result!.value(forKey: "type") as! String
                 if(type == "driveOffer"){
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.presentDriveOffer(result!)
                     })
                 }else if(type == "rideRequest"){
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.presentRideRequest(result!)
                     })
                 }else if(type == "trip"){
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.presentTrip(result!)
                     })
                 }else if(type == "review"){
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+                    DispatchQueue.main.async(execute: {
+                        self.window!.rootViewController?.dismiss(animated: false, completion: nil)
                         
                         self.presentReview(result!)
                     })
                 }
             }else{
                 //Dismiss trip window if it was cancelled
-                if  UIApplication.sharedApplication().keyWindow!.rootViewController!.presentedViewController?.childViewControllers.first is TripViewController{
+                if  UIApplication.shared.keyWindow!.rootViewController!.presentedViewController?.childViewControllers.first is TripViewController{
                     print("shouldve dismissed")
-                    self.window!.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    self.window!.rootViewController?.dismiss(animated: true, completion: nil)
                     
                 }
             }
@@ -181,25 +179,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
     }
     
-    func presentReview(json:NSDictionary){
+    func presentReview(_ json:NSDictionary){
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let review = mainStoryBoard.instantiateViewControllerWithIdentifier("review") as! ReviewViewController
-        let navController:UINavigationController = UINavigationController(rootViewController: review)
+        let review = mainStoryBoard.instantiateViewController(withIdentifier: "review") as! ReviewViewController
+        var navController:UINavigationController = UINavigationController(rootViewController: review)
     
-        navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = true
+        navController = UIHelper.customizeNavController(navController)
         
         //Get user photo and name with access token
-        if json.valueForKey("accessToken") != nil{
-            let reviewee = Rider(userID: json.valueForKey("revieweeID") as! String, accessToken: json.valueForKey("accessToken") as! String)
+        if json.value(forKey: "accessToken") != nil{
+            let reviewee = Rider(userID: json.value(forKey: "revieweeID") as! String, accessToken: json.value(forKey: "accessToken") as! String)
             
             FacebookHelper.riderGraphRequest(reviewee, completion: { (result)->Void in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     review.photoImage = result.photo
                     review.revieweeID = result.userID
-                    review.type = json.valueForKey("review_type") as? String
+                    review.type = json.value(forKey: "review_type") as? String
                     review.title = "Review for \(result.name!)"
-                    self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+                    self.window?.rootViewController?.present(navController, animated: true, completion: nil)
                 })
             })
         }
@@ -214,61 +211,61 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(SharingCenter.sharedInstance.phone)
         
         if SharingCenter.sharedInstance.phone == nil || SharingCenter.sharedInstance.phone! == ""{
-            let vc = mainStoryBoard.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
-            vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+            let vc = mainStoryBoard.instantiateViewController(withIdentifier: "PhoneNumber") as! PhoneNumberViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
             vc.title = "Enter Phone Number"
             
-            let navController = UINavigationController(rootViewController: vc)
-            navController.navigationBar.tintColor = colorHelper.orange
-            navController.navigationBar.translucent = true
+            var navController = UINavigationController(rootViewController: vc)
+            navController = UIHelper.customizeNavController(navController)
             
-            self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+            self.window?.rootViewController?.present(navController, animated: true, completion: nil)
         }
         
     }
     
-    func presentTrip(json:NSDictionary){
+    func presentTrip(_ json:NSDictionary){
         
         //Set up trip view
-        let dj = json.objectForKey("driver")
+        let dj = json.object(forKey: "driver")
         
-        let mf = json.valueForKey("mutualFriends") as? String
-        let driver = Driver(name: nil, photo: nil, mutualFriends: mf, fareEstimate: nil, eta: nil, userID: dj!.valueForKey("id") as? String, accessToken: dj!.valueForKey("accessToken") as? String, addedTime: nil)
-        driver.name = dj!.valueForKey("name") as? String
+        let mf = json.value(forKey: "mutualFriends") as? String
+        let driver = Driver(name: nil, photo: nil, mutualFriends: mf, fareEstimate: nil, eta: nil, userID: (dj! as AnyObject).value(forKey: "id") as? String, accessToken: (dj! as AnyObject).value(forKey: "accessToken") as? String, addedTime: nil)
+        driver.name = (dj! as AnyObject).value(forKey: "name") as? String
         
-        driver.origin = dj!.valueForKey("origin") as? String
-        driver.destination = dj!.valueForKey("destination") as? String
+        driver.origin = (dj! as AnyObject).value(forKey: "origin") as? String
+        driver.destination = (dj! as AnyObject).value(forKey: "destination") as? String
         
         //Get price and format it
-        let priceNumber = ((json.valueForKey("price") as! Double)/100)
-        let formatter = NSNumberFormatter()
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 1
-        driver.price = formatter.stringFromNumber(priceNumber)
+        let priceNumber = ((json.value(forKey: "price") as! Double)/100) as NSNumber
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_US")
+        let finalPrice = formatter.string(from: priceNumber)// "123.44$"
         
-        driver.aboutMe = dj!.valueForKey("aboutMe") as? String
-        driver.phone = dj!.valueForKey("phone") as? String
+        driver.price = finalPrice
+        
+        driver.aboutMe = (dj! as AnyObject).value(forKey: "aboutMe") as? String
+        driver.phone = (dj! as AnyObject).value(forKey: "phone") as? String
         
         //Da fuq??
-        driver.addedTime = (json.valueForKey("addedTime") as! Double)
+        driver.addedTime = (json.value(forKey: "addedTime") as! Double)
         
-        let rj = json.objectForKey("rider")
-        let rider = Rider(name: nil, origin: rj?.valueForKey("origin") as? String, destination: rj?.valueForKey("destination") as? String, photo: nil, mutualFriends: mf, fareEstimate: nil, addedTime: nil, userID: rj?.valueForKey("id") as? String, accessToken: rj?.valueForKey("accessToken") as? String)
-        rider.aboutMe = rj!.valueForKey("aboutMe") as? String
-        rider.phone = rj!.valueForKey("phone") as? String
-        rider.name = rj?.valueForKey("name") as? String
+        let rj = json.object(forKey: "rider")
+        let rider = Rider(name: nil, origin: (rj as AnyObject).value(forKey: "origin") as? String, destination: (rj as AnyObject).value(forKey: "destination") as? String, photo: nil, mutualFriends: mf, fareEstimate: nil, addedTime: nil, userID: (rj as AnyObject).value(forKey: "id") as? String, accessToken: (rj as AnyObject).value(forKey: "accessToken") as? String)
+        rider.aboutMe = (rj! as AnyObject).value(forKey: "aboutMe") as? String
+        rider.phone = (rj! as AnyObject).value(forKey: "phone") as? String
+        rider.name = (rj as AnyObject).value(forKey: "name") as? String
         
-        rider.originAddress = rj!.valueForKey("originAddress") as? String
-        rider.destinationAddress = rj!.valueForKey("destinationAddress") as? String
+        rider.originAddress = (rj! as AnyObject).value(forKey: "originAddress") as? String
+        rider.destinationAddress = (rj! as AnyObject).value(forKey: "destinationAddress") as? String
         
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let driveOffer = mainStoryBoard.instantiateViewControllerWithIdentifier("Trip") as! TripViewController
+        let driveOffer = mainStoryBoard.instantiateViewController(withIdentifier: "Trip") as! TripViewController
         
-        driveOffer.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        driveOffer.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         driveOffer.driver = driver
         driveOffer.rider = rider
-        driveOffer.status = json.valueForKey("status") as! String
+        driveOffer.status = json.value(forKey: "status") as! String
         
         if rider.userID == SharingCenter.sharedInstance.userID{
             driveOffer.type = "riding"
@@ -277,39 +274,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         }
         
-        let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
+        var navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
-        navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = true
+        navController = UIHelper.customizeNavController(navController)
         
         print("xxx~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~xxx")
-        print(UIApplication.sharedApplication().keyWindow?.rootViewController!.presentedViewController?.childViewControllers.first?.title)
+        print(UIApplication.shared.keyWindow?.rootViewController!.presentedViewController?.childViewControllers.first?.title)
         
         if rider.userID == SharingCenter.sharedInstance.userID{
-            driveOffer.totalTripTime = (rj?.valueForKey("duration") as! Double)
+            driveOffer.totalTripTime = ((rj as AnyObject).value(forKey: "duration") as! Double)
             
             //Update view controller if this is already on display
-            if let tripVC = UIApplication.sharedApplication().keyWindow!.rootViewController!.presentedViewController?.childViewControllers.first as? TripViewController{
-                tripVC.status = json.valueForKey("status") as! String
+            if let tripVC = UIApplication.shared.keyWindow!.rootViewController!.presentedViewController?.childViewControllers.first as? TripViewController{
+                tripVC.status = json.value(forKey: "status") as! String
                 print("status should have been updated!!")
                 tripVC.updateDriverStatus()
                 
             }
             
             FacebookHelper.driverGraphRequest(driver, completion: { (result)->Void in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     driveOffer.driver = result
-                    self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+                    self.window?.rootViewController?.present(navController, animated: true, completion: nil)
                 })
             })
             
         }else{
-            driveOffer.totalTripTime = json.valueForKey("duration") as? Double
+            driveOffer.totalTripTime = json.value(forKey: "duration") as? Double
             
             FacebookHelper.riderGraphRequest(rider, completion: { (result)->Void in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     driveOffer.rider = result
-                    self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+                    self.window?.rootViewController?.present(navController, animated: true, completion: nil)
                 })
             })
             
@@ -317,92 +313,92 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-    func presentDriveOffer(jsonResults:NSDictionary){
-        let mf = jsonResults.valueForKey("mutualFriends") as? String
+    func presentDriveOffer(_ jsonResults:NSDictionary){
+        let mf = jsonResults.value(forKey: "mutualFriends") as? String
 
         //Get the driver info
-        let driverID = jsonResults.valueForKey("driverID") as! String
-        let accessToken = jsonResults.valueForKey("driverAccessToken") as? String
+        let driverID = jsonResults.value(forKey: "driverID") as! String
+        let accessToken = jsonResults.value(forKey: "driverAccessToken") as? String
         let driver = Driver(name: nil, photo: nil, mutualFriends: mf, fareEstimate: nil, eta: nil, userID: driverID, accessToken: accessToken, addedTime: nil)
         
         //Get price and format it
-        let priceNumber = ((jsonResults.valueForKey("price") as! Double)/100)
-        let formatter = NSNumberFormatter()
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 1
-        driver.price = formatter.stringFromNumber(priceNumber)
+        let priceNumber = ((jsonResults.value(forKey: "price") as! Double)/100) as NSNumber
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_US")
+        let finalPrice = formatter.string(from: priceNumber)// "123.44$"
         
-        let origin = jsonResults.valueForKey("origin") as! String
-        let destination = jsonResults.valueForKey("destination") as! String
-        let duration = jsonResults.valueForKey("duration") as! Double
+        driver.price = finalPrice
+        
+        let origin = jsonResults.value(forKey: "origin") as! String
+        let destination = jsonResults.value(forKey: "destination") as! String
+        let duration = jsonResults.value(forKey: "duration") as! Double
         
         let rider = Rider(name: nil, origin: origin, destination: destination, photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: nil, userID: nil, accessToken: nil)
         
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let driveOffer = mainStoryBoard.instantiateViewControllerWithIdentifier("OfferResponse") as! OfferResponseViewController
+        let driveOffer = mainStoryBoard.instantiateViewController(withIdentifier: "OfferResponse") as! OfferResponseViewController
         
-        driveOffer.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        driveOffer.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         driveOffer.totalTripTime = duration
         driveOffer.driver = driver
         driveOffer.rider = rider
         driveOffer.type = "ride"
         
-        let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
+        var navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
-        navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = true
+        navController = UIHelper.customizeNavController(navController)
         
         FacebookHelper.driverGraphRequest(driver, completion: { (result)->Void in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 driveOffer.driver = result
-                self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+                self.window?.rootViewController?.present(navController, animated: true, completion: nil)
             })
         })
     }
     
-    func presentRideRequest(jsonResults:NSDictionary){
-        let mf = jsonResults.valueForKey("mutualFriends") as? String
+    func presentRideRequest(_ jsonResults:NSDictionary){
+        let mf = jsonResults.value(forKey: "mutualFriends") as? String
 
-        let id = jsonResults.valueForKey("riderID") as! String
-        let accessToken = jsonResults.valueForKey("accessToken") as? String
+        let id = jsonResults.value(forKey: "riderID") as! String
+        let accessToken = jsonResults.value(forKey: "accessToken") as? String
         let driver = Driver(name: nil, photo: nil, mutualFriends: nil, fareEstimate: nil, eta: nil, userID: nil, accessToken: nil, addedTime: nil)
-        driver.destination = jsonResults.valueForKey("driverDestination") as? String
-        driver.origin = jsonResults.valueForKey("driverOrigin") as? String
-        driver.addedTime = jsonResults.valueForKey("addedTime") as? Double
+        driver.destination = jsonResults.value(forKey: "driverDestination") as? String
+        driver.origin = jsonResults.value(forKey: "driverOrigin") as? String
+        driver.addedTime = jsonResults.value(forKey: "addedTime") as? Double
         
         //Get price and format it
-        let priceNumber = ((jsonResults.valueForKey("price") as! Double)/100)
-        let formatter = NSNumberFormatter()
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 1
-        driver.price = formatter.stringFromNumber(priceNumber)
+        let priceNumber = ((jsonResults.value(forKey: "price") as! Double)/100) as NSNumber
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_US")
+        let finalPrice = formatter.string(from: priceNumber)// "123.44$"
         
-        let riderOrigin = jsonResults.valueForKey("riderOrigin") as! String
-        let riderDestination = jsonResults.valueForKey("riderDestination") as! String
-        let duration = jsonResults.valueForKey("driverDuration") as! String
+        driver.price = finalPrice
+        
+        let riderOrigin = jsonResults.value(forKey: "riderOrigin") as! String
+        let riderDestination = jsonResults.value(forKey: "riderDestination") as! String
+        let duration = jsonResults.value(forKey: "driverDuration") as! String
         
         let rider = Rider(name: nil, origin: riderOrigin, destination: riderDestination, photo: nil, mutualFriends: mf, fareEstimate: nil, addedTime: nil, userID: id, accessToken: accessToken)
         
         let mainStoryBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let driveOffer = mainStoryBoard.instantiateViewControllerWithIdentifier("OfferResponse") as! OfferResponseViewController
+        let driveOffer = mainStoryBoard.instantiateViewController(withIdentifier: "OfferResponse") as! OfferResponseViewController
         
-        driveOffer.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        driveOffer.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         driveOffer.totalTripTime = Double(duration)
         driveOffer.driver = driver
         driveOffer.rider = rider
         driveOffer.type = "drive"
         
-        let navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
+        var navController:UINavigationController = UINavigationController(rootViewController: driveOffer)
         
-        navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = true
+        navController = UIHelper.customizeNavController(navController)
         
         FacebookHelper.riderGraphRequest(rider, completion: { (result)->Void in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 driveOffer.rider = result
-                self.window?.rootViewController?.presentViewController(navController, animated: true, completion: nil)
+                self.window?.rootViewController?.present(navController, animated: true, completion: nil)
             })
         })
     }

@@ -89,14 +89,14 @@ class ConfirmRiderViewController: UIViewController {
         polyLine.strokeWidth = 5
         polyLine.strokeColor = colorHelper.blue
         let bounds = GMSCoordinateBounds(path: newPath!)
-        let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/5)
+        let update = GMSCameraUpdate.fit(bounds, withPadding: self.mapView.frame.width/5)
         self.mapView.moveCamera(update)
         
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "profileSegue"{
-            let destination = segue.destinationViewController as! UserProfileViewController
+            let destination = segue.destination as! UserProfileViewController
             destination.title = rider.name!
             destination.photoImage = rider.photo!
             destination.locationText = rider.mutualFriends!
@@ -107,12 +107,12 @@ class ConfirmRiderViewController: UIViewController {
     }
     
     
-    @IBAction func pressedOffer(sender: AnyObject) {
+    @IBAction func pressedOffer(_ sender: AnyObject) {
         
         //Presenting an alert no matter what
         var alertString = "You will be alerted when \(rider.name!) responds to your offer"
         
-        var okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+        var okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
             YokweHelper.riderSelection(self.rider.userID!, addedTime: self.rider.addedTime!, price: self.rider.price!)
             self.returnToHomeScreen()
         })
@@ -120,7 +120,7 @@ class ConfirmRiderViewController: UIViewController {
         if SharingCenter.sharedInstance.accountToken == nil{
             //Presenting an alert no matter what
             alertString = "You must enter driver account info using the payments section of the main menu before you can offer rides."
-            okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+            okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil)
             
             
         }else{
@@ -129,9 +129,9 @@ class ConfirmRiderViewController: UIViewController {
         }
         
         //Present an alert no matter what
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     /*
@@ -163,37 +163,45 @@ class ConfirmRiderViewController: UIViewController {
     
     
     func presentDriverForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "DriverAccountCreation") as! DriverAccountCreationViewController
         vc = RideOrDriveViewController.customizeVC(vc) as! DriverAccountCreationViewController
         vc.title = "Create Driver Account"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = RideOrDriveViewController.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     func returnToHomeScreen(){
         SharingCenter.sharedInstance.shouldReset = true
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
-    //Store the damn time here instead. this is so stupid and is a big example of how time is wasted and how you need to avoid complexity.
+    //For now this doesn't seem useful. June 29th
+    //Store the damn time here instead. this is so stupid and is a big example of how time is wasted and why it's important to simplify.
     func getTotalTripTime() -> String{
         let tripTimeString = SharingCenter.sharedInstance.tripTime
-        let splitString = tripTimeString!.componentsSeparatedByString(" ")
-        for index in 0...splitString.count{
+        
+/*
+        let splitString = tripTimeString!.components(separatedBy: " ")
+        
+        for index in 0...splitString.count-1{
             if splitString[index] == "mins"{
-                var minNum = Int(splitString[index-1])
-                minNum = minNum! + Int(rider.addedTime!)!
+                
+                var minuteNum = Int(splitString[index-1])
+                minuteNum = minuteNum! + Int(rider.addedTime!)!
                 if splitString.count == 2{
-                    return "\(minNum!) mins"
+                    return "\(minuteNum!) mins"
                 }else{
-                    return "\(splitString[0]) \(splitString[1]) \(minNum!) mins"
+                    return "\(splitString[0]) \(splitString[1]) \(minuteNum!) mins"
                 }
             }
         }
         return ""
+ */
+        
+        return tripTimeString!
     }
 
     

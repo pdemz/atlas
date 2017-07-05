@@ -42,38 +42,30 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let trips = self.storyboard?.instantiateViewControllerWithIdentifier("TripsViewController") as! TripsViewController
         
-        
-        dispatch_async(dispatch_get_main_queue(), {
-            self.presentViewController(trips, animated: true, completion: nil)
-            
-        })
-        
-        /*
         //Display tutorial
         if shouldDisplayTutorial{
             
             shouldDisplayTutorial = false
             
-            let tutorial = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
+            let tutorial = self.storyboard?.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
             
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(tutorial, animated: true, completion: nil)
+            DispatchQueue.main.async(execute: {
+                self.present(tutorial, animated: true, completion: nil)
                 
             })
             
         }
- */
+        
     }
-    @IBAction func tappedEmailButton(sender: AnyObject) {
+    @IBAction func tappedEmailButton(_ sender: AnyObject) {
         tappedEmail()
     }
     
-    @IBAction func emailLogin(sender: AnyObject) {
+    @IBAction func emailLogin(_ sender: AnyObject) {
         
         
         if let email = emailTextField.text{
@@ -100,7 +92,7 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
             if result == true{
                 YokweHelper.getUser({(result) -> Void in
                     if let user = result{
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             self.proceedToHomeScreen(user)
                         })
                         
@@ -117,80 +109,80 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
     func tappedEmail() {
         
         self.view.layoutIfNeeded()
-        UIView.animateWithDuration(0.5) {
+        UIView.animate(withDuration: 0.5, animations: {
             self.verticalSpacingConstraint.constant -= 300
             print("VSC contstant after tapping email: \(self.verticalSpacingConstraint.constant)")
             print("logoFrame:\(self.logo.frame.maxY)")
             print("logoframemaxy: \(self.logoFrameMaxY)")
             
-            self.emailTextField.enabled = true
+            self.emailTextField.isEnabled = true
             self.emailTextField.alpha = 1
             self.useEmailLabel.alpha = 0
             self.useEmailButton.alpha = 0
-            self.useEmailButton.enabled = false
+            self.useEmailButton.isEnabled = false
             self.loginButton.alpha = 0
             //self.titleLable.alpha = 0
             self.logo.alpha = 0
-            self.loginButton.enabled = false
-            self.passwordTextField.enabled = true
+            self.loginButton.isEnabled = false
+            self.passwordTextField.isEnabled = true
             self.passwordTextField.alpha = 1
-            self.backButton.enabled = true
+            self.backButton.isEnabled = true
             self.backButton.alpha = 1
             self.emailLoginButton.alpha = 1
-            self.emailLoginButton.enabled = true
+            self.emailLoginButton.isEnabled = true
             
             self.view.layoutIfNeeded()
-        }
+        }) 
     }
     
-    @IBAction func tappedBack(sender: AnyObject) {
+    @IBAction func tappedBack(_ sender: AnyObject) {
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
 
         self.view.layoutIfNeeded()
         self.verticalSpacingConstraint.constant += 300
-        UIView.animateWithDuration(0.5) {
+        UIView.animate(withDuration: 0.5, animations: {
             print("VSC contstant after tapping back: \(self.verticalSpacingConstraint.constant)")
             print("logoFrame:\(self.logo.frame.maxY)")
 
             self.emailTextField.alpha = 0
-            self.emailTextField.enabled = false
+            self.emailTextField.isEnabled = false
             self.useEmailButton.alpha = 1
-            self.useEmailButton.enabled = true
+            self.useEmailButton.isEnabled = true
             self.loginButton.alpha = 1
             self.logo.alpha = 1
-            self.loginButton.enabled = true
-            self.passwordTextField.enabled = false
+            self.loginButton.isEnabled = true
+            self.passwordTextField.isEnabled = false
             self.passwordTextField.alpha = 0
-            self.backButton.enabled = false
+            self.backButton.isEnabled = false
             self.backButton.alpha = 0
             self.emailLoginButton.alpha = 0
-            self.emailLoginButton.enabled = false
+            self.emailLoginButton.isEnabled = false
             
             self.view.layoutIfNeeded()
-        }
+        }) 
         
     }
     
     //Facebook login
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if error != nil{
             print(error.localizedDescription)
         }else{
             print("login complete")
             
-            SharingCenter.sharedInstance.userID = FBSDKAccessToken.currentAccessToken().userID
-            SharingCenter.sharedInstance.accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+            SharingCenter.sharedInstance.userID = FBSDKAccessToken.current().userID
+            SharingCenter.sharedInstance.accessToken = FBSDKAccessToken.current().tokenString
             
             //check if the user has logged in before by fetching info
             YokweHelper.getUser({(result) -> Void in
                 if let user = result{
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.proceedToHomeScreen(user)
                     })
                 }else{
                     print("User does not exist")
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.presentPhoneView()
                     })
                 }
@@ -201,56 +193,63 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
     }
     
     func presentPhoneView(){
-        let phone = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
+        let phone = self.storyboard?.instantiateViewController(withIdentifier: "PhoneNumber") as! PhoneNumberViewController
         phone.title = "Enter Phone Number"
         
         var navController = UINavigationController(rootViewController: phone)
         navController = self.customizeNavController(navController)
         
-        self.presentViewController(navController, animated: true, completion: nil)
+        self.present(navController, animated: true, completion: nil)
         
         
     }
     
-    @IBAction func signUp(sender: AnyObject) {
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("EmailSignup") as! EmailSignupViewController
-        showViewController(vc, sender: sender)
+    @IBAction func signUp(_ sender: AnyObject) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "EmailSignup") as! EmailSignupViewController
+        show(vc, sender: sender)
     }
     
-    func proceedToHomeScreen(user:User){
+    func proceedToHomeScreen(_ user:User){
         SharingCenter.sharedInstance.didJustLogIn = true
         
         YokweHelper.storeUser()
         
         let selfRider = Rider(name: user.name, origin: "", destination: "", photo: nil, mutualFriends: nil, fareEstimate: nil, addedTime: "", userID: SharingCenter.sharedInstance.userID, accessToken: SharingCenter.sharedInstance.accessToken)
         
-        if FBSDKAccessToken.currentAccessToken() != nil{
+        if FBSDKAccessToken.current() != nil{
         //Get user name photo and education
             FacebookHelper.riderGraphRequest(selfRider, completion: {(result)-> Void in
                 SharingCenter.sharedInstance.rider = result
             })
         }
         
+        //store user data locally
         SharingCenter.sharedInstance.aboutMe = user.aboutMe
         SharingCenter.sharedInstance.phone = user.phone
         SharingCenter.sharedInstance.accountToken = user.accountToken
         SharingCenter.sharedInstance.customerToken = user.customerToken
 
-        let protectedPage = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as! SWRevealViewController
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let protectedPage = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.window?.rootViewController = protectedPage
-        let notificationTypes : UIUserNotificationType = [.Alert, .Badge, .Sound]
-        let notificationSettings : UIUserNotificationSettings = UIUserNotificationSettings(forTypes: notificationTypes, categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
         
+        //register for push notifications
+        let notificationTypes : UIUserNotificationType = [.alert, .badge, .sound]
+        let notificationSettings : UIUserNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: nil)
+        UIApplication.shared.registerUserNotificationSettings(notificationSettings)
+        UIApplication.shared.registerForRemoteNotifications()
+        
+        //storing the user here again to save the apns token
+        YokweHelper.storeUser()
+
+        //enable location services
         SharingCenter.sharedInstance.locationManager = CLLocationManager()
         SharingCenter.sharedInstance.locationManager!.requestAlwaysAuthorization()
         SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
 
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         print("logged out")
     }
     
@@ -258,9 +257,9 @@ class TitularViewController: UIViewController, FBSDKLoginButtonDelegate, UITextF
     
     //Bad programming here -- these customize the phone view controller
     
-    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = true
+        navController.navigationBar.isTranslucent = true
         
         return navController
     }

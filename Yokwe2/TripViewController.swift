@@ -43,15 +43,15 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         
         //Button button who's got the button...
         endTripButton.alpha = 0
-        endTripButton.enabled = false
-        endTripButton.hidden = true
+        endTripButton.isEnabled = false
+        endTripButton.isHidden = true
         endTripButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
         startTripButton.titleLabel?.text
         startTripButton.titleLabel?.adjustsFontSizeToFitWidth
         
         //Google map view set up
-        self.mapView!.myLocationEnabled = true
+        self.mapView!.isMyLocationEnabled = true
         self.mapView!.settings.myLocationButton = true
         
         if type! == "riding"{
@@ -70,7 +70,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             containerVC?.photo.image = driver!.photo
             
             currentDestination = rider?.destination
-            containerVC?.addedTime.hidden = true
+            containerVC?.addedTime.isHidden = true
             containerVC?.phoneText = driver!.phone
         }else{
             self.title = "Driving"
@@ -93,10 +93,10 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             if status == "waiting"{
                 slideDriverStatusView()
                 startTripButton.alpha = 1
-                startTripButton.enabled = true
+                startTripButton.isEnabled = true
             }else{
                 startTripButton.alpha = 0
-                startTripButton.enabled = false
+                startTripButton.isEnabled = false
             }
             
             containerVC?.name.text = rider!.name
@@ -108,10 +108,10 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             containerVC?.addedTime.text = "+\(Int(driver!.addedTime!)) mins"
             
             //Handle location updates
-            SharingCenter.sharedInstance.locationManager?.delegate = self
+            SharingCenter.sharedInstance.locationManager?.delegate = self as! CLLocationManagerDelegate
             SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyKilometer
             SharingCenter.sharedInstance.locationManager?.allowsBackgroundLocationUpdates = true
-            SharingCenter.sharedInstance.locationManager?.activityType = CLActivityType.AutomotiveNavigation
+            SharingCenter.sharedInstance.locationManager?.activityType = CLActivityType.automotiveNavigation
             SharingCenter.sharedInstance.locationManager?.pausesLocationUpdatesAutomatically = true
             
             if status != "waiting"{
@@ -123,7 +123,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             
         }
         
-        containerVC?.price.text = "$\(driver!.price!)"
+        containerVC?.price.text = driver!.price!
         
         loadMapView()
         
@@ -132,8 +132,8 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        containerVC = segue.destinationViewController as? TripDetails
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        containerVC = segue.destination as? TripDetails
         containerVC?.delegate = self
         
     }
@@ -147,9 +147,9 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         }
         
         //Now animate
-        UIView.animateWithDuration(0.2){
+        UIView.animate(withDuration: 0.2, animations: {
             self.view.layoutIfNeeded()
-        }
+        })
         
     }
     
@@ -162,9 +162,9 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         }
         
         //Now animate
-        UIView.animateWithDuration(0.2){
+        UIView.animate(withDuration: 0.2, animations: {
             self.view.layoutIfNeeded()
-        }
+        })
     }
     
     func loadMapView(){
@@ -173,30 +173,30 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         
         //Split rider origin and destination
         
-        let riderOriginSplit = rider!.origin!.componentsSeparatedByString(",")
-        let riderDestinationSplit = rider!.destination!.componentsSeparatedByString(",")
+        let riderOriginSplit = rider!.origin!.components(separatedBy: ",")
+        let riderDestinationSplit = rider!.destination!.components(separatedBy: ",")
         let riderOrigin = CLLocationCoordinate2D(latitude: CLLocationDegrees((riderOriginSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((riderOriginSplit[1] as NSString).doubleValue))
         let riderDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((riderDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((riderDestinationSplit[1] as NSString).doubleValue))
         
         let riderStartMarker = GMSMarker(position: riderOrigin)
-        riderStartMarker.icon = GMSMarker.markerImageWithColor(colorHelper.orange)
+        riderStartMarker.icon = GMSMarker.markerImage(with: colorHelper.orange)
         let riderEndMarker = GMSMarker(position: riderDestination)
-        riderEndMarker.icon = GMSMarker.markerImageWithColor(colorHelper.orange)
+        riderEndMarker.icon = GMSMarker.markerImage(with: colorHelper.orange)
         riderStartMarker.title = "Start"
         riderEndMarker.title = "End"
         
         let bounds = GMSCoordinateBounds(coordinate: riderOrigin, coordinate: riderDestination)
-        let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/6)
+        let update = GMSCameraUpdate.fit(bounds, withPadding: self.mapView.frame.width/6)
         self.mapView.moveCamera(update)
         
         if(type! != "riding"){
-            let driverOriginSplit = driver!.origin!.componentsSeparatedByString(",")
-            let driverDestinationSplit = driver!.destination!.componentsSeparatedByString(",")
+            let driverOriginSplit = driver!.origin!.components(separatedBy: ",")
+            let driverDestinationSplit = driver!.destination!.components(separatedBy: ",")
             let driverOrigin = CLLocationCoordinate2D(latitude: CLLocationDegrees((driverOriginSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((driverOriginSplit[1] as NSString).doubleValue))
             let driverDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((driverDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((driverDestinationSplit[1] as NSString).doubleValue))
             
             let driverStartMarker = GMSMarker(position: driverOrigin)
-            driverStartMarker.icon = GMSMarker.markerImageWithColor(UIColor.greenColor())
+            driverStartMarker.icon = GMSMarker.markerImage(with: UIColor.green)
             driverStartMarker.map = mapView
             driverStartMarker.title = "Start"
             
@@ -208,7 +208,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             riderEndMarker.title = "Rider End"
             
             let bounds = GMSCoordinateBounds(coordinate: driverOrigin, coordinate: driverDestination)
-            let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/6)
+            let update = GMSCameraUpdate.fit(bounds, withPadding: self.mapView.frame.width/6)
             self.mapView.moveCamera(update)
             
             let mh = MapsHelper()
@@ -218,7 +218,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             mh.rend = self.rider?.destination
             
             mh.makeDirectionsRequest({(result) -> Void in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     SharingCenter.sharedInstance.myPath = result
                     
                     
@@ -237,7 +237,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             mh.end = self.rider?.destination
             
             mh.makeDirectionsRequest({(result) -> Void in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     SharingCenter.sharedInstance.myPath = result
                     let newPath = GMSPath(fromEncodedPath: result)
                     let polyLine = GMSPolyline(path: newPath)
@@ -259,25 +259,25 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
 
     func pressedNavigate() {
         //Open google maps, and route to currentDestination
-        let dest = self.currentDestination!.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        let dest = self.currentDestination!.replacingOccurrences(of: " ", with: "+")
         
         //Add waypoints here
         
         //Check if Google Maps is installed
-        if UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!){
+        if UIApplication.shared.canOpenURL(URL(string: "comgooglemaps://")!){
             
             //Open Google Maps
-            UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps-x-callback://?saddr=&daddr=" + dest + "&directionsmode=driving&x-success=yokwe://?resume=true&x-source=Yokwe")!)
+            UIApplication.shared.openURL(URL(string: "comgooglemaps-x-callback://?saddr=&daddr=" + dest + "&directionsmode=driving&x-success=yokwe://?resume=true&x-source=Yokwe")!)
             
         //Otherwise open Apple Maps
         }else{
-            UIApplication.sharedApplication().openURL(NSURL(string: "http://maps.apple.com/?daddr=\(dest)")!)
+            UIApplication.shared.openURL(URL(string: "http://maps.apple.com/?daddr=\(dest)")!)
             
         }
         
     }
     
-    @IBAction func pressedPickup(sender: AnyObject) {
+    @IBAction func pressedPickup(_ sender: AnyObject) {
         
         print("pickup happened")
         
@@ -299,34 +299,34 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         
         //Confirm that driver is ready to end the trip
         let alertString = "This will end the trip early, so no charge will be made. Are you sure about this?"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+        let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: {(ACTION) in
             
             //Send message to server to end trip and return to homescreen
             YokweHelper.cancelTrip((self.rider?.userID)!, driverID: (self.driver?.userID)!)
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         })
         
-        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.Default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.default, handler: nil)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
     //Starts the trip, alerts the rider about what is going on and starts sending location data to server
-    @IBAction func startTrip(sender: AnyObject) {
+    @IBAction func startTrip(_ sender: AnyObject) {
         
         status = "leg1"
         SharingCenter.sharedInstance.locationManager?.startUpdatingLocation()
         YokweHelper.startTrip((self.rider?.userID)!)
         
         //Handle button animation
-        self.startTripButton.enabled = false
+        self.startTripButton.isEnabled = false
         self.startTripButton.frame.offsetInPlace(dx: 0, dy: -(startTripButton.frame.height))
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.startTripButton.frame.offsetInPlace(dx: 0, dy: -(self.startTripButton.frame.height))
             self.startTripButton.layer.opacity = 0
             self.view.layoutIfNeeded()
@@ -340,10 +340,10 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     @IBAction func endTrip(){
         
         //Confirm that driver is ready to end the trip
-        let alertString = "This will end the trip and you will be paid $\(driver!.price!)"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alertString = "This will end the trip and you will be paid \(driver!.price!)"
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
             
             //Send message to server to end trip and return to homescreen
             YokweHelper.endTrip((self.rider?.userID)!, driverID: (self.driver?.userID)!)
@@ -352,14 +352,14 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             SharingCenter.sharedInstance.locationManager?.stopUpdatingLocation()
             
             //Dismiss the view controller
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         })
         
-        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.Default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.default, handler: nil)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
@@ -367,7 +367,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         //Update status bar appropriately
         if status == "leg2"{
             containerVC?.cancel.alpha = 0
-            containerVC?.cancel.enabled = false
+            containerVC?.cancel.isEnabled = false
             
             statusBar.alpha = 0
             
@@ -376,7 +376,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             statusBar.text = "\((driver?.name)!) is en route"
             
         }else{
-            statusBar.textColor = UIColor.orangeColor()
+            statusBar.textColor = UIColor.orange
             statusBar.text = "Waiting for \((driver?.name)!) to start the trip."
         }
     }
@@ -388,7 +388,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
     }
     
     func presentProfile(){
-        var selfProfile = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfile") as! UserProfileViewController
+        var selfProfile = self.storyboard?.instantiateViewController(withIdentifier: "UserProfile") as! UserProfileViewController
         selfProfile = customizeVC(selfProfile) as! UserProfileViewController
         
         //Get driver info
@@ -414,21 +414,21 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         
         
         var navController = UINavigationController(rootViewController: selfProfile)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
-    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
         return navController
     }
     
-    func customizeVC(vc:UIViewController) -> UIViewController{
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+    func customizeVC(_ vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
         
         return vc
@@ -444,47 +444,46 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
         }
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: NSError) {
         print("failed to update location :(")
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        print("driver location updated!")
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         //Get current location
         let driverLocation = SharingCenter.sharedInstance.locationManager?.location!
         
         //Get the CLLocation from coordinates
-        let latLongPickUp = self.rider!.origin!.componentsSeparatedByString(",")
-        let latLongDropOff = self.rider!.destination!.componentsSeparatedByString(",")
+        let latLongPickUp = self.rider!.origin!.components(separatedBy: ",")
+        let latLongDropOff = self.rider!.destination!.components(separatedBy: ",")
         
         let pickup = CLLocation(latitude: CLLocationDegrees(latLongPickUp[0])!, longitude: CLLocationDegrees(latLongPickUp[1])!)
         let dropOff = CLLocation(latitude: CLLocationDegrees(latLongDropOff[0])!, longitude: CLLocationDegrees(latLongDropOff[1])!)
         
         //Get distance
-        let distanceInMetersFromPickup = driverLocation!.distanceFromLocation(pickup)
-        let distanceInMetersFromDropoff = driverLocation!.distanceFromLocation(dropOff)
+        let distanceInMetersFromPickup = driverLocation!.distance(from: pickup)
+        let distanceInMetersFromDropoff = driverLocation!.distance(from: dropOff)
         
         print("distance from pickup in meters: \(distanceInMetersFromPickup)")
         print("distance from dropoff in meters: \(distanceInMetersFromDropoff)")
         
-        //Check if they are within about 1 mile of pickup point
-        if distanceInMetersFromPickup < 1000 && status == "leg1"{
+        //Orginally did this to more precisely determine the location of the driver. I expanded the range for pick ups, so it's not really necessary, but will keep it for now
+        //Check if they are within 1000 meters of pickup point
+        if distanceInMetersFromPickup < 4000 && status == "leg1"{
             
             //Set location services to be very accurate
             SharingCenter.sharedInstance.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
             
             //Determine if they are within 200 meters of the drop off point
-            if distanceInMetersFromPickup < 200 && status == "leg1"{
+            if distanceInMetersFromPickup < 4000 && status == "leg1"{
                 pressedPickup(self)
                 
                 //Notify driver that they have arrived
                 if notifiedOfPickup == false{
                     let notification = UILocalNotification()
-                    notification.alertBody = "Now arriving at \(rider!.name!)'s location"
+                    notification.alertBody = "Arriving near \(rider!.name!)'s pick up spot"
                     notification.soundName = UILocalNotificationDefaultSoundName
-                    UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+                    UIApplication.shared.presentLocalNotificationNow(notification)
                     
                     notifiedOfPickup = true
                 }
@@ -507,7 +506,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             */
             
         //Check if they are within about 1 mile of drop off point and rider has been picked up.
-        }else if distanceInMetersFromDropoff < 1000 && status == "leg2"{
+        }else if distanceInMetersFromDropoff < 4000 && status == "leg2"{
             
             //Local notification that they can drop off passenger and end trip
             if notifiedOfDropoff == false{
@@ -515,7 +514,7 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
                 let notification = UILocalNotification()
                 notification.alertBody = "You can now end the trip once you drop \(rider!.name!) off"
                 notification.soundName = UILocalNotificationDefaultSoundName
-                UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+                UIApplication.shared.presentLocalNotificationNow(notification)
                 
                 notifiedOfDropoff = true
                 
@@ -524,14 +523,14 @@ class TripViewController: UIViewController, TripDetailsDelegate, CLLocationManag
             }
             
             //show end trip button
-            self.endTripButton.enabled = true
-            self.endTripButton.hidden = false
+            self.endTripButton.isEnabled = true
+            self.endTripButton.isHidden = false
             
             //Now animate
-            UIView.animateWithDuration(0.5){
+            UIView.animate(withDuration: 0.5, animations: {
                 self.endTripButton.alpha = 0.9
                 self.view.layoutIfNeeded()
-            }
+            })
             
         }
 

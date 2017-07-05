@@ -14,7 +14,7 @@ class SlideOutMenuViewController: UITableViewController {
     @IBOutlet weak var modeCellText: UILabel!
     
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row{
         case 0:
             //Present payment manager
@@ -33,9 +33,9 @@ class SlideOutMenuViewController: UITableViewController {
             switchMode()
             
         default:
-            self.revealViewController().revealToggleAnimated(true)
+            self.revealViewController().revealToggle(animated: true)
         }
-        self.revealViewController().revealToggleAnimated(true)
+        self.revealViewController().revealToggle(animated: true)
     }
     
     func switchMode(){
@@ -49,34 +49,34 @@ class SlideOutMenuViewController: UITableViewController {
     }
     
     func presentSettings(){
-        var settings = self.storyboard?.instantiateViewControllerWithIdentifier("Settings") as! SettingsTableViewController
+        var settings = self.storyboard?.instantiateViewController(withIdentifier: "Settings") as! SettingsTableViewController
         settings = customizeVC(settings) as! SettingsTableViewController
         settings.title = "Settings"
         settings.phoneText = SharingCenter.sharedInstance.phone
 
         var navController = UINavigationController(rootViewController: settings)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     func presentPayment(){
-        var paymentVC = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentManager") as! PaymentManagementController
+        var paymentVC = self.storyboard?.instantiateViewController(withIdentifier: "PaymentManager") as! PaymentManagementController
         paymentVC = customizeVC(paymentVC) as! PaymentManagementController
         
         var navController = UINavigationController(rootViewController: paymentVC)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
 
         
     }
     
     func presentProfile(){
-        var selfProfile = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfile") as! UserProfileViewController
+        var selfProfile = self.storyboard?.instantiateViewController(withIdentifier: "UserProfile") as! UserProfileViewController
         selfProfile = customizeVC(selfProfile) as! UserProfileViewController
         
-        let editButton = UIBarButtonItem(image: UIImage(named: "Pencil"), style: UIBarButtonItemStyle.Plain, target: selfProfile, action: "editProfile")
+        let editButton = UIBarButtonItem(image: UIImage(named: "Pencil"), style: UIBarButtonItemStyle.plain, target: selfProfile, action: "editProfile")
         
         //let editButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: selfProfile, action: "editProfile")
         selfProfile.navigationItem.rightBarButtonItem = editButton
@@ -98,23 +98,23 @@ class SlideOutMenuViewController: UITableViewController {
         }
         
         var navController = UINavigationController(rootViewController: selfProfile)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
-    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.isTranslucent = false
         
         return navController
     }
     
-    func customizeVC(vc:UIViewController) -> UIViewController{
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+    func customizeVC(_ vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
 
         return vc

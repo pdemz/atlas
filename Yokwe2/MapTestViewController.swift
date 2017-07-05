@@ -22,8 +22,8 @@ class MapTestViewController:UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
-        let camera = GMSCameraPosition.cameraWithLatitude(0, longitude: 0, zoom: 0)
-        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
+        let camera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 0)
+        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.settings.compassButton = true
         
         let mapInsets = UIEdgeInsetsMake(0, 0, 45.0, 0)
@@ -34,7 +34,7 @@ class MapTestViewController:UIViewController, CLLocationManagerDelegate {
         //mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateLocation(true)
     }
@@ -45,22 +45,22 @@ class MapTestViewController:UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         updateLocation(false)
         updateLocation(true)
     }
     
-    func updateLocation(running: Bool){
+    func updateLocation(_ running: Bool){
         let mapView = self.view as! GMSMapView
         let status = CLLocationManager.authorizationStatus()
         
-        if running && status == CLAuthorizationStatus.AuthorizedWhenInUse{
+        if running && status == CLAuthorizationStatus.authorizedWhenInUse{
             locationManager.startUpdatingLocation()
-            mapView.myLocationEnabled = true
+            mapView.isMyLocationEnabled = true
             mapView.settings.myLocationButton = true
         }else{
             locationManager.stopUpdatingLocation()
-            mapView.myLocationEnabled = false
+            mapView.isMyLocationEnabled = false
             mapView.settings.myLocationButton = false
         }
     }

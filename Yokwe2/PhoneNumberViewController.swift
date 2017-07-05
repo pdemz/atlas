@@ -18,17 +18,17 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         phone.delegate = self
-        phone.keyboardType = .PhonePad
+        phone.keyboardType = .phonePad
 
         continueButton.alpha = 0.5
-        continueButton.enabled = false
+        continueButton.isEnabled = false
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = "Enter Phone Number"
         
-        self.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        self.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         /*
         //Dismiss button
@@ -37,26 +37,26 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
  */
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         self.title = ""
     }
     
-    @IBAction func continuePress(sender: AnyObject) {
+    @IBAction func continuePress(_ sender: AnyObject) {
         proceedToHomeScreen()
     }
     
     //Formats the phone number as the user enters it
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
         if textField == phone{
-            let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
-            let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            let components = newString.components(separatedBy: CharacterSet.decimalDigits.inverted)
             
-            let decimalString = components.joinWithSeparator("") as NSString
+            let decimalString = components.joined(separator: "") as NSString
             let length = decimalString.length
-            let hasLeadingOne = length > 0 && decimalString.characterAtIndex(0) == (1 as unichar)
+            let hasLeadingOne = length > 0 && decimalString.character(at: 0) == (1 as unichar)
             
             if length == 0 || (length > 10 && !hasLeadingOne) || length > 11
             {
@@ -69,30 +69,30 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
             
             if hasLeadingOne
             {
-                formattedString.appendString("1 ")
+                formattedString.append("1 ")
                 index += 1
             }
             if (length - index) > 3
             {
-                let areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let areaCode = decimalString.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("(%@) ", areaCode)
                 index += 3
             }
             if length - index > 3
             {
-                let prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let prefix = decimalString.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
             }
             if length == 10{
                 continueButton.alpha = 1
-                continueButton.enabled = true
+                continueButton.isEnabled = true
             }else{
                 continueButton.alpha = 0.5
-                continueButton.enabled = false
+                continueButton.isEnabled = false
             }
-            let remainder = decimalString.substringFromIndex(index)
-            formattedString.appendString(remainder)
+            let remainder = decimalString.substring(from: index)
+            formattedString.append(remainder)
             textField.text = formattedString as String
             
             return false
@@ -105,14 +105,14 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
     func proceedToHomeScreen(){
         YokweHelper.requestVerificationCode(phone.text!)
  
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneConfirmation") as! PhoneConfirmationViewController
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "PhoneConfirmation") as! PhoneConfirmationViewController
         
         vc.phoneNumber = phone.text!
-        self.showViewController(vc, sender: self)
+        self.show(vc, sender: self)
         
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
@@ -121,7 +121,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate {
         let loginManager = FBSDKLoginManager()
         loginManager.logOut()
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
         
     }
 }

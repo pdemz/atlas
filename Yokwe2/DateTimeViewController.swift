@@ -9,21 +9,13 @@
 import UIKit
 import CoreFoundation
 import GoogleMaps
+import GooglePlaces
 
-class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDelegate, CLLocationManagerDelegate, SWRevealViewControllerDelegate, UIPopoverPresentationControllerDelegate{
+class DateTimeViewController: UIViewController, UITextFieldDelegate, StreamDelegate, CLLocationManagerDelegate, SWRevealViewControllerDelegate, UIPopoverPresentationControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Start trips testing
-        print("Didn't crash")
-        let trips = self.storyboard?.instantiateViewControllerWithIdentifier("Trips") as! TripsViewController
-        trips.title = "Active trips + requests"
-        let navController = UINavigationController(rootViewController: trips)
-        self.presentViewController(navController, animated: true, completion: nil)
-        //end
-        
-        /*
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -37,14 +29,13 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
 
         additionalUISetup()
- */
         
     }
     
     func additionalUISetup(){
         //set up bottom view
         self.bottomView.layer.shadowOpacity = 0.1
-        self.bottomView.hidden = true
+        self.bottomView.isHidden = true
         
         //Set up text field backing views
         originTextFieldBacking.layer.cornerRadius = 2
@@ -65,11 +56,11 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         originTextField.attributedPlaceholder = NSAttributedString(string:"Current location",
             attributes:[NSForegroundColorAttributeName: blue])
         
-        originTextField.leftView = UIView(frame: CGRectMake(0, 0, self.startLabel.frame.width+8, originTextField.frame.height))
-        originTextField.leftViewMode = UITextFieldViewMode.Always
+        originTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: self.startLabel.frame.width+8, height: originTextField.frame.height))
+        originTextField.leftViewMode = UITextFieldViewMode.always
         
-        destinationTextField.leftView = UIView(frame: CGRectMake(0, 0, self.startLabel.frame.width+8, originTextField.frame.height))
-        destinationTextField.leftViewMode = UITextFieldViewMode.Always
+        destinationTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: self.startLabel.frame.width+8, height: originTextField.frame.height))
+        destinationTextField.leftViewMode = UITextFieldViewMode.always
         
         originTextField.layer.cornerRadius = 4
         originTextField.clipsToBounds = true
@@ -78,7 +69,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         destinationTextField.delegate = self
         
         //Set up map view
-        self.mapView!.myLocationEnabled = true
+        self.mapView!.isMyLocationEnabled = true
         self.mapView!.settings.myLocationButton = true
         
         let mapInsets = UIEdgeInsetsMake(self.destinationTextField.frame.maxY + 40, 0, (self.bottomView.frame.height + 8), 0)
@@ -87,17 +78,17 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         //Set up search button
         searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
         searchButton.titleLabel?.numberOfLines = 2
-        searchButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        searchButton.titleLabel?.textAlignment = NSTextAlignment.center
     }
     
-    /*
-    override func viewWillAppear(animated: Bool) {
+    
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         //Update facebook info, apns key, and other things.
         YokweHelper.storeUser()
         
-        //Ask if they want to ride or drive just logged in
+        //Ask if they want to ride or drive - just logged in
         if SharingCenter.sharedInstance.didJustLogIn{
             presentRideOrDrive()
             
@@ -115,21 +106,21 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
             endLocation = nil
             SharingCenter.sharedInstance.start = ""
             SharingCenter.sharedInstance.destination = ""
-            self.bottomView.hidden = true
+            self.bottomView.isHidden = true
             SharingCenter.sharedInstance.shouldReset = false
         }
 
         //Set up the screen to reflect if the user is riding or driving
         if SharingCenter.sharedInstance.mode == "driver"{
             self.title = "Offer a trip"
-            searchButton.setTitle("Search for riders", forState: UIControlState.Normal)
+            searchButton.setTitle("Search for riders", for: [])
 
             destinationTextField.placeholder = "Where are you driving?"
             destinationTextField.layoutIfNeeded()
             
         }else{
             self.title = "Request a ride"
-            searchButton.setTitle("Search for drivers", forState: UIControlState.Normal)
+            searchButton.setTitle("Search for drivers", for: [])
             
             destinationTextField.placeholder = "Where do you want to go?"
             destinationTextField.layoutIfNeeded()
@@ -138,35 +129,38 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         
         print("updated placehodler: \(destinationTextField.placeholder!)")
         
-        self.navigationController?.navigationBar.tintColor = colorHelper.orange
-        self.navigationController?.navigationBar.translucent = false
+        //Customize navigation controller
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.barTintColor = colorHelper.orange
+        self.navigationController?.navigationBar.isTranslucent = false
         //self.navigationController?.navigationBar.barTintColor = colorHelper.orange
         //self.navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.whiteColor()]
     }
-    */
-    override func viewWillDisappear(animated: Bool) {
+    
+    override func viewWillDisappear(_ animated: Bool) {
         self.title = ""
     }
     
     //Disables mapview while menu is open
-    func revealController(revealController: SWRevealViewController!, willMoveToPosition position: FrontViewPosition) {
-        if position == FrontViewPosition.Left{
-            self.mapView.userInteractionEnabled = true
+    func revealController(_ revealController: SWRevealViewController!, willMoveTo position: FrontViewPosition) {
+        if position == FrontViewPosition.left{
+            self.mapView.isUserInteractionEnabled = true
             if SharingCenter.sharedInstance.mode == "driver"{
                 self.title = "Offer a trip"
                 self.destinationTextField.placeholder = "Where are you driving to?"
-                searchButton.setTitle("Search for riders", forState: UIControlState.Normal)
+                searchButton.setTitle("Search for riders", for: UIControlState())
 
             }else{
                 self.title = "Request a ride"
                 self.destinationTextField.placeholder = "Where do you want to go?"
-                searchButton.setTitle("Search for drivers", forState: UIControlState.Normal)
+                searchButton.setTitle("Search for drivers", for: UIControlState())
 
 
             }
             
         }else{
-            self.mapView.userInteractionEnabled = false
+            self.mapView.isUserInteractionEnabled = false
         }
     }
     
@@ -200,39 +194,39 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         let visibleRegion = self.mapView.projection.visibleRegion()
         autocompleteController.autocompleteBounds = GMSCoordinateBounds(coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
         
-        self.presentViewController(autocompleteController, animated: true, completion: nil)
+        self.present(autocompleteController, animated: true, completion: nil)
     }
     
     //MARK: UITextFieldDelegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard.
         textField.resignFirstResponder()
         return true
     }
     
     //MARK: Actions
-    @IBAction func originTextFieldTap(sender: AnyObject) {
+    @IBAction func originTextFieldTap(_ sender: AnyObject) {
         originWasTapped = true
         openAutocomplete()
     }
     
-    @IBAction func destinationTextFieldTap(sender: AnyObject) {
+    @IBAction func destinationTextFieldTap(_ sender: AnyObject) {
         openAutocomplete()
     }
     
     func presentRideOrDrive(){
-        let rideOrDrive = self.storyboard?.instantiateViewControllerWithIdentifier("rideOrDrive") as! RideOrDriveViewController
+        let rideOrDrive = self.storyboard?.instantiateViewController(withIdentifier: "rideOrDrive") as! RideOrDriveViewController
         rideOrDrive.title = "I want to..."
         
         let navController = UINavigationController(rootViewController: rideOrDrive)
         
-        self.presentViewController(navController, animated: true, completion: nil)
+        self.present(navController, animated: true, completion: nil)
         
         SharingCenter.sharedInstance.didJustLogIn = false
     }
 
     //Check that user entered an origin and a destination before progressing
-    @IBAction func pressedGo(sender: AnyObject) {
+    @IBAction func pressedGo(_ sender: AnyObject) {
         
         if destinationTextField.text != ""{
             SharingCenter.sharedInstance.start = startLocation!
@@ -247,7 +241,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
                 }
                 */
                 
-                performSegueWithIdentifier("driverSegue", sender: sender)
+                performSegue(withIdentifier: "driverSegue", sender: sender)
                 
                 
             }else if SharingCenter.sharedInstance.mode ==  "rider"{
@@ -258,7 +252,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
                     
                 }
                 */
-                performSegueWithIdentifier("riderSegue", sender: sender)
+                performSegue(withIdentifier: "riderSegue", sender: sender)
                     
                 
             }
@@ -267,25 +261,25 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
     }
     
     func presentCustomerForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "PaymentForm") as! PaymentFormViewController
         vc = customizeVC(vc) as! PaymentFormViewController
         vc.title = "Payment Info"
         
         var navController = UINavigationController(rootViewController: vc)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     func presentDriverForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "DriverAccountCreation") as! DriverAccountCreationViewController
         vc = customizeVC(vc) as! DriverAccountCreationViewController
         vc.title = "Create Driver Account"
         
         var navController = UINavigationController(rootViewController: vc)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: {
+        present(navController, animated: true, completion: {
             self.pressedGo(self)
         })
     }
@@ -296,34 +290,34 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
         print(SharingCenter.sharedInstance.phone)
         
         if SharingCenter.sharedInstance.phone == nil || SharingCenter.sharedInstance.phone! == ""{
-            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhoneNumber") as! PhoneNumberViewController
-            vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "PhoneNumber") as! PhoneNumberViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
             vc.title = "Enter Phone Number"
             
             var navController = UINavigationController(rootViewController: vc)
             navController = customizeNavController(navController)
             
-            presentViewController(navController, animated: true, completion: nil)
+            present(navController, animated: true, completion: nil)
         }
         
     }
  
-    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = true
+        navController.navigationBar.isTranslucent = true
         
         return navController
     }
     
-    func customizeVC(vc:UIViewController) -> UIViewController{
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+    func customizeVC(_ vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
         
         //Save button
-        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "saveInfo")
+        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .done, target: vc, action: "saveInfo")
         vc.navigationItem.rightBarButtonItem = barSaveButton
         
         return vc
@@ -332,7 +326,7 @@ class DateTimeViewController: UIViewController, UITextFieldDelegate, NSStreamDel
 }
 
 extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
-    func viewController(viewController: GMSAutocompleteViewController!, didAutocompleteWithPlace place: GMSPlace!) {
+    func viewController(_ viewController: GMSAutocompleteViewController!, didAutocompleteWith place: GMSPlace!) {
         if originWasTapped{
             origin = place.coordinate
             
@@ -353,7 +347,7 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
             //Get polyline
             helper.makeDirectionsRequest{(result) -> Void in
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     //These are switched because I was lazy
                     self.duration.text = "(\(helper.distance!))"
                     self.distance.text = helper.duration!
@@ -371,11 +365,11 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
                     let bounds = GMSCoordinateBounds(path: newPath!)
                     self.mapView.clear()
                     polyLine.map = self.mapView
-                    let update = GMSCameraUpdate.fitBounds(bounds)
+                    let update = GMSCameraUpdate.fit(bounds)
                     self.mapView.moveCamera(update)
                     
                     let riderStartMarker = GMSMarker(position: self.origin!)
-                    riderStartMarker.icon = GMSMarker.markerImageWithColor(UIColor.greenColor())
+                    riderStartMarker.icon = GMSMarker.markerImage(with: UIColor.green)
                     riderStartMarker.map = self.mapView
                     
                     let riderEndMarker = GMSMarker(position: self.destination!)
@@ -383,18 +377,17 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
                 })
             }
             
-            self.bottomView.hidden = false
+            self.bottomView.isHidden = false
 
         }
 
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func viewController(viewController: GMSAutocompleteViewController!, didFailAutocompleteWithError error: NSError!) {
-        print(error.description)
+    func viewController(_ viewController: GMSAutocompleteViewController!, didFailAutocompleteWithError error: Error!) {
     }
     
-    func wasCancelled(viewController: GMSAutocompleteViewController!) {
+    func wasCancelled(_ viewController: GMSAutocompleteViewController!) {
         
         if self.originWasTapped{
             self.originTextField.text = nil
@@ -404,36 +397,36 @@ extension DateTimeViewController: GMSAutocompleteViewControllerDelegate {
             self.destinationTextField.text = nil
             self.endLocation = nil
             self.mapView.clear()
-            self.bottomView.hidden = true
+            self.bottomView.isHidden = true
         }
         self.originWasTapped = false
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
 }
 
 extension DateTimeViewController{
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController!) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController!) -> UIModalPresentationStyle {
         // Return no adaptive presentation style, use default presentation behaviour
-        return .None
+        return .none
     }
     
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == .AuthorizedWhenInUse {
+    @objc(locationManager:didChangeAuthorizationStatus:) func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
             SharingCenter.sharedInstance.locationManager!.startUpdatingLocation()
         }else{
             SharingCenter.sharedInstance.locationManager!.stopUpdatingLocation()
         }
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    @nonobjc func locationManager(_ manager: CLLocationManager, didFailWithError error: NSError) {
         print("couldn't get user location :( there was an error")
         
     }
     
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("did update location")
         
         SharingCenter.sharedInstance.startLocation = SharingCenter.sharedInstance.locationManager?.location!.coordinate

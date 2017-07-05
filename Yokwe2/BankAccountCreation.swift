@@ -22,7 +22,7 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
             textField.delegate = self
             
             if textField == routingNum || textField == accountNum{
-                textField.keyboardType = UIKeyboardType.NumberPad
+                textField.keyboardType = UIKeyboardType.numberPad
             }
         }
     }
@@ -38,23 +38,23 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
                     alertString = "Bank account added successfully"
                     print(resultString)
                     
-                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                        self.view.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                        self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
                     })
                     
                 }
                 else{
                     //Create alert for error, and ask user to retry
                     alertString = "There were errors processing your payment information. Please try again."
-                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                        self.view.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)                    })
+                    okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                        self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)                    })
                 }
                 
                 if alertString != nil{
-                    dispatch_async(dispatch_get_main_queue(), {
-                        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.Alert)
+                    DispatchQueue.main.async(execute: {
+                        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(okAction!)
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        self.present(alert, animated: true, completion: nil)
                     })
                 }
             })
@@ -66,16 +66,16 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
     
     
     //Below code helps ensure info is entered correctly
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool{
         
         var maxLength = 100
         
@@ -121,12 +121,12 @@ class BankAccountCreation: UIViewController, UITextFieldDelegate {
     
     func closeView(){
         let alertString = "You are able to drive, but we cannot pay money out to you until you add direct deposit information."
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-            self.view.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
+            self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
         })
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
 }

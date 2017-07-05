@@ -7,100 +7,100 @@
 //
 
 class RideOrDriveViewController: UIViewController {
-    @IBAction func ride(sender: AnyObject) {
+    @IBAction func ride(_ sender: AnyObject) {
         SharingCenter.sharedInstance.mode = "rider"
         
         if SharingCenter.sharedInstance.customerToken == nil{
             //Ask if they want to submit payment info now or later, if they select yes, open the payment view controller, otherwise do nothing
             let alertString = "You can search for drivers heading your way, but you won't be able to request rides from them until you enter a credit card. Want to do that now?"
-            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
             
-            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
                 self.presentCustomerForm()
                 
             })
             
-            let cancelAction = UIAlertAction(title: "Nah, I'll do it later", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                self.dismissViewControllerAnimated(true, completion: nil)
+            let cancelAction = UIAlertAction(title: "Nah, I'll do it later", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                self.dismiss(animated: true, completion: nil)
                 
             })
             
             alert.addAction(okAction)
             alert.addAction(cancelAction)
             
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
             
         }else{
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 
-    @IBAction func drive(sender: AnyObject) {
+    @IBAction func drive(_ sender: AnyObject) {
         SharingCenter.sharedInstance.mode = "driver"
         
         if SharingCenter.sharedInstance.accountToken == nil{
             //Ask if they want to submit personal info and payment info now or later
             let alertString = "You'll have to enter some personal info before we can legally allow you to drive with us. If not, you'll still be able to search for riders, you just won't be able to drive them."
-            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
             
-            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
                 self.presentDriverForm()
                 
             })
             
-            let cancelAction = UIAlertAction(title: "Nah, I'll do it later", style: UIAlertActionStyle.Default, handler: {(ACTION) in
-                self.dismissViewControllerAnimated(true, completion: nil)
+            let cancelAction = UIAlertAction(title: "Nah, I'll do it later", style: UIAlertActionStyle.default, handler: {(ACTION) in
+                self.dismiss(animated: true, completion: nil)
                 
             })
             
             alert.addAction(okAction)
             alert.addAction(cancelAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
             
         }else{
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
         
     }
     
     func presentCustomerForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "PaymentForm") as! PaymentFormViewController
         vc = RideOrDriveViewController.customizeVC(vc) as! PaymentFormViewController
         vc.title = "Payment Info"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = RideOrDriveViewController.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     func presentDriverForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "DriverAccountCreation") as! DriverAccountCreationViewController
         vc = RideOrDriveViewController.customizeVC(vc) as! DriverAccountCreationViewController
         vc.title = "Create Driver Account"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = RideOrDriveViewController.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
-    class func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    class func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
-        navController.navigationBar.translucent = false
+        navController.navigationBar.isTranslucent = false
         
         return navController
     }
     
-    class func customizeVC(vc:UIViewController) -> UIViewController{
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+    class func customizeVC(_ vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
         
         //Save button
-        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "saveInfo")
+        let barSaveButton = UIBarButtonItem(barButtonSystemItem: .done, target: vc, action: "saveInfo")
         vc.navigationItem.rightBarButtonItem = barSaveButton
         
         return vc

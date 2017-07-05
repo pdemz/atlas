@@ -48,31 +48,31 @@ class TripDetails: UIViewController {
         
     }
 
-    @IBAction func tappedBackground(sender: AnyObject) {
+    @IBAction func tappedBackground(_ sender: AnyObject) {
         print("background button tapped")
         self.delegate?.tappedBackground()
     }
     
-    @IBAction func pressedNavigate(sender: AnyObject) {
+    @IBAction func pressedNavigate(_ sender: AnyObject) {
         self.delegate?.pressedNavigate()
         
     }
     
-    @IBAction func pressedCancel(sender: AnyObject) {
+    @IBAction func pressedCancel(_ sender: AnyObject) {
         self.delegate?.pressedCancel()
         
     }
     
-    @IBAction func tappedPhoto(sender: AnyObject) {
+    @IBAction func tappedPhoto(_ sender: AnyObject) {
         self.delegate?.tappedPhoto()
         
     }
     
-    @IBAction func openMessenger(sender: AnyObject) {
+    @IBAction func openMessenger(_ sender: AnyObject) {
         if phoneText != nil && phoneText != ""{
-            let number = phoneText!.stringByReplacingOccurrencesOfString("(", withString: "").stringByReplacingOccurrencesOfString(") ", withString: "").stringByReplacingOccurrencesOfString("-", withString: "")
+            let number = phoneText!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ") ", with: "").replacingOccurrences(of: "-", with: "")
             let url = "sms:\(number)"
-            UIApplication.sharedApplication().openURL(NSURL(string: url)!)
+            UIApplication.shared.openURL(URL(string: url)!)
             
         }
 

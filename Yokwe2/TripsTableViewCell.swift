@@ -22,7 +22,7 @@ class TripsTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    @IBAction func pressedDelete(sender: AnyObject) {
+    @IBAction func pressedDelete(_ sender: AnyObject) {
     }
     
 

@@ -39,7 +39,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.rideTrips = result[0]
             self.driveTrips = result[1]
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.rideRequestsTableView.reloadData()
                 self.driveOffersTableView.reloadData()
                 
@@ -47,7 +47,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == rideRequestsTableView{
             return rideTrips.count
             
@@ -57,10 +57,10 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if tableView == driveOffersTableView{
-            let cell = tableView.dequeueReusableCellWithIdentifier("TripsDriveTableViewCell", forIndexPath: indexPath) as! TripsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TripsDriveTableViewCell", for: indexPath) as! TripsTableViewCell
             
             cell.from.text = driveTrips[indexPath.row].from!
             cell.to.text = driveTrips[indexPath.row].to!
@@ -69,7 +69,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
             return cell
         }else{
-            let cell = tableView.dequeueReusableCellWithIdentifier("TripsTableViewCell", forIndexPath: indexPath) as! TripsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TripsTableViewCell", for: indexPath) as! TripsTableViewCell
             
             cell.from.text = rideTrips[indexPath.row].from!
             cell.to.text = rideTrips[indexPath.row].to!

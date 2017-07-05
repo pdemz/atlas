@@ -16,17 +16,17 @@ class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
         
         self.title = "Confirm Phone Number"
         
-        codeTextBox.keyboardType = .NumberPad
-        codeTextBox.isFirstResponder()
+        codeTextBox.keyboardType = .numberPad
+        codeTextBox.isFirstResponder
         
     }
     
     func proceedToHomeScreen(){
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
         
     }
     
-    @IBAction func continueTap(sender: AnyObject) {
+    @IBAction func continueTap(_ sender: AnyObject) {
         //See if code is valid on server
         let code = codeTextBox.text
         print(code!)
@@ -34,7 +34,7 @@ class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
         //Call api
         YokweHelper.verifyCode(code!, number: phoneNumber!, completion: {(result) -> Void in
             let valid = result
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 if valid{
                     SharingCenter.sharedInstance.phone = self.phoneNumber!
                     self.proceedToHomeScreen()
@@ -50,9 +50,9 @@ class PhoneConfirmationViewController: UIViewController, UITextFieldDelegate {
     
     func errorNotification(){
         let alertString = "Incorrect code"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 }

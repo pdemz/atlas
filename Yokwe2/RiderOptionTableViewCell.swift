@@ -26,7 +26,7 @@ class RiderOptionTableViewCell: UITableViewCell {
         photo.clipsToBounds = true
         
         self.name.textColor = colorHelper.orange
-        mutualFriends.textColor = UIColor.blackColor()
+        mutualFriends.textColor = UIColor.black
         
         mutualFriends.adjustsFontSizeToFitWidth = true
         
@@ -37,7 +37,7 @@ class RiderOptionTableViewCell: UITableViewCell {
         
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

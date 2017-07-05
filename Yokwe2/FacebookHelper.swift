@@ -12,7 +12,7 @@ import FBSDKCoreKit
 class FacebookHelper{
     
     //Returns a driver with photo and name added to one passed in
-    class func driverGraphRequest(driver:Driver, completion:(result:Driver)->Void){
+    class func driverGraphRequest(_ driver:Driver, completion:@escaping (_ result:Driver)->Void){
         let params = ["fields": "id, first_name, email, picture.height(500), education"]
         
         print("got into driverGraphRequest")
@@ -20,20 +20,20 @@ class FacebookHelper{
         //Don't try to add Facebook info if they don't have an access token
         if driver.accessToken == nil || driver.accessToken == "null"{
             driver.photo = UIImage(named: "noUserPhoto")
-            completion(result: driver)
+            completion(driver)
         }
         
-        FBSDKGraphRequest(graphPath: driver.userID, parameters: params, tokenString: driver.accessToken, version: nil, HTTPMethod: nil).startWithCompletionHandler({ (connection, result, error) -> Void in
+        FBSDKGraphRequest(graphPath: driver.userID, parameters: params, tokenString: driver.accessToken, version: nil, httpMethod: nil).start(completionHandler: { (connection, result, error) -> Void in
             
             if ((error) == nil){
                 let dict = result as! NSDictionary
-                driver.name = dict.valueForKey("first_name") as? String
+                driver.name = dict.value(forKey: "first_name") as? String
                 print(result)
-                print(dict.valueForKey("email"))
-                let educationList = dict.valueForKey("education") as? [NSDictionary]
+                print(dict.value(forKey: "email"))
+                let educationList = dict.value(forKey: "education") as? [NSDictionary]
                 let school = educationList?.last
                 var education = ""
-                if let schoolName = school?.valueForKey("school")?.valueForKey("name") as? String{
+                if let schoolName = (school?.value(forKey: "school") as AnyObject).value(forKey: "name") as? String{
                     education += schoolName
                 }
                 
@@ -46,14 +46,14 @@ class FacebookHelper{
                 driver.education = education
                 print(driver.education)
                 
-                let url = dict.valueForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String
+                let url = ((dict.value(forKey: "picture") as AnyObject).object(forKey: "data") as AnyObject).object(forKey: "url") as! String
                 print(url)
-                if let picURL = NSURL(string: url){
+                if let picURL = URL(string: url){
                     print(picURL)
-                    if let data = NSData(contentsOfURL: picURL){
+                    if let data = try? Data(contentsOf: picURL){
                         
                         driver.photo = UIImage(data: data)!
-                        completion(result: driver)
+                        completion(driver)
                         
                     }
                 }
@@ -62,26 +62,26 @@ class FacebookHelper{
     }
     
     //Returns a rider with photo and name added to the one passed in
-    class func riderGraphRequest(rider:Rider, completion:(result:Rider)->Void){
+    class func riderGraphRequest(_ rider:Rider, completion:@escaping (_ result:Rider)->Void){
         let params = ["fields": "id, first_name, email, picture.height(500), education"]
         
         //Don't try to add Facebook info if they don't have an access token
         if rider.accessToken == nil || rider.accessToken == "null"{
             rider.photo = UIImage(named: "noUserPhoto")
-            completion(result: rider)
+            completion(rider)
         }
         
-        FBSDKGraphRequest(graphPath: rider.userID, parameters: params, tokenString: rider.accessToken, version: nil, HTTPMethod: nil).startWithCompletionHandler({ (connection, result, error) -> Void in
+        FBSDKGraphRequest(graphPath: rider.userID, parameters: params, tokenString: rider.accessToken, version: nil, httpMethod: nil).start(completionHandler: { (connection, result, error) -> Void in
             
             if ((error) == nil){
                 let dict = result as! NSDictionary
-                rider.name = dict.valueForKey("first_name") as? String
-                let url = dict.valueForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String
+                rider.name = dict.value(forKey: "first_name") as? String
+                let url = ((dict.value(forKey: "picture") as AnyObject).object(forKey: "data") as AnyObject).object(forKey: "url") as! String
                 
-                let educationList = dict.valueForKey("education") as? [NSDictionary]
+                let educationList = dict.value(forKey: "education") as? [NSDictionary]
                 let school = educationList?.last
                 var education = ""
-                if let schoolName = school?.valueForKey("school")?.valueForKey("name") as? String{
+                if let schoolName = (school?.value(forKey: "school") as AnyObject).value(forKey: "name") as? String{
                     education += schoolName
                 }
                 
@@ -90,12 +90,11 @@ class FacebookHelper{
                 }*/
                 
                 rider.education = education
-                print(education)
                 
-                if let picURL = NSURL(string: url){
-                    if let data = NSData(contentsOfURL: picURL){
+                if let picURL = URL(string: url){
+                    if let data = try? Data(contentsOf: picURL){
                         rider.photo = UIImage(data: data)
-                        completion(result: rider)
+                        completion(rider)
                     }
                 }
             }

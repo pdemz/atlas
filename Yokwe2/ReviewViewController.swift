@@ -30,45 +30,45 @@ class ReviewViewController: UIViewController, UITextViewDelegate {
         setUpCommentBox()
         setUpProfilePhoto()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ReviewViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ReviewViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReviewViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReviewViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
-    @IBAction func starTouch(sender: AnyObject) {
+    @IBAction func starTouch(_ sender: AnyObject) {
         let selectedStar = UIImage(named: "SelectedStar")
         
         resetStars()
         
         //Set appropriate stars to filled
         if sender as! NSObject == button1{
-            button1.setBackgroundImage(selectedStar, forState: .Normal)
+            button1.setBackgroundImage(selectedStar, for: UIControlState())
             stars = 1
             
         }else if sender as! NSObject == button2{
-            button1.setBackgroundImage(selectedStar, forState: .Normal)
-            button2.setBackgroundImage(selectedStar, forState: .Normal)
+            button1.setBackgroundImage(selectedStar, for: UIControlState())
+            button2.setBackgroundImage(selectedStar, for: UIControlState())
             stars = 2
             
         }else if sender as! NSObject == button3{
-            button1.setBackgroundImage(selectedStar, forState: .Normal)
-            button2.setBackgroundImage(selectedStar, forState: .Normal)
-            button3.setBackgroundImage(selectedStar, forState: .Normal)
+            button1.setBackgroundImage(selectedStar, for: UIControlState())
+            button2.setBackgroundImage(selectedStar, for: UIControlState())
+            button3.setBackgroundImage(selectedStar, for: UIControlState())
             stars = 3
             
         }else if sender as! NSObject == button4{
-            button1.setBackgroundImage(selectedStar, forState: .Normal)
-            button2.setBackgroundImage(selectedStar, forState: .Normal)
-            button3.setBackgroundImage(selectedStar, forState: .Normal)
-            button4.setBackgroundImage(selectedStar, forState: .Normal)
+            button1.setBackgroundImage(selectedStar, for: UIControlState())
+            button2.setBackgroundImage(selectedStar, for: UIControlState())
+            button3.setBackgroundImage(selectedStar, for: UIControlState())
+            button4.setBackgroundImage(selectedStar, for: UIControlState())
             stars = 4
             
         }else if sender as! NSObject == button5{
-            button1.setBackgroundImage(selectedStar, forState: .Normal)
-            button2.setBackgroundImage(selectedStar, forState: .Normal)
-            button3.setBackgroundImage(selectedStar, forState: .Normal)
-            button4.setBackgroundImage(selectedStar, forState: .Normal)
-            button5.setBackgroundImage(selectedStar, forState: .Normal)
+            button1.setBackgroundImage(selectedStar, for: UIControlState())
+            button2.setBackgroundImage(selectedStar, for: UIControlState())
+            button3.setBackgroundImage(selectedStar, for: UIControlState())
+            button4.setBackgroundImage(selectedStar, for: UIControlState())
+            button5.setBackgroundImage(selectedStar, for: UIControlState())
             stars = 5
             
         }
@@ -82,7 +82,7 @@ class ReviewViewController: UIViewController, UITextViewDelegate {
 
         for view in starView.subviews{
             let button = view as? UIButton
-            button?.setBackgroundImage(emptyStar, forState: .Normal)
+            button?.setBackgroundImage(emptyStar, for: UIControlState())
         }
         
     }
@@ -93,7 +93,7 @@ class ReviewViewController: UIViewController, UITextViewDelegate {
         
         for view in starView.subviews{
             let button = view as? UIButton
-            button?.setBackgroundImage(selectedStar, forState: .Normal)
+            button?.setBackgroundImage(selectedStar, for: UIControlState())
         }
         
     }
@@ -101,32 +101,32 @@ class ReviewViewController: UIViewController, UITextViewDelegate {
     func setUpCommentBox(){
         commentBox.delegate = self
         self.commentBox.layer.borderWidth = 0.5
-        self.commentBox.layer.borderColor = colorHelper.blue.CGColor
+        self.commentBox.layer.borderColor = colorHelper.blue.cgColor
         self.commentBox.layer.cornerRadius = 5
-        commentBox.textColor = UIColor.lightGrayColor()
+        commentBox.textColor = UIColor.lightGray
     }
     
-    @IBAction func submitTap(sender: AnyObject) {
+    @IBAction func submitTap(_ sender: AnyObject) {
         //Submit the review
         var review = commentBox.text
-        if commentBox.textColor == UIColor.lightGrayColor(){
+        if commentBox.textColor == UIColor.lightGray{
             review = ""
         }
         
-        YokweHelper.submitReview(stars, review: review, revieweeID: revieweeID!, reviewType: type!)
-        super.dismissViewControllerAnimated(true, completion: nil)
+        YokweHelper.submitReview(stars, review: review!, revieweeID: revieweeID!, reviewType: type!)
+        super.dismiss(animated: true, completion: nil)
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let maxtext: Int = 140
         //If the text is larger than the maxtext, the return is false
 
         return textView.text.characters.count + (text.characters.count - range.length) <= maxtext        
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        if textView.textColor == UIColor.lightGrayColor(){
-            textView.textColor = UIColor.blackColor()
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray{
+            textView.textColor = UIColor.black
             textView.text = ""
         }
     }
@@ -138,23 +138,23 @@ class ReviewViewController: UIViewController, UITextViewDelegate {
         photo.clipsToBounds = true
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             self.view.frame.origin.y -= commentBox.frame.minY
         }
         
     }
     
-    func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+    func keyboardWillHide(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             self.view.frame.origin.y += commentBox.frame.minY
         }
     }
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?){
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
         view.endEditing(true)
-        super.touchesBegan(touches, withEvent: event)
+        super.touchesBegan(touches, with: event)
     }
     
 

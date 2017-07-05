@@ -20,9 +20,9 @@ class DriverOptionsTableViewController: UITableViewController {
     @IBOutlet weak var indicatorr: UIActivityIndicatorView!
     
     //MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let driverIndex = tableView.indexPathForSelectedRow!.row
-        let nextController = segue.destinationViewController as! ConfirmationViewController
+        let nextController = segue.destination as! ConfirmationViewController
         nextController.driver = drivers[driverIndex]
         
     }
@@ -37,12 +37,12 @@ class DriverOptionsTableViewController: UITableViewController {
         populateRows()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = "Select driver"
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.title = ""
     }
@@ -52,29 +52,29 @@ class DriverOptionsTableViewController: UITableViewController {
             
             print("call to server has completed")
             if result.count == 0{
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     let alertString = "No drivers heading your way right now. We'll let you know when one becomes available!"
-                    let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-                    let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+                    let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
+                    let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
                         self.returnToHomeScreen()
                     })
                     alert.addAction(okAction)
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.present(alert, animated: true, completion: nil)
                 })
                 
             }else{
                 
                 self.driverList = result
-                dispatch_async(dispatch_get_main_queue(), {
-                    for (index,driver) in self.driverList!.enumerate(){
+                DispatchQueue.main.async(execute: {
+                    for (index,driver) in self.driverList!.enumerated(){
                         FacebookHelper.driverGraphRequest(driver, completion: {(result) -> Void in
                             let newDriver = result
-                            dispatch_async(dispatch_get_main_queue(), {
+                            DispatchQueue.main.async(execute: {
                                 self.drivers.append(newDriver)
                                 if index == self.driverList!.count-1 || self.driverList == nil{
                                     self.tableView.reloadData()
                                     self.indicatorr.stopAnimating()
-                                    UIView.animateWithDuration(0.5, animations: {
+                                    UIView.animate(withDuration: 0.5, animations: {
                                         self.indicatorr.frame.offsetInPlace(dx: 0, dy: 20)
                                         self.indicatorr.alpha = 0
                                     })
@@ -89,11 +89,11 @@ class DriverOptionsTableViewController: UITableViewController {
         
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if driverList == nil{
             return 0
         }else{
@@ -101,25 +101,25 @@ class DriverOptionsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.alpha = 0
         cell.frame.offsetInPlace(dx: 0, dy: 20)
         
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             cell.alpha = 1
             cell.frame.offsetInPlace(dx: 0, dy: -20)
         })
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if drivers.count > tableView.numberOfRowsInSection(0){
+        if drivers.count > tableView.numberOfRows(inSection: 0){
             tableView.reloadData()
             print("reloaded")
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("DriverTableViewCell", forIndexPath: indexPath) as! DriverTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DriverTableViewCell", for: indexPath) as! DriverTableViewCell
         cell.alpha = 0
         
         if indexPath.row < drivers.count{
@@ -129,7 +129,15 @@ class DriverOptionsTableViewController: UITableViewController {
             cell.name.text = driver.name
             cell.photo.image = driver.photo
             cell.mutualFriends.text = "\(driver.mutualFriends!) mutual friends"
-            cell.price.text = ("$\(Double(driver.price!)!/100)")
+            
+            //Format price
+            let priceNumber = ((Double(driver.price!)!/100)) as NSNumber
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.locale = Locale(identifier: "en_US")
+            let finalPrice = formatter.string(from: priceNumber)// "123.44$"
+            
+            cell.price.text = finalPrice
         }
         
         return cell
@@ -138,7 +146,7 @@ class DriverOptionsTableViewController: UITableViewController {
     
     func returnToHomeScreen(){
         SharingCenter.sharedInstance.shouldReset = true
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
 
 }

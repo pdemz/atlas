@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		82F1DCC7619A5D91007AA7F0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B3B8A66AD6F66B58E45DD574 /* libPods.a */; };
+		02B0D3A7177A30770F35F903 /* libPods-Yokwe2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 605F2634DF2B5EF527B61D21 /* libPods-Yokwe2.a */; };
 		BE0128CB1BE2BE2200D78FD7 /* DriverOrRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0128CA1BE2BE2200D78FD7 /* DriverOrRideViewController.swift */; };
 		BE0128CD1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0128CC1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift */; };
 		BE0128CF1BE2CA8800D78FD7 /* Rider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0128CE1BE2CA8800D78FD7 /* Rider.swift */; };
@@ -38,6 +38,12 @@
 		DB68DA491CA0BEA8005B4158 /* PaymentConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */; };
 		DB68DA4B1CAB20C5005B4158 /* DriverAccountCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */; };
 		DB68DA4D1CADC0AE005B4158 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB68DA4C1CADC0AE005B4158 /* User.swift */; };
+		DB7021AF1EFC941800C2AE50 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7021AE1EFC941800C2AE50 /* Stripe.framework */; };
+		DB7021B01EFC941800C2AE50 /* Stripe.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB7021AE1EFC941800C2AE50 /* Stripe.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DB7021B71EFC950E00C2AE50 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7021B31EFC950E00C2AE50 /* Bolts.framework */; };
+		DB7021B81EFC950E00C2AE50 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7021B41EFC950E00C2AE50 /* FBSDKCoreKit.framework */; };
+		DB7021B91EFC950E00C2AE50 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7021B51EFC950E00C2AE50 /* FBSDKLoginKit.framework */; };
+		DB7021BA1EFC950E00C2AE50 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7021B61EFC950E00C2AE50 /* FBSDKShareKit.framework */; };
 		DB70FA431D8AC9F5005A391C /* PhoneConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB70FA421D8AC9F5005A391C /* PhoneConfirmationViewController.swift */; };
 		DB7C66BB1C592AF10087474F /* colorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7C66BA1C592AF10087474F /* colorHelper.swift */; };
 		DB81671C1CE6335200712459 /* TripDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB81671B1CE6335200712459 /* TripDetails.swift */; };
@@ -57,7 +63,6 @@
 		DBD32B201C8161440015CF06 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD32B1F1C8161440015CF06 /* TripViewController.swift */; };
 		DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */; };
 		DBD79D551BFD13F400BF383C /* TitularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD79D541BFD13F400BF383C /* TitularViewController.swift */; };
-		DBD79D571BFD31B300BF383C /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */; };
 		DBD9A41B1DA1D36D00FC1780 /* TripsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD9A41A1DA1D36D00FC1780 /* TripsViewController.swift */; };
 		DBD9A41F1DA1DAD900FC1780 /* TripsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD9A41E1DA1DAD900FC1780 /* TripsTableViewCell.swift */; };
 		DBD9A4211DA1E9C700FC1780 /* TripStatusObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD9A4201DA1E9C700FC1780 /* TripStatusObject.swift */; };
@@ -75,10 +80,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DB7021B11EFC941800C2AE50 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DB7021B01EFC941800C2AE50 /* Stripe.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		251EEB9B4EB1B49A1F884916 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		822734AD1EB616F5447E9078 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		B3B8A66AD6F66B58E45DD574 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		304C0AF97535EACB3FA92532 /* Pods-Yokwe2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yokwe2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Yokwe2/Pods-Yokwe2.debug.xcconfig"; sourceTree = "<group>"; };
+		53B3B76BEDBE01F636B9A2AC /* Pods-Yokwe2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yokwe2.release.xcconfig"; path = "Pods/Target Support Files/Pods-Yokwe2/Pods-Yokwe2.release.xcconfig"; sourceTree = "<group>"; };
+		605F2634DF2B5EF527B61D21 /* libPods-Yokwe2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Yokwe2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE0128CA1BE2BE2200D78FD7 /* DriverOrRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverOrRideViewController.swift; sourceTree = "<group>"; };
 		BE0128CC1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderOptionsTableViewController.swift; sourceTree = "<group>"; };
 		BE0128CE1BE2CA8800D78FD7 /* Rider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rider.swift; sourceTree = "<group>"; };
@@ -114,6 +133,11 @@
 		DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentConfirmationViewController.swift; sourceTree = "<group>"; };
 		DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverAccountCreationViewController.swift; sourceTree = "<group>"; };
 		DB68DA4C1CADC0AE005B4158 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DB7021AE1EFC941800C2AE50 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Stripe.framework; sourceTree = "<group>"; };
+		DB7021B31EFC950E00C2AE50 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		DB7021B41EFC950E00C2AE50 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		DB7021B51EFC950E00C2AE50 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		DB7021B61EFC950E00C2AE50 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		DB70FA421D8AC9F5005A391C /* PhoneConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneConfirmationViewController.swift; sourceTree = "<group>"; };
 		DB7C66BA1C592AF10087474F /* colorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = colorHelper.swift; sourceTree = "<group>"; };
 		DB81671B1CE6335200712459 /* TripDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetails.swift; sourceTree = "<group>"; };
@@ -135,7 +159,6 @@
 		DBD32B1F1C8161440015CF06 /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsHelper.swift; sourceTree = "<group>"; };
 		DBD79D541BFD13F400BF383C /* TitularViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitularViewController.swift; sourceTree = "<group>"; };
-		DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		DBD9A41A1DA1D36D00FC1780 /* TripsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsViewController.swift; sourceTree = "<group>"; };
 		DBD9A41E1DA1DAD900FC1780 /* TripsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsTableViewCell.swift; sourceTree = "<group>"; };
 		DBD9A4201DA1E9C700FC1780 /* TripStatusObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripStatusObject.swift; sourceTree = "<group>"; };
@@ -148,10 +171,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				82F1DCC7619A5D91007AA7F0 /* libPods.a in Frameworks */,
+				DB7021BA1EFC950E00C2AE50 /* FBSDKShareKit.framework in Frameworks */,
+				DB7021B71EFC950E00C2AE50 /* Bolts.framework in Frameworks */,
+				DB7021B81EFC950E00C2AE50 /* FBSDKCoreKit.framework in Frameworks */,
 				DB4B88B11BFC01F50006F974 /* FBSDKCoreKit.framework in Frameworks */,
-				DBD79D571BFD31B300BF383C /* FBSDKLoginKit.framework in Frameworks */,
 				DB914AAC1C9A37D1002BA5A3 /* Stripe.framework in Frameworks */,
+				DB7021B91EFC950E00C2AE50 /* FBSDKLoginKit.framework in Frameworks */,
+				02B0D3A7177A30770F35F903 /* libPods-Yokwe2.a in Frameworks */,
+				DB7021AF1EFC941800C2AE50 /* Stripe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,11 +192,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		83E8D80DEB0381674C31EFC6 /* Pods */ = {
+		2E0CEFFDEC7E2663BB0A2527 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				251EEB9B4EB1B49A1F884916 /* Pods.debug.xcconfig */,
-				822734AD1EB616F5447E9078 /* Pods.release.xcconfig */,
+				304C0AF97535EACB3FA92532 /* Pods-Yokwe2.debug.xcconfig */,
+				53B3B76BEDBE01F636B9A2AC /* Pods-Yokwe2.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -177,11 +204,12 @@
 		BE0D70071BA5024400F201FE = {
 			isa = PBXGroup;
 			children = (
+				DB7021AE1EFC941800C2AE50 /* Stripe.framework */,
 				BE0D70121BA5024400F201FE /* Yokwe2 */,
 				BE0D70281BA5024400F201FE /* Yokwe2Tests */,
 				BE0D70111BA5024400F201FE /* Products */,
-				83E8D80DEB0381674C31EFC6 /* Pods */,
 				EB0DB239C785A79D01E0AD14 /* Frameworks */,
+				2E0CEFFDEC7E2663BB0A2527 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -340,10 +368,13 @@
 		EB0DB239C785A79D01E0AD14 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DB7021B31EFC950E00C2AE50 /* Bolts.framework */,
+				DB7021B41EFC950E00C2AE50 /* FBSDKCoreKit.framework */,
+				DB7021B51EFC950E00C2AE50 /* FBSDKLoginKit.framework */,
+				DB7021B61EFC950E00C2AE50 /* FBSDKShareKit.framework */,
 				DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */,
-				DBD79D561BFD31B300BF383C /* FBSDKLoginKit.framework */,
 				DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */,
-				B3B8A66AD6F66B58E45DD574 /* libPods.a */,
+				605F2634DF2B5EF527B61D21 /* libPods-Yokwe2.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -355,12 +386,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE0D702F1BA5024400F201FE /* Build configuration list for PBXNativeTarget "Yokwe2" */;
 			buildPhases = (
-				D5B204A7B6258A1CA4C610E4 /* Check Pods Manifest.lock */,
+				B24B3107202E311AF99FA755 /* [CP] Check Pods Manifest.lock */,
 				BE0D700C1BA5024400F201FE /* Sources */,
 				BE0D700D1BA5024400F201FE /* Frameworks */,
 				BE0D700E1BA5024400F201FE /* Resources */,
-				5C43B46C159F56CA8537EB0D /* Embed Pods Frameworks */,
-				444C4FF294D8299A388009A8 /* Copy Pods Resources */,
+				2BB167A43E6236308888F70D /* [CP] Embed Pods Frameworks */,
+				2F6B00D1374AF20F222AD4F2 /* [CP] Copy Pods Resources */,
+				DB7021B11EFC941800C2AE50 /* Embed Frameworks */,
+				DB7021B21EFC944400C2AE50 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -405,7 +438,7 @@
 					BE0D700F1BA5024400F201FE = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 69W48383FK;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -424,7 +457,7 @@
 					};
 					BE0D70241BA5024400F201FE = {
 						CreatedOnToolsVersion = 6.4;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -469,50 +502,63 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		444C4FF294D8299A388009A8 /* Copy Pods Resources */ = {
+		2BB167A43E6236308888F70D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Yokwe2/Pods-Yokwe2-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5C43B46C159F56CA8537EB0D /* Embed Pods Frameworks */ = {
+		2F6B00D1374AF20F222AD4F2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Yokwe2/Pods-Yokwe2-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D5B204A7B6258A1CA4C610E4 /* Check Pods Manifest.lock */ = {
+		B24B3107202E311AF99FA755 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		DB7021B21EFC944400C2AE50 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stripe.framework/integrate-dynamic-framework.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -626,8 +672,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: pdems@icloud.com (7D454Q7VH7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Atlas Rideshare, Inc. (69W48383FK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -674,8 +720,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: pdems@icloud.com (7D454Q7VH7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Atlas Rideshare, Inc. (69W48383FK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -699,17 +745,18 @@
 		};
 		BE0D70301BA5024400F201FE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 251EEB9B4EB1B49A1F884916 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 304C0AF97535EACB3FA92532 /* Pods-Yokwe2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Yokwe2/.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Demarreau (MGNCLU2LGU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 69W48383FK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"~/Documents/FacebookSDK",
 				);
 				INFOPLIST_FILE = Yokwe2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -720,23 +767,24 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Yokwe2/Yokwe2-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		BE0D70311BA5024400F201FE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 822734AD1EB616F5447E9078 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 53B3B76BEDBE01F636B9A2AC /* Pods-Yokwe2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Yokwe2/.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Demarreau (MGNCLU2LGU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 69W48383FK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"~/Documents/FacebookSDK",
 				);
 				INFOPLIST_FILE = Yokwe2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -746,7 +794,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Yokwe2/Yokwe2-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -765,7 +813,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "demz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -780,7 +828,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "demz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

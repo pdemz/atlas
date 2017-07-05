@@ -31,21 +31,21 @@ class PaymentManagementController: UITableViewController {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         //If the server returns info, then display the bank/card info and the delete button
         YokweHelper.getCardInfo { (result) in
             print("card: \(result)")
             if let cardInfo = result{
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.creditCard.text = cardInfo
-                    self.creditCard.hidden = false
+                    self.creditCard.isHidden = false
                     
-                    self.deleteCardButton.enabled = true
-                    self.deleteCardButton.hidden = false
+                    self.deleteCardButton.isEnabled = true
+                    self.deleteCardButton.isHidden = false
                     
-                    self.addCardButton.enabled = false
-                    self.addCardButton.hidden = true
+                    self.addCardButton.isEnabled = false
+                    self.addCardButton.isHidden = true
                 })
             }
             
@@ -55,27 +55,27 @@ class PaymentManagementController: UITableViewController {
             print(result)
             if let bankInfo = result{
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.bankAccount.text = bankInfo
-                    self.bankAccount.hidden = false
+                    self.bankAccount.isHidden = false
                     
-                    self.deleteBankButton.enabled = true
-                    self.deleteBankButton.hidden = false
+                    self.deleteBankButton.isEnabled = true
+                    self.deleteBankButton.isHidden = false
                     
-                    self.addBankButton.enabled = false
-                    self.addBankButton.hidden = true
+                    self.addBankButton.isEnabled = false
+                    self.addBankButton.isHidden = true
                 })
             }
         }
 
     }
     
-    @IBAction func deleteCreditCard(sender: AnyObject) {
+    @IBAction func deleteCreditCard(_ sender: AnyObject) {
         
         let alertString = "If you remove your card, you won't be able to get a ride until you enter a new one"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
             
             //Delete card from server
             YokweHelper.deleteCard()
@@ -85,41 +85,41 @@ class PaymentManagementController: UITableViewController {
             
         })
         
-        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.Default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.default, handler: nil)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
-    @IBAction func deleteBankAccount(sender: AnyObject) {
+    @IBAction func deleteBankAccount(_ sender: AnyObject) {
         
         //Pop up notificiation
         let alertString = "If you remove your bank account, we can't pay you until you add a new one"
-        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: {(ACTION) in
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
             YokweHelper.deleteBank()
             
             self.setBankFieldToEmpty()
             
         })
         
-        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.Default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Never mind", style: UIAlertActionStyle.default, handler: nil)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     
-    @IBAction func addCard(sender: AnyObject) {
+    @IBAction func addCard(_ sender: AnyObject) {
         //open credit card controller
         presentPaymentForm()
         
     }
     
-    @IBAction func addBank(sender: AnyObject) {
+    @IBAction func addBank(_ sender: AnyObject) {
         //open bank account controller
         presentBankForm()
         
@@ -127,50 +127,50 @@ class PaymentManagementController: UITableViewController {
     
     func closeView(){
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func presentPaymentForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "PaymentForm") as! PaymentFormViewController
         vc = UIHelper.customizeVC(vc) as! PaymentFormViewController
         vc.title = "Payment Info"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     func presentBankForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "DriverAccountCreation") as! DriverAccountCreationViewController
         vc = UIHelper.customizeVC(vc) as! DriverAccountCreationViewController
         vc.title = "Create driver account"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = UIHelper.customizeNavController(navController)
         
-        navController.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
-        presentViewController(navController, animated: true, completion: nil)
+        navController.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+        present(navController, animated: true, completion: nil)
     }
     
     func setCardFieldToEmpty(){
-        deleteCardButton.enabled = false
-        deleteCardButton.hidden = true
+        deleteCardButton.isEnabled = false
+        deleteCardButton.isHidden = true
         
-        creditCard.hidden = true
+        creditCard.isHidden = true
         
-        addCardButton.hidden = false
-        addCardButton.enabled = true
+        addCardButton.isHidden = false
+        addCardButton.isEnabled = true
     }
     
     func setBankFieldToEmpty(){
-        deleteBankButton.enabled = false
-        deleteBankButton.hidden = true
+        deleteBankButton.isEnabled = false
+        deleteBankButton.isHidden = true
         
-        bankAccount.hidden = true
+        bankAccount.isHidden = true
         
-        addBankButton.hidden = false
-        addBankButton.enabled = true
+        addBankButton.isHidden = false
+        addBankButton.isEnabled = true
     }
     
 }

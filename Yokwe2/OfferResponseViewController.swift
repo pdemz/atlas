@@ -41,7 +41,7 @@ class OfferResponseViewController: UIViewController {
         
         totalTripTimeLabel.text = "\(Int(totalTripTime!/3600)) hr \(Int(totalTripTime!/60)%60) min total"
                 
-        price.text = "$\((driver?.price!)!)"
+        price.text = driver!.price!
         
         price.adjustsFontSizeToFitWidth = true
         totalTripTimeLabel.adjustsFontSizeToFitWidth = true
@@ -51,7 +51,7 @@ class OfferResponseViewController: UIViewController {
             self.title = "Ride offer"
             name.text = driver!.name
             photo.image = driver!.photo
-            addedTimeLabel.hidden = true
+            addedTimeLabel.isHidden = true
         }else{
             self.title = "Ride request"
             name.text = rider!.name
@@ -71,25 +71,25 @@ class OfferResponseViewController: UIViewController {
         self.mapView.padding = mapInsets
         //Split rider origin and destination
         
-        let riderOriginSplit = rider!.origin!.componentsSeparatedByString(",")
-        let riderDestinationSplit = rider!.destination!.componentsSeparatedByString(",")
+        let riderOriginSplit = rider!.origin!.components(separatedBy: ",")
+        let riderDestinationSplit = rider!.destination!.components(separatedBy: ",")
         let riderOrigin = CLLocationCoordinate2D(latitude: CLLocationDegrees((riderOriginSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((riderOriginSplit[1] as NSString).doubleValue))
         let riderDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((riderDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((riderDestinationSplit[1] as NSString).doubleValue))
 
         let riderStartMarker = GMSMarker(position: riderOrigin)
-        riderStartMarker.icon = GMSMarker.markerImageWithColor(UIColor.greenColor())
+        riderStartMarker.icon = GMSMarker.markerImage(with: UIColor.green)
         
         let riderEndMarker = GMSMarker(position: riderDestination)
         riderStartMarker.title = "Start"
         riderEndMarker.title = "End"
         
         let bounds = GMSCoordinateBounds(coordinate: riderOrigin, coordinate: riderDestination)
-        let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/5)
+        let update = GMSCameraUpdate.fit(bounds, withPadding: self.mapView.frame.width/5)
         self.mapView.moveCamera(update)
         
         if(type == "drive"){
-            let driverOriginSplit = driver!.origin!.componentsSeparatedByString(",")
-            let driverDestinationSplit = driver!.destination!.componentsSeparatedByString(",")
+            let driverOriginSplit = driver!.origin!.components(separatedBy: ",")
+            let driverDestinationSplit = driver!.destination!.components(separatedBy: ",")
             let driverOrigin = CLLocationCoordinate2D(latitude: CLLocationDegrees((driverOriginSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((driverOriginSplit[1] as NSString).doubleValue))
             let driverDestination = CLLocationCoordinate2D(latitude: CLLocationDegrees((driverDestinationSplit[0]as NSString).doubleValue), longitude: CLLocationDegrees((driverDestinationSplit[1] as NSString).doubleValue))
             
@@ -105,7 +105,7 @@ class OfferResponseViewController: UIViewController {
             riderEndMarker.title = "Rider End"
             
             let bounds = GMSCoordinateBounds(coordinate: driverOrigin, coordinate: driverDestination)
-            let update = GMSCameraUpdate.fitBounds(bounds, withPadding: self.mapView.frame.width/5)
+            let update = GMSCameraUpdate.fit(bounds, withPadding: self.mapView.frame.width/5)
             self.mapView.moveCamera(update)
             
             let mh = MapsHelper()
@@ -116,7 +116,7 @@ class OfferResponseViewController: UIViewController {
             
             mh.makeDirectionsRequest({(result) -> Void in
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     SharingCenter.sharedInstance.myPath = result
                     let newPath = GMSPath(fromEncodedPath: result)
                     let polyLine = GMSPolyline(path: newPath)
@@ -134,7 +134,7 @@ class OfferResponseViewController: UIViewController {
             
             //Show polyline
             mh.makeDirectionsRequest({(result) -> Void in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     SharingCenter.sharedInstance.myPath = result
                     let newPath = GMSPath(fromEncodedPath: result)
                     let polyLine = GMSPolyline(path: newPath)
@@ -151,17 +151,17 @@ class OfferResponseViewController: UIViewController {
         //Generate path with maps helper
     }
 
-    @IBAction func pressedReject(sender: AnyObject) {
+    @IBAction func pressedReject(_ sender: AnyObject) {
         if type == "ride"{
             YokweHelper.driveReject((driver?.userID)!)
         }else{
             YokweHelper.rideReject((rider?.userID)!)
         }
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func pressedAccept(sender: AnyObject) {
+    @IBAction func pressedAccept(_ sender: AnyObject) {
         if type == "ride"{
             
             
@@ -169,19 +169,19 @@ class OfferResponseViewController: UIViewController {
             //Notify the rider if they need to enter a credit card
             if SharingCenter.sharedInstance.customerToken == nil{
                 let alertString = "You must have a credit card on file before you can accept rides. You can add one via the payments section in the main menu."
-                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-                let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
+                let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(okAction)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }else{
                 //Accept the ride request and open the active trip view
                 
                 YokweHelper.acceptRequest((driver?.userID)!, requestType: "drive")
                 
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.getUpdate()
                 
-                dismissViewControllerAnimated(true, completion: nil)
+                dismiss(animated: true, completion: nil)
     
             }
         }else{
@@ -190,10 +190,10 @@ class OfferResponseViewController: UIViewController {
             if SharingCenter.sharedInstance.accountToken == nil{
                 //Alert the driver that they need to create an account before they can drive people
                 let alertString = "You must add driver account info using the payments section of the main menu before you can drive people."
-                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.ActionSheet)
-                let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+                let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)
+                let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(okAction)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
 
             }else{
                 print("account token isn't nil for some reason")
@@ -202,22 +202,22 @@ class OfferResponseViewController: UIViewController {
                 
                 YokweHelper.acceptRequest((rider?.userID)!, requestType: "ride")
                 
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.getUpdate()
                 
-                dismissViewControllerAnimated(true, completion: nil)
+                dismiss(animated: true, completion: nil)
             }
         }
         
     }
     
-    @IBAction func tappedPhoto(sender: AnyObject) {
+    @IBAction func tappedPhoto(_ sender: AnyObject) {
         presentProfile()
     }
     
     
     func presentProfile(){
-        var selfProfile = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfile") as! UserProfileViewController
+        var selfProfile = self.storyboard?.instantiateViewController(withIdentifier: "UserProfile") as! UserProfileViewController
         selfProfile = customizeVC(selfProfile) as! UserProfileViewController
         
         //Get driver info
@@ -243,22 +243,22 @@ class OfferResponseViewController: UIViewController {
         }
         
         var navController = UINavigationController(rootViewController: selfProfile)
-        navController = customizeNavController(navController)
+        navController = UIHelper.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
-    func customizeNavController(navController: UINavigationController) -> UINavigationController{
+    func customizeNavController(_ navController: UINavigationController) -> UINavigationController{
         navController.navigationBar.tintColor = colorHelper.orange
 
         return navController
     }
     
-    func customizeVC(vc:UIViewController) -> UIViewController{
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+    func customizeVC(_ vc:UIViewController) -> UIViewController{
+        vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         
         //Dismiss button
-        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.Plain, target: vc, action: "closeView")
+        let dismissButton = UIBarButtonItem(image: UIImage(named: "Close"), style: UIBarButtonItemStyle.plain, target: vc, action: "closeView")
         vc.navigationItem.leftBarButtonItem = dismissButton
         
         return vc
@@ -266,25 +266,25 @@ class OfferResponseViewController: UIViewController {
     
     //Actually just presents a pop up
     func presentCustomerForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("PaymentForm") as! PaymentFormViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "PaymentForm") as! PaymentFormViewController
         vc = RideOrDriveViewController.customizeVC(vc) as! PaymentFormViewController
         vc.title = "Payment Info"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = RideOrDriveViewController.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     func presentDriverForm(){
-        var vc = self.storyboard?.instantiateViewControllerWithIdentifier("DriverAccountCreation") as! DriverAccountCreationViewController
+        var vc = self.storyboard?.instantiateViewController(withIdentifier: "DriverAccountCreation") as! DriverAccountCreationViewController
         vc = RideOrDriveViewController.customizeVC(vc) as! DriverAccountCreationViewController
         vc.title = "Create Driver Account"
         
         var navController = UINavigationController(rootViewController: vc)
         navController = RideOrDriveViewController.customizeNavController(navController)
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
 
 }
