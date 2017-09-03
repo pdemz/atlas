@@ -54,10 +54,9 @@ class YokweHelper{
     class func getActiveTrips(_ completion:@escaping (_ result:[[TripStatusObject]])->Void){
         let addr = URL(string: "\(serverAddress)/atlas")
         var request = URLRequest(url: addr!)
-        let session = URLSession.shared
         
         //Add parameters
-        let type = "getActiveTrips"
+        let type = "getTripsAndRequests"
         
         request.httpMethod = "POST"
         var postString = "type=\(type)"
@@ -100,6 +99,8 @@ class YokweHelper{
                             rideStatusObjects.append(tt)
                         }
                         
+                        
+                        //Put all trips into one object (containing 2 lists of trips) to be returned
                         tripStatusObjects.append(driveStatusObjects)
                         tripStatusObjects.append(rideStatusObjects)
                         
@@ -512,8 +513,7 @@ class YokweHelper{
     }
     
     //Create stripe account
-    class func createStripeAccount(_ firstName:String, lastName:String, day:String, month:String,year:String,
-                                 line1:String, line2:String?, city:String, state:String, zip:String, last4:String, completion:@escaping (_ result:String?)->Void){
+    class func createStripeAccount(_ firstName:String, lastName:String, day:String, month:String,year:String, completion:@escaping (_ result:String?)->Void){
         let addr = URL(string: "\(serverAddress)/profile")
         var request = URLRequest(url: addr!)
 
@@ -521,7 +521,7 @@ class YokweHelper{
         let type = "createStripeAccount"
         
         var postString = "type=\(type)&firstName=\(firstName)&lastName=\(lastName)" +
-        "&day=\(day)&month=\(month)&year=\(year)&line1=\(line1)&city=\(city)&state=\(state)&zip=\(zip)&last4=\(last4)"
+        "&day=\(day)&month=\(month)&year=\(year)"
         postString = addCredentials(postString)
         
         request.httpMethod = "POST"

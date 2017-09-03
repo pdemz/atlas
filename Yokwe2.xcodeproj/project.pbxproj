@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02B0D3A7177A30770F35F903 /* libPods-Yokwe2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 605F2634DF2B5EF527B61D21 /* libPods-Yokwe2.a */; };
+		7613E7F072D375C0139F401E /* Pods_Yokwe2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737D8DD0AD9EFBD686A7A367 /* Pods_Yokwe2.framework */; };
 		BE0128CB1BE2BE2200D78FD7 /* DriverOrRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0128CA1BE2BE2200D78FD7 /* DriverOrRideViewController.swift */; };
 		BE0128CD1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0128CC1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift */; };
 		BE0128CF1BE2CA8800D78FD7 /* Rider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0128CE1BE2CA8800D78FD7 /* Rider.swift */; };
@@ -30,6 +30,7 @@
 		DB0914CC1C867F2300D52B36 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB0914CB1C867F2300D52B36 /* Launch Screen.storyboard */; };
 		DB0A3E7C1C6180D500187B9C /* SlideOutMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */; };
 		DB1DD0391CD64C5E00645C0E /* EmailSignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */; };
+		DB1E74AE1F45AED1001A2C00 /* TripsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E74AD1F45AED1001A2C00 /* TripsTableViewController.swift */; };
 		DB2727D41C723DEF00A528CE /* DriverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */; };
 		DB4B88B11BFC01F50006F974 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */; };
 		DB5543F61C7B6058001503EB /* DashboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */; };
@@ -59,6 +60,7 @@
 		DBA80AEC1C5FBF85003B8B73 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA80AEB1C5FBF85003B8B73 /* PhoneNumberViewController.swift */; };
 		DBA80AF21C605CC2003B8B73 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA80AF11C605CC2003B8B73 /* SWRevealViewController.m */; };
 		DBB1C46F1D2DE7F9003E6633 /* PaymentManagementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB1C46E1D2DE7F9003E6633 /* PaymentManagementController.swift */; };
+		DBBF9A9D1F400D8600B8BF62 /* SlideOutMenuContainingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBBF9A9C1F400D8600B8BF62 /* SlideOutMenuContainingViewController.swift */; };
 		DBCB03171D06114E001AC1A7 /* RideOrDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */; };
 		DBD32B201C8161440015CF06 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD32B1F1C8161440015CF06 /* TripViewController.swift */; };
 		DBD4D3601C4C305F007CCA7E /* MapsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */; };
@@ -97,7 +99,7 @@
 /* Begin PBXFileReference section */
 		304C0AF97535EACB3FA92532 /* Pods-Yokwe2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yokwe2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Yokwe2/Pods-Yokwe2.debug.xcconfig"; sourceTree = "<group>"; };
 		53B3B76BEDBE01F636B9A2AC /* Pods-Yokwe2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yokwe2.release.xcconfig"; path = "Pods/Target Support Files/Pods-Yokwe2/Pods-Yokwe2.release.xcconfig"; sourceTree = "<group>"; };
-		605F2634DF2B5EF527B61D21 /* libPods-Yokwe2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Yokwe2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		737D8DD0AD9EFBD686A7A367 /* Pods_Yokwe2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Yokwe2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE0128CA1BE2BE2200D78FD7 /* DriverOrRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverOrRideViewController.swift; sourceTree = "<group>"; };
 		BE0128CC1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderOptionsTableViewController.swift; sourceTree = "<group>"; };
 		BE0128CE1BE2CA8800D78FD7 /* Rider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rider.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		DB0914CB1C867F2300D52B36 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideOutMenuViewController.swift; sourceTree = "<group>"; };
 		DB1DD0381CD64C5E00645C0E /* EmailSignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailSignupViewController.swift; sourceTree = "<group>"; };
+		DB1E74AD1F45AED1001A2C00 /* TripsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsTableViewController.swift; sourceTree = "<group>"; };
 		DB2727D31C723DEF00A528CE /* DriverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverTableViewCell.swift; sourceTree = "<group>"; };
 		DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		DB5543F51C7B6058001503EB /* DashboardTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardTableViewController.swift; sourceTree = "<group>"; };
@@ -155,6 +158,7 @@
 		DBA80AF01C605CC2003B8B73 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		DBA80AF11C605CC2003B8B73 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		DBB1C46E1D2DE7F9003E6633 /* PaymentManagementController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentManagementController.swift; sourceTree = "<group>"; };
+		DBBF9A9C1F400D8600B8BF62 /* SlideOutMenuContainingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideOutMenuContainingViewController.swift; sourceTree = "<group>"; };
 		DBCB03161D06114E001AC1A7 /* RideOrDriveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideOrDriveViewController.swift; sourceTree = "<group>"; };
 		DBD32B1F1C8161440015CF06 /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		DBD4D35F1C4C305F007CCA7E /* MapsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsHelper.swift; sourceTree = "<group>"; };
@@ -177,8 +181,8 @@
 				DB4B88B11BFC01F50006F974 /* FBSDKCoreKit.framework in Frameworks */,
 				DB914AAC1C9A37D1002BA5A3 /* Stripe.framework in Frameworks */,
 				DB7021B91EFC950E00C2AE50 /* FBSDKLoginKit.framework in Frameworks */,
-				02B0D3A7177A30770F35F903 /* libPods-Yokwe2.a in Frameworks */,
 				DB7021AF1EFC941800C2AE50 /* Stripe.framework in Frameworks */,
+				7613E7F072D375C0139F401E /* Pods_Yokwe2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +276,7 @@
 				DBCB03151D0610E2001AC1A7 /* Login */,
 				DBE564C81CF5DC7A00B96659 /* ReviewViewController.swift */,
 				DBD9A41A1DA1D36D00FC1780 /* TripsViewController.swift */,
+				DB1E74AD1F45AED1001A2C00 /* TripsTableViewController.swift */,
 				DB81671B1CE6335200712459 /* TripDetails.swift */,
 				DB8C94701CBAE9B100FFF48C /* BankAccountCreation.swift */,
 				DB68DA481CA0BEA8005B4158 /* PaymentConfirmationViewController.swift */,
@@ -292,6 +297,7 @@
 				BE0128CC1BE2C9E900D78FD7 /* RiderOptionsTableViewController.swift */,
 				BE8BD91C1BE81E9900B77BDD /* ConfirmRiderViewController.swift */,
 				DB0A3E7B1C6180D500187B9C /* SlideOutMenuViewController.swift */,
+				DBBF9A9C1F400D8600B8BF62 /* SlideOutMenuContainingViewController.swift */,
 				DB98A07D1C6943DD00FBCAA7 /* SettingsTableViewController.swift */,
 				DB68DA4A1CAB20C5005B4158 /* DriverAccountCreationViewController.swift */,
 			);
@@ -374,7 +380,7 @@
 				DB7021B61EFC950E00C2AE50 /* FBSDKShareKit.framework */,
 				DB914AAB1C9A37D1002BA5A3 /* Stripe.framework */,
 				DB4B88B01BFC01F50006F974 /* FBSDKCoreKit.framework */,
-				605F2634DF2B5EF527B61D21 /* libPods-Yokwe2.a */,
+				737D8DD0AD9EFBD686A7A367 /* Pods_Yokwe2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -585,6 +591,7 @@
 				BE92C9651BC1ABEB008D22E5 /* DriverOptionsTableViewController.swift in Sources */,
 				BE0128CF1BE2CA8800D78FD7 /* Rider.swift in Sources */,
 				DBB1C46F1D2DE7F9003E6633 /* PaymentManagementController.swift in Sources */,
+				DB1E74AE1F45AED1001A2C00 /* TripsTableViewController.swift in Sources */,
 				DBA80AEC1C5FBF85003B8B73 /* PhoneNumberViewController.swift in Sources */,
 				BEC40C851BDED3C60032A8F4 /* MapTestViewController.swift in Sources */,
 				DB5543F61C7B6058001503EB /* DashboardTableViewController.swift in Sources */,
@@ -601,6 +608,7 @@
 				DBD9A4211DA1E9C700FC1780 /* TripStatusObject.swift in Sources */,
 				DB0A3E7C1C6180D500187B9C /* SlideOutMenuViewController.swift in Sources */,
 				DB68DA4B1CAB20C5005B4158 /* DriverAccountCreationViewController.swift in Sources */,
+				DBBF9A9D1F400D8600B8BF62 /* SlideOutMenuContainingViewController.swift in Sources */,
 				DB9D94A31C7BAC5D0072992B /* RideRequestResponseViewController.swift in Sources */,
 				DBD9A41B1DA1D36D00FC1780 /* TripsViewController.swift in Sources */,
 				DB979C061C4D50A9000B91B4 /* FacebookHelper.swift in Sources */,

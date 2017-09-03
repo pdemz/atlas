@@ -13,9 +13,7 @@ class DashboardTableViewCell: UITableViewCell {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var routeLabel: UILabel!
     @IBOutlet weak var modeLabel: UILabel!
-    @IBOutlet weak var photo: UIImageView!
     
-    var photoImage:UIImage?
     var name:String?
     var mode:String?
     var pending:Bool?
@@ -25,10 +23,8 @@ class DashboardTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         modeLabel.textColor = colorHelper.pink
         
-        photo.image = photoImage
-        photo.layer.masksToBounds = false
-        photo.layer.cornerRadius = photo.frame.height/2
-        photo.clipsToBounds = true
+        routeLabel.adjustsFontSizeToFitWidth = true
+        statusLabel.adjustsFontSizeToFitWidth = true
         
         modeLabel.text = mode!
         routeLabel.text = "\(origin) to \(destination)"
@@ -39,10 +35,10 @@ class DashboardTableViewCell: UITableViewCell {
     
     func statusHandler(){
         if pending!{
-            statusLabel.text = "\(mode) request pending"
+            statusLabel.text = "Waiting for someone to respond"
             statusLabel.textColor = colorHelper.maroonOrange
         }else{
-            statusLabel.text = "Waiting for \(name) to respond"
+            statusLabel.text = "Request sent. Waiting for \(name) to respond"
             statusLabel.textColor = colorHelper.orange
         }
         

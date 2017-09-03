@@ -15,11 +15,6 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
     @IBOutlet weak var month: UITextField!
     @IBOutlet weak var day: UITextField!
     @IBOutlet weak var year: UITextField!
-    @IBOutlet weak var ssn: UITextField!
-    @IBOutlet weak var street: UITextField!
-    @IBOutlet weak var city: UITextField!
-    @IBOutlet weak var state: UITextField!
-    @IBOutlet weak var zip: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +22,7 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
         for case let textField as UITextField in (self.view.subviews.first?.subviews.first?.subviews)!{
             textField.delegate = self
             
-            if textField == month || textField == day || textField == year || textField == ssn || textField == zip{
+            if textField == month || textField == day || textField == year{
                 textField.keyboardType = UIKeyboardType.numberPad
             }
         }
@@ -35,7 +30,7 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
     
     func saveInfo() {
         if fieldsAreCorrectLength(){
-            YokweHelper.createStripeAccount(first.text!, lastName: last.text!, day: day.text!, month: month.text!, year: year.text!, line1: street.text!.replacingOccurrences(of: " ", with: "+"), line2: nil, city: city.text!, state: state.text!, zip: zip.text!, last4: ssn.text!, completion: { (result) -> Void in
+            YokweHelper.createStripeAccount(first.text!, lastName: last.text!, day: day.text!, month: month.text!, year: year.text!, completion: { (result) -> Void in
                 
                 var alertString:String?
                 var okAction:UIAlertAction?
@@ -97,14 +92,8 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
             maxLength = 2
         }else if textField == day{
             maxLength = 2
-        }else if textField == state{
-            maxLength = 2
-        }else if textField == ssn{
-            maxLength = 4
         }else if textField == year{
             maxLength = 4
-        }else if textField == zip{
-            maxLength = 5
         }else{
             return true
         }
@@ -124,14 +113,8 @@ class DriverAccountCreationViewController: UIViewController, UITextFieldDelegate
                     maxLength = 2
                 }else if textField == day{
                     maxLength = 2
-                }else if textField == state{
-                    maxLength = 2
-                }else if textField == ssn{
-                    maxLength = 4
                 }else if textField == year{
                     maxLength = 4
-                }else if textField == zip{
-                    maxLength = 5
                 }else{
                     maxLength = (textField.text?.characters.count)!
                 }

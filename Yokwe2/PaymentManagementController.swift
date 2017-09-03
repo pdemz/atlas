@@ -120,8 +120,8 @@ class PaymentManagementController: UITableViewController {
     }
     
     @IBAction func addBank(_ sender: AnyObject) {
-        //open bank account controller
-        presentBankForm()
+        //open stripe account form. Need functionality here to add payment methods to existing accounts
+        presentStripeAccountForm()
         
     }
     
@@ -141,7 +141,7 @@ class PaymentManagementController: UITableViewController {
         present(navController, animated: true, completion: nil)
     }
     
-    func presentBankForm(){
+    func presentStripeAccountForm(){
         var vc = self.storyboard?.instantiateViewController(withIdentifier: "DriverAccountCreation") as! DriverAccountCreationViewController
         vc = UIHelper.customizeVC(vc) as! DriverAccountCreationViewController
         vc.title = "Create driver account"

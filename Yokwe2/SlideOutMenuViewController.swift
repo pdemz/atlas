@@ -27,10 +27,6 @@ class SlideOutMenuViewController: UITableViewController {
         case 2:
             //Open settings
             presentSettings()
-
-        case 3:
-            //Switch from riding to driving
-            switchMode()
             
         default:
             self.revealViewController().revealToggle(animated: true)
