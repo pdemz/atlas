@@ -47,10 +47,11 @@ class DriverOptionsTableViewController: UITableViewController {
         self.title = ""
     }
     
+    //Get list of drivers
     func populateRows(){
         YokweHelper.getDriverList{(result) -> Void in
             
-            print("call to server has completed")
+            //If there are none available, present an alert
             if result.count == 0{
                 DispatchQueue.main.async(execute: {
                     let alertString = "No drivers heading your way right now. We'll let you know when one becomes available!"
@@ -62,6 +63,7 @@ class DriverOptionsTableViewController: UITableViewController {
                     self.present(alert, animated: true, completion: nil)
                 })
                 
+            //If there are drivers, add their FB info, then reload the data in the tableview to show the drivers
             }else{
                 
                 self.driverList = result
@@ -71,6 +73,7 @@ class DriverOptionsTableViewController: UITableViewController {
                             let newDriver = result
                             DispatchQueue.main.async(execute: {
                                 self.drivers.append(newDriver)
+                                
                                 if index == self.driverList!.count-1 || self.driverList == nil{
                                     self.tableView.reloadData()
                                     self.indicatorr.stopAnimating()
@@ -123,7 +126,6 @@ class DriverOptionsTableViewController: UITableViewController {
         cell.alpha = 0
         
         if indexPath.row < drivers.count{
-            //let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
             let driver = drivers[indexPath.row]
             
             cell.name.text = driver.name

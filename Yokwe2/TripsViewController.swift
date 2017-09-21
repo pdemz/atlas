@@ -36,14 +36,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func getTrips(){
         YokweHelper.getActiveTrips{(result) in
-            self.rideTrips = result[0]
-            self.driveTrips = result[1]
-            
-            DispatchQueue.main.async(execute: {
-                self.rideRequestsTableView.reloadData()
-                self.driveOffersTableView.reloadData()
-                
-            })
+
         }
     }
 
@@ -65,7 +58,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.from.text = driveTrips[indexPath.row].from!
             cell.to.text = driveTrips[indexPath.row].to!
             cell.status.text = driveTrips[indexPath.row].status!
-            cell.isActive = driveTrips[indexPath.row].isActive
+            //cell.isActive = driveTrips[indexPath.row].isActive
     
             return cell
         }else{
@@ -74,7 +67,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.from.text = rideTrips[indexPath.row].from!
             cell.to.text = rideTrips[indexPath.row].to!
             cell.status.text = rideTrips[indexPath.row].status!
-            cell.isActive = rideTrips[indexPath.row].isActive
+            //cell.isActive = rideTrips[indexPath.row].isActive
             
             return cell
         }

@@ -28,8 +28,6 @@ class FacebookHelper{
             if ((error) == nil){
                 let dict = result as! NSDictionary
                 driver.name = dict.value(forKey: "first_name") as? String
-                print(result)
-                print(dict.value(forKey: "email"))
                 let educationList = dict.value(forKey: "education") as? [NSDictionary]
                 let school = educationList?.last
                 var education = ""
@@ -44,12 +42,9 @@ class FacebookHelper{
                 }*/
                 
                 driver.education = education
-                print(driver.education)
                 
                 let url = ((dict.value(forKey: "picture") as AnyObject).object(forKey: "data") as AnyObject).object(forKey: "url") as! String
-                print(url)
                 if let picURL = URL(string: url){
-                    print(picURL)
                     if let data = try? Data(contentsOf: picURL){
                         
                         driver.photo = UIImage(data: data)!

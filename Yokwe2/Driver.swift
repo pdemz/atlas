@@ -26,6 +26,7 @@ class Driver {
     var aboutMe: String?
     var price: String?
     var education:String?
+    var tripID:String?
     
     init(name: String?, photo: UIImage?, mutualFriends: String?, fareEstimate: String?, eta:String?, userID:String?, accessToken:String?, addedTime:Double?){
         

@@ -8,40 +8,42 @@
 
 import UIKit
 
-class DashboardTableViewCell: UITableViewCell {
+class DashboardTableViewCell: UITableViewCell{
+    
+    var cellDelegate: TripsCellDelegate?
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var routeLabel: UILabel!
     @IBOutlet weak var modeLabel: UILabel!
+    @IBOutlet weak var whiteBackingView: UIView!
+    @IBOutlet weak var deleteButton: UIButton!
     
-    var name:String?
     var mode:String?
-    var pending:Bool?
+    var status:String?
     var origin:String?
     var destination:String?
+    var indexPath:IndexPath?
     
     override func awakeFromNib() {
-        modeLabel.textColor = colorHelper.pink
+        super.awakeFromNib()
+        
+        whiteBackingView.layer.shadowOpacity = 0.1
+        whiteBackingView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        whiteBackingView.layer.shadowRadius = 3
         
         routeLabel.adjustsFontSizeToFitWidth = true
         statusLabel.adjustsFontSizeToFitWidth = true
         
-        modeLabel.text = mode!
-        routeLabel.text = "\(origin) to \(destination)"
-        
-        statusHandler()
-        
     }
     
-    func statusHandler(){
-        if pending!{
-            statusLabel.text = "Waiting for someone to respond"
-            statusLabel.textColor = colorHelper.maroonOrange
-        }else{
-            statusLabel.text = "Request sent. Waiting for \(name) to respond"
-            statusLabel.textColor = colorHelper.orange
-        }
+    //When you press the delete button, the delegate method in TripsViewController is called
+    @IBAction func didPressDelete(_ sender: Any) {
+        cellDelegate?.didPressDeleteButton((indexPath?.row)!)
         
     }
-    
+
+}
+
+protocol TripsCellDelegate : class {
+    func didPressDeleteButton(_ tag: Int)
 }

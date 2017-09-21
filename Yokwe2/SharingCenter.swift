@@ -34,6 +34,7 @@ class SharingCenter{
     var accountToken:String?
     var password:String?
     var name:String?
+    var latestTripID:String?
     
     static let sharedInstance = SharingCenter()
     

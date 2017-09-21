@@ -12,13 +12,15 @@ class TripStatusObject{
     var to:String?
     var from:String?
     var status:String?
-    var isActive = false
+    var mode:String?
+    var tripID:Int?
     
-    init(newTo:String, newFrom:String, newStatus:String, newIsActive:Bool){
+    init(newTo:String, newFrom:String, newStatus:String, newMode:String){
         to = newTo
         from = newFrom
         status = newStatus
-        self.isActive = newIsActive
+        mode = newMode
+        
     }
     
     

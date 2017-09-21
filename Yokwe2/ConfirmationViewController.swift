@@ -95,7 +95,7 @@ class ConfirmationViewController: UIViewController {
             
         //Otherwise let the request go through
         }else{
-            YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!)
+            YokweHelper.driverSelection(driver.userID!, addedTime: String(driver.addedTime!), price: driver.price!, driverTripID: driver.tripID!)
             
             let alertString = "You will be alerted when \(driver.name!) responds to your request"
             let alert = UIAlertController(title: "", message: alertString, preferredStyle: UIAlertControllerStyle.actionSheet)

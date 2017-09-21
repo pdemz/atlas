@@ -113,7 +113,7 @@ class ConfirmRiderViewController: UIViewController {
         var alertString = "You will be alerted when \(rider.name!) responds to your offer"
         
         var okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: {(ACTION) in
-            YokweHelper.riderSelection(self.rider.userID!, addedTime: self.rider.addedTime!, price: self.rider.price!)
+            YokweHelper.riderSelection(self.rider.userID!, addedTime: self.rider.addedTime!, price: self.rider.price!, riderTripID: self.rider.tripID!)
             self.returnToHomeScreen()
         })
         

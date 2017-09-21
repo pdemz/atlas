@@ -9,12 +9,92 @@
 import Foundation
 import FBSDKCoreKit
 import UIKit
-
+import Alamofire
 class YokweHelper{
     
-    //static let serverAddress = "http://localhost:8080/yokwe"
-    static let serverAddress = "https://www.atlascarpool.com/"
+    static let serverAddress = "http://localhost:8080/yokwe/"
+    //static let serverAddress = "https://www.atlascarpool.com/"
 
+    //get all trips from server
+    class func getTrips(completion: @escaping (_ result:[TripStatusObject])->Void){
+        var urlString = "\(serverAddress)/atlas?type=getTrips"
+        urlString = addCredentials(urlString)
+
+        Alamofire.request(urlString).responseJSON { response in
+            if let json = response.result.value {
+                
+                //convert JSON into a list
+                let tripList = json as! [NSDictionary]
+                var tsoList = [TripStatusObject]()
+                
+                //Prepare to loop with asynchronous calls
+                let group = DispatchGroup()
+                
+                //convert each element of the list into a trip status object
+                //Requires calls to FB, requires sorting out which info you need
+                for trip in tripList{
+                    group.enter()
+                    
+                    //Create status sentence using FB request and mode
+                    let mode = trip.value(forKey: "mode") as! String
+                    let status = trip.value(forKey: "status") as! String
+                    var tsoStatus:String
+                    
+                    //If its a pending response, get the name from FB
+                    if status == "pendingResponse" {
+                        //Get user name
+                        var user = Driver.init(name: nil, photo: nil, mutualFriends: nil, fareEstimate: nil, eta: nil, userID: trip.value(forKey: "userID") as! String, accessToken: trip.value(forKey: "accessToken") as! String, addedTime: nil)
+                        
+                        FacebookHelper.driverGraphRequest(user, completion: {(result) -> Void in
+                            let name = result.name!
+                            var tsoStatus = "Waiting for \(name) to respond"
+                            
+                            let tso = TripStatusObject(newTo: trip.value(forKey: "destinationName") as! String, newFrom: trip.value(forKey:"originName") as! String, newStatus: tsoStatus, newMode: mode)
+                            tso.tripID = trip.value(forKey: "tripID") as! Int
+                            
+                            tsoList.append(tso)
+                            group.leave()
+                        })
+                        
+                    //Otherwise, its simple.
+                    }else{
+                        switch status{
+                        case "rideRequest":
+                            tsoStatus = "Ride request is in the queue"
+                        case "driveRequest":
+                            tsoStatus = "Driver offer is in the queue"
+                        default:
+                            tsoStatus = "Waiting for the driver to start the trip"
+                        }
+                        
+                        let tso = TripStatusObject(newTo: trip.value(forKey: "destinationName") as! String, newFrom: trip.value(forKey:"originName") as! String, newStatus: tsoStatus, newMode: mode)
+                        tso.tripID = trip.value(forKey: "tripID") as! Int
+                        
+                        tsoList.append(tso)
+                        group.leave()
+                        
+                    }
+                    
+                }
+                
+                //Once all elements are processed, return the list.
+                group.notify(queue: .main) {
+                    completion(tsoList)
+                }
+            }
+        }
+    }
+    
+    //delete trip from database
+    class func deleteTrip(tripID:Int){
+        var urlString = "\(serverAddress)/atlas?type=deleteTrip&tripID=\(tripID)"
+        urlString = addCredentials(urlString)
+        
+        Alamofire.request(urlString)
+        
+    }
+    
+    //get credit card info for the user
     class func getCardInfo(_ completion:@escaping (_ result:String?)->Void){
         let addr = URL(string: "\(serverAddress)/profile")
         var request = URLRequest(url: addr!)
@@ -27,7 +107,6 @@ class YokweHelper{
         postString = addCredentials(postString)
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
-        
         //Send HTTP post request
         URLSession.shared.dataTask(with: request){
             data, response, error in
@@ -51,7 +130,7 @@ class YokweHelper{
         }.resume()
     }
     
-    class func getActiveTrips(_ completion:@escaping (_ result:[[TripStatusObject]])->Void){
+    class func getActiveTrips(_ completion:@escaping (_ result:[TripStatusObject])->Void){
         let addr = URL(string: "\(serverAddress)/atlas")
         var request = URLRequest(url: addr!)
         
@@ -64,9 +143,7 @@ class YokweHelper{
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
         
-        var tripStatusObjects = [[TripStatusObject]]()
-        var rideStatusObjects = [TripStatusObject]()
-        var driveStatusObjects = [TripStatusObject]()
+        var tripStatusObjects = [TripStatusObject]()
         
         //Send HTTP post request
         let task = URLSession.shared.dataTask(with: request, completionHandler: {
@@ -82,27 +159,14 @@ class YokweHelper{
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary{
                      
-                        let drive = json.object(forKey: "drive") as! [NSDictionary]
-                        let ride = json.object(forKey: "ride") as! [NSDictionary]
+                        let trips = json.object(forKey: "trips") as! [NSDictionary]
                         
-                        //Store all the driving trips
-                        for trip in drive{
-                            let tt = TripStatusObject(newTo: trip.value(forKey: "to") as! String, newFrom: trip.value(forKey: "from") as! String, newStatus: trip.value(forKey: "status") as! String, newIsActive: trip.value(forKey: "isActive") as! Bool)
+                        //Store all the trips in a list
+                        for trip in trips{
+                            let tt = TripStatusObject(newTo: trip.value(forKey: "to") as! String, newFrom: trip.value(forKey: "from") as! String, newStatus: trip.value(forKey: "status") as! String, newMode: trip.value(forKey: "mode") as! String)
                 
-                            driveStatusObjects.append(tt)
+                            tripStatusObjects.append(tt)
                         }
-                        
-                        //Store all the riding trips
-                        for trip in ride{
-                            let tt = TripStatusObject(newTo: trip.value(forKey: "to") as! String, newFrom: trip.value(forKey: "from") as! String, newStatus: trip.value(forKey: "status") as! String, newIsActive: trip.value(forKey: "isActive") as! Bool)
-                            
-                            rideStatusObjects.append(tt)
-                        }
-                        
-                        
-                        //Put all trips into one object (containing 2 lists of trips) to be returned
-                        tripStatusObjects.append(driveStatusObjects)
-                        tripStatusObjects.append(rideStatusObjects)
                         
                         completion(tripStatusObjects)
                     }
@@ -309,7 +373,12 @@ class YokweHelper{
             
             //userID;accessToken_
             if let responseString = String(data: data!, encoding: String.Encoding.utf8){
-                let driverStringList = responseString.components(separatedBy: "_")
+                var driverStringList = responseString.components(separatedBy: "_")
+
+                //Get the tripID (first element) from the list then remove it.
+                let tripID = driverStringList.first
+                SharingCenter.sharedInstance.latestTripID = tripID
+                driverStringList.remove(at: 0)
                 
                 var driverList:[Driver] = [Driver]()
                 for driver in driverStringList{
@@ -319,6 +388,9 @@ class YokweHelper{
                         newDriver.price = newb[4]
                         newDriver.aboutMe = newb[5]
                         newDriver.name = newb[6]
+                        newDriver.tripID = newb[7]
+                        print("new driver tripid")
+                        print(newDriver.tripID)
                         driverList.append(newDriver)
                     }
                 }
@@ -362,7 +434,14 @@ class YokweHelper{
             
             //id;accessToken;origin;destination;addedTime_
             if let responseString = String(data: data!, encoding: String.Encoding.utf8){
-                let riderStringList = responseString.components(separatedBy: "_")
+                
+                var riderStringList = responseString.components(separatedBy: "_")
+                
+                //Get the tripID (first element) from the list then remove it.
+                let tripID = riderStringList.first
+                riderStringList.remove(at: 0)
+                SharingCenter.sharedInstance.latestTripID = tripID!
+                
                 var riderList:[Rider] = [Rider]()
                 
                 for rider in riderStringList{
@@ -372,12 +451,13 @@ class YokweHelper{
                         newRider.price = newb[6]
                         newRider.aboutMe = newb[7]
                         newRider.name = newb[8]
+                        newRider.tripID = newb[9]
                         
                         riderList.append(newRider)
                         
                     }
                 }
-                
+                    
                 completion(riderList)
                 
             }
@@ -919,7 +999,7 @@ class YokweHelper{
     }
     
     //Called after a rider is selected by a driver
-    class func riderSelection(_ riderID:String, addedTime:String, price:String){
+    class func riderSelection(_ riderID:String, addedTime:String, price:String, riderTripID:String){
         let addr = URL(string: "\(serverAddress)/atlas")
         var request = URLRequest(url: addr!)
 
@@ -928,10 +1008,9 @@ class YokweHelper{
         
         request.httpMethod = "POST"
         
-        var postString = "type=\(type)&riderID=\(riderID)&addedTime=\(addedTime)&price=\(price)"
+        var postString = "type=\(type)&riderID=\(riderID)&addedTime=\(addedTime)&price=\(price)&tripID=\(SharingCenter.sharedInstance.latestTripID!)&requesteeTripID=\(riderTripID)"
         postString = addCredentials(postString)
 
-        print("POST STRINGGGGG: \(postString)")
         request.httpBody = postString.data(using: String.Encoding.utf8)
         
         //Send HTTP post request
@@ -946,7 +1025,7 @@ class YokweHelper{
     }
     
     //Called after a driver is selected by a rider
-    class func driverSelection(_ driverID:String, addedTime:String, price:String){
+    class func driverSelection(_ driverID:String, addedTime:String, price:String, driverTripID:String){
         let addr = URL(string: "\(serverAddress)/atlas")
         var request = URLRequest(url: addr!)
 
@@ -954,7 +1033,10 @@ class YokweHelper{
         let type = "driverSelection"
         
         request.httpMethod = "POST"
-        var postString = "type=\(type)&driverID=\(driverID)&addedTime=\(addedTime)&price=\(price)"
+        
+        //add duration, distance, all this other crap that you don't have. Recalculate it on the server side.
+        var postString = "type=\(type)&driverID=\(driverID)&addedTime=\(addedTime)&price=\(price)&tripID=\(SharingCenter.sharedInstance.latestTripID!)&requesteeTripID=\(driverTripID)"
+        
         postString = addCredentials(postString)
 
         request.httpBody = postString.data(using: String.Encoding.utf8)

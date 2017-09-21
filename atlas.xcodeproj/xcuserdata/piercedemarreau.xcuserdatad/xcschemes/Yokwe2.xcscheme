@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BE0D700F1BA5024400F201FE"
                BuildableName = "Atlas.app"
-               BlueprintName = "Yokwe2"
-               ReferencedContainer = "container:Yokwe2.xcodeproj">
+               BlueprintName = "atlas"
+               ReferencedContainer = "container:atlas.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BE0D70241BA5024400F201FE"
-               BuildableName = "Yokwe2Tests.xctest"
-               BlueprintName = "Yokwe2Tests"
-               ReferencedContainer = "container:Yokwe2.xcodeproj">
+               BuildableName = "atlasTests.xctest"
+               BlueprintName = "atlasTests"
+               ReferencedContainer = "container:atlas.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,8 +44,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BE0D700F1BA5024400F201FE"
             BuildableName = "Atlas.app"
-            BlueprintName = "Yokwe2"
-            ReferencedContainer = "container:Yokwe2.xcodeproj">
+            BlueprintName = "atlas"
+            ReferencedContainer = "container:atlas.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -67,8 +67,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BE0D700F1BA5024400F201FE"
             BuildableName = "Atlas.app"
-            BlueprintName = "Yokwe2"
-            ReferencedContainer = "container:Yokwe2.xcodeproj">
+            BlueprintName = "atlas"
+            ReferencedContainer = "container:atlas.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -90,8 +90,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BE0D700F1BA5024400F201FE"
             BuildableName = "Atlas.app"
-            BlueprintName = "Yokwe2"
-            ReferencedContainer = "container:Yokwe2.xcodeproj">
+            BlueprintName = "atlas"
+            ReferencedContainer = "container:atlas.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

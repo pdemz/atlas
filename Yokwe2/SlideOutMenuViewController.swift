@@ -28,6 +28,11 @@ class SlideOutMenuViewController: UITableViewController {
             //Open settings
             presentSettings()
             
+        case 3:
+            //Open trips board
+            presentTrips()
+            
+            
         default:
             self.revealViewController().revealToggle(animated: true)
         }
@@ -94,6 +99,17 @@ class SlideOutMenuViewController: UITableViewController {
         }
         
         var navController = UINavigationController(rootViewController: selfProfile)
+        navController = UIHelper.customizeNavController(navController)
+        
+        present(navController, animated: true, completion: nil)
+    }
+    
+    func presentTrips(){
+        var trips = self.storyboard?.instantiateViewController(withIdentifier: "TripsBoard") as! TripsTableViewController
+        trips = customizeVC(trips) as! TripsTableViewController
+        trips.title = "Scheduled Trips"
+        
+        var navController = UINavigationController(rootViewController: trips)
         navController = UIHelper.customizeNavController(navController)
         
         present(navController, animated: true, completion: nil)

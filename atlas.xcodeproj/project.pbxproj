@@ -111,7 +111,7 @@
 		BE0D701A1BA5024400F201FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BE0D701C1BA5024400F201FE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		BE0D701F1BA5024400F201FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		BE0D70251BA5024400F201FE /* Yokwe2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Yokwe2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE0D70251BA5024400F201FE /* atlasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = atlasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE0D702A1BA5024400F201FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE0D702B1BA5024400F201FE /* Yokwe2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Yokwe2Tests.swift; sourceTree = "<group>"; };
 		BE0D70351BA5028300F201FE /* DateTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimeViewController.swift; sourceTree = "<group>"; };
@@ -221,7 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				BE0D70101BA5024400F201FE /* Atlas.app */,
-				BE0D70251BA5024400F201FE /* Yokwe2Tests.xctest */,
+				BE0D70251BA5024400F201FE /* atlasTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -388,9 +388,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BE0D700F1BA5024400F201FE /* Yokwe2 */ = {
+		BE0D700F1BA5024400F201FE /* atlas */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BE0D702F1BA5024400F201FE /* Build configuration list for PBXNativeTarget "Yokwe2" */;
+			buildConfigurationList = BE0D702F1BA5024400F201FE /* Build configuration list for PBXNativeTarget "atlas" */;
 			buildPhases = (
 				B24B3107202E311AF99FA755 /* [CP] Check Pods Manifest.lock */,
 				BE0D700C1BA5024400F201FE /* Sources */,
@@ -405,14 +405,14 @@
 			);
 			dependencies = (
 			);
-			name = Yokwe2;
+			name = atlas;
 			productName = Yokwe2;
 			productReference = BE0D70101BA5024400F201FE /* Atlas.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BE0D70241BA5024400F201FE /* Yokwe2Tests */ = {
+		BE0D70241BA5024400F201FE /* atlasTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BE0D70321BA5024400F201FE /* Build configuration list for PBXNativeTarget "Yokwe2Tests" */;
+			buildConfigurationList = BE0D70321BA5024400F201FE /* Build configuration list for PBXNativeTarget "atlasTests" */;
 			buildPhases = (
 				BE0D70211BA5024400F201FE /* Sources */,
 				BE0D70221BA5024400F201FE /* Frameworks */,
@@ -423,9 +423,9 @@
 			dependencies = (
 				BE0D70271BA5024400F201FE /* PBXTargetDependency */,
 			);
-			name = Yokwe2Tests;
+			name = atlasTests;
 			productName = Yokwe2Tests;
-			productReference = BE0D70251BA5024400F201FE /* Yokwe2Tests.xctest */;
+			productReference = BE0D70251BA5024400F201FE /* atlasTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -467,7 +467,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BE0D700B1BA5024400F201FE /* Build configuration list for PBXProject "Yokwe2" */;
+			buildConfigurationList = BE0D700B1BA5024400F201FE /* Build configuration list for PBXProject "atlas" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -480,8 +480,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BE0D700F1BA5024400F201FE /* Yokwe2 */,
-				BE0D70241BA5024400F201FE /* Yokwe2Tests */,
+				BE0D700F1BA5024400F201FE /* atlas */,
+				BE0D70241BA5024400F201FE /* atlasTests */,
 			);
 		};
 /* End PBXProject section */
@@ -638,7 +638,7 @@
 /* Begin PBXTargetDependency section */
 		BE0D70271BA5024400F201FE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BE0D700F1BA5024400F201FE /* Yokwe2 */;
+			target = BE0D700F1BA5024400F201FE /* atlas */;
 			targetProxy = BE0D70261BA5024400F201FE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -843,7 +843,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BE0D700B1BA5024400F201FE /* Build configuration list for PBXProject "Yokwe2" */ = {
+		BE0D700B1BA5024400F201FE /* Build configuration list for PBXProject "atlas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE0D702D1BA5024400F201FE /* Debug */,
@@ -852,7 +852,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BE0D702F1BA5024400F201FE /* Build configuration list for PBXNativeTarget "Yokwe2" */ = {
+		BE0D702F1BA5024400F201FE /* Build configuration list for PBXNativeTarget "atlas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE0D70301BA5024400F201FE /* Debug */,
@@ -861,7 +861,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BE0D70321BA5024400F201FE /* Build configuration list for PBXNativeTarget "Yokwe2Tests" */ = {
+		BE0D70321BA5024400F201FE /* Build configuration list for PBXNativeTarget "atlasTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE0D70331BA5024400F201FE /* Debug */,
