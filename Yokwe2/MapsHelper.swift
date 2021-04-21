@@ -23,9 +23,9 @@ class MapsHelper{
         var path:String
         
         if rstart != nil{
-           path = "https://maps.googleapis.com/maps/api/directions/json?origin=\(start!)&destination=\(end!)&waypoints=via:\(rstart!)%7Cvia:\(rend!)&key=AIzaSyCqZ50c_NV-tYwVOMwxaS4XY-vomaxsOEc"
+           path = "https://maps.googleapis.com/maps/api/directions/json?origin=\(start!)&destination=\(end!)&waypoints=via:\(rstart!)%7Cvia:\(rend!)&key=###"
         }else{
-            path = "https://maps.googleapis.com/maps/api/directions/json?origin=\(start!)&destination=\(end!)&key=AIzaSyCqZ50c_NV-tYwVOMwxaS4XY-vomaxsOEc"
+            path = "https://maps.googleapis.com/maps/api/directions/json?origin=\(start!)&destination=\(end!)&key=###"
         }
         
         print(path)
